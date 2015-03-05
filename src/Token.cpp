@@ -1,5 +1,10 @@
 #include "Token.h"
 
+#include <ctype.h>
+
+const static char *KEYWORD_BUFFER[] = { "IF", "ELSE", "INT" };
+const char** Token::KEYWORDS = KEYWORD_BUFFER;
+
 void Token::setToken(char *token) {
 	this->token = token;
 }
@@ -12,24 +17,44 @@ char *Token::getType() {
 	switch (type) {
 	case WHITESPACE:
 		return (char*) "WHITESPACE";
-		break;
 	case KEYWORD:
 		return (char*) "KEYWORD";
-		break;
 	case IDENTIFIER:
 		return (char*) "IDENTIFIER";
-		break;
 	case NUMBER:
 		return (char*) "NUMBER";
-		break;
 	case ASSIGN_OP:
 		return (char*) "ASSIGNMENT OPERATOR";
-		break;
 	case LPAREN:
 		return (char*) "LEFT PARENTHESIS";
-		break;
 	case RPAREN:
 		return (char*) "RIGHT PARENTHESIS";
-		break;
+	}
+}
+
+Token::TOKEN_TYPE Token::identifyTokenType(char *token) {
+	if (token[0] == '\t' || token[0] == '\n' || token[0] == ' ') // Checks for whitespace
+		return WHITESPACE;
+
+	// Checks for keywords and special characters
+	for (int i = 0; i < sizeof(KEYWORDS); i++) {
+		if (token == KEYWORDS[i]) return KEYWORD;
+	}
+	
+	if (token == "=")
+		return ASSIGN_OP;
+	if (token == "(")
+		return LPAREN;
+	if (token == ")")
+		return RPAREN;
+	
+	if (isnum(token)) return NUMBER;
+	return IDENTIFIER;	
+}
+
+bool Token::isnum(char *token) {
+	for (int i = 0; i < sizeof(token); i++) {
+		if (!isdigit(token[i])) return false;
+		return true;
 	}
 }

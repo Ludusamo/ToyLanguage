@@ -1,2 +1,4 @@
-	This is a test line.
-This is the second test line.
+int a = 10
+int b = 10
+if (a == b)
+	print(hi)

@@ -9,8 +9,12 @@ public:
 	void setToken(char *token);
 	void setType(TOKEN_TYPE type);
 	char *getType();
+	static TOKEN_TYPE identifyTokenType(char *token);
 
 	TOKEN_TYPE type;
+private:
+	static bool isnum(char *token);
+	const static char **KEYWORDS;
 };
 
 class TWhiteSpace : Token {
