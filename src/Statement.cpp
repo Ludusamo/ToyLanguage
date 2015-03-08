@@ -6,10 +6,6 @@
 #include <string.h>
 #include "BitUtil.h"
 
-void Statement::setStatement(char *statement) {
-	this->statement = statement;
-}
-
 void Statement::tokenizeStatement() {
 	depth = calculateDepth();
 	char currTokenType = 0;
@@ -19,7 +15,7 @@ void Statement::tokenizeStatement() {
 	while (i != strlen(statement)) {
 		buffer[currIndex] = statement[i];	
 		if (currTokenType == 0) { // If no flags are set
-			if (iswhitespace(statement[i])) {
+			if (Token::iswhitespace(statement[i])) {
 				BitUtil::turnOnBit(currTokenType, WHITESPACE_FLAG);
 			} else if (isalnum(statement[i])) {
 				BitUtil::turnOnBit(currTokenType, STRING_FLAG);
@@ -29,7 +25,7 @@ void Statement::tokenizeStatement() {
 		}	
 
 		if (BitUtil::checkBit(currTokenType, WHITESPACE_FLAG)) {
-			if (!iswhitespace(peekNextChar(i))) {
+			if (!Token::iswhitespace(peekNextChar(i))) {
 				buffer[currIndex + 1] = '\0'; // Terminates the string
 				recordToken(buffer, Token::WHITESPACE);
 				currTokenType = 0;
@@ -45,7 +41,7 @@ void Statement::tokenizeStatement() {
 				memset(buffer, ' ', sizeof(buffer));
 			}
 		} else if (BitUtil::checkBit(currTokenType, DELIM_FLAG)) {
-			if (iswhitespace(peekNextChar(i)) || isalnum(peekNextChar(i))) {
+			if (Token::iswhitespace(peekNextChar(i)) || isalnum(peekNextChar(i))) {
 				buffer[currIndex + 1] = '\0'; // Terminates the string
 				recordToken(buffer, Token::identifyTokenType(buffer));
 				currTokenType = 0;
@@ -62,7 +58,7 @@ void Statement::tokenizeStatement() {
 int Statement::calculateDepth() {
 	int count = 0;
 	for (int i = 0; i < strlen(statement); i++) {
-		if (!iswhitespace(statement[i])) break;
+		if (!Token::iswhitespace(statement[i])) break;
 		count++;		
 	}	
 	return count;
@@ -78,10 +74,7 @@ void Statement::recordToken(char *token, Token::TOKEN_TYPE type) {
 	t.setType(type);
 
 	printf("Token: %s\n", token);
+	printf("Token Type: %s\n", t.getType());
 
 	tokens.push_back(t);
-}
-
-bool Statement::iswhitespace(char c) {
-	return (c == ' ') || (c == '\t') || (c == '\n');
 }

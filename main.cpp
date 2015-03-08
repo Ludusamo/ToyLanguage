@@ -6,6 +6,9 @@ int main() {
 	FileReader file;
 	file.openFile("res/test.ls");
 	char *line = file.getLine();
+	line = file.getLine();
+	line = file.getLine();
+	line = file.getLine();
 	Statement statement;
 	statement.setStatement(line);
 	statement.tokenizeStatement();

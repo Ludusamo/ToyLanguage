@@ -1,17 +1,17 @@
 #include "Token.h"
 
 #include <ctype.h>
+#include <stdio.h>
+#include <string.h>
 
+// DEFINITIONS
 const static char *KEYWORD_BUFFER[] = { "IF", "ELSE", "INT" };
 const char** Token::KEYWORDS = KEYWORD_BUFFER;
+const int Token::numKeywords = 3;
 
-void Token::setToken(char *token) {
-	this->token = token;
-}
-
-void Token::setType(TOKEN_TYPE type) {
-	this->type = type;
-}
+const static char *OPERATORS_BUFFER[] = { "=", "==", "<", ">", "<=", ">=", "+", "-", "*", "/" };
+const char** Token::OPERATORS = OPERATORS_BUFFER;
+const int Token::numOperators = 10;
 
 char *Token::getType() {
 	switch (type) {
@@ -23,33 +23,50 @@ char *Token::getType() {
 		return (char*) "IDENTIFIER";
 	case NUMBER:
 		return (char*) "NUMBER";
-	case ASSIGN_OP:
-		return (char*) "ASSIGNMENT OPERATOR";
+	case OPERATOR:
+		return (char*) "OPERATOR";
 	case LPAREN:
-		return (char*) "LEFT PARENTHESIS";
+		return (char*) "LPAREN";
 	case RPAREN:
-		return (char*) "RIGHT PARENTHESIS";
+		return (char*) "RPAREN";
 	}
 }
 
 Token::TOKEN_TYPE Token::identifyTokenType(char *token) {
-	if (token[0] == '\t' || token[0] == '\n' || token[0] == ' ') // Checks for whitespace
+	if (iswhitespace(token[0])) // Checks for whitespace
 		return WHITESPACE;
 
 	// Checks for keywords and special characters
-	for (int i = 0; i < sizeof(KEYWORDS); i++) {
+	for (int i = 0; i < numKeywords; i++) {
 		if (token == KEYWORDS[i]) return KEYWORD;
 	}
-	
-	if (token == "=")
-		return ASSIGN_OP;
-	if (token == "(")
+	if(isoperator(token)) return OPERATOR;
+
+	if (token[0] == '(')
 		return LPAREN;
-	if (token == ")")
+	if (token[0] == ')')
 		return RPAREN;
 	
 	if (isnum(token)) return NUMBER;
 	return IDENTIFIER;	
+}
+
+bool Token::iswhitespace(char c) {
+	return (c == ' ') || (c == '\t') || (c == '\n');
+}
+
+bool Token::isoperator(char *token) {
+	for (int i = 0; i < numOperators; i++) {
+		for (int j = 0; j < strlen(OPERATORS[i]); j++) {
+			if (OPERATORS[i][j] != token[j]) {
+				break;
+			}
+			if (j == strlen(OPERATORS[i]) - 1) {
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 bool Token::isnum(char *token) {

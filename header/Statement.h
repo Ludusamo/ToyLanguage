@@ -15,13 +15,12 @@ public:
 	char *statement;
 	std::vector<Token> tokens;
 
-	void setStatement(char *statement);
+	void setStatement(char *statement) { this->statement = statement; };
 	void tokenizeStatement();
 private:
 	int calculateDepth();
 	char peekNextChar(int currIndex);
 	void recordToken(char *token, Token::TOKEN_TYPE type);
-	bool iswhitespace(char c);
 };
 
 #endif // STATEMENT_H

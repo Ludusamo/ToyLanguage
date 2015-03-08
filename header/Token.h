@@ -3,46 +3,24 @@
 
 class Token {
 public:
-	enum TOKEN_TYPE { WHITESPACE, KEYWORD, IDENTIFIER, NUMBER, ASSIGN_OP, LPAREN, RPAREN };
+	enum TOKEN_TYPE { WHITESPACE, KEYWORD, IDENTIFIER, NUMBER, OPERATOR, LPAREN, RPAREN };
 	char *token;
 	
-	void setToken(char *token);
-	void setType(TOKEN_TYPE type);
+	void setToken(char *token) { this->token = token; };
+	void setType(TOKEN_TYPE type) { this->type = type; };
 	char *getType();
 	static TOKEN_TYPE identifyTokenType(char *token);
 
 	TOKEN_TYPE type;
-private:
+	
+	static bool iswhitespace(char c);
+	static bool isoperator(char *token);
 	static bool isnum(char *token);
+private:	
 	const static char **KEYWORDS;
-};
-
-class TWhiteSpace : Token {
-	TWhiteSpace() { setType(WHITESPACE); }
-};
-
-class TKeyword : Token {
-	TKeyword() { setType(WHITESPACE); }
-};
-
-class TIdentifier : Token {
-	TIdentifier() { setType(IDENTIFIER); }
-};
-
-class TNumber : Token {
-	TNumber() { setType(NUMBER); }
-};
-
-class TAssignOp : Token {
-	TAssignOp() { setType(ASSIGN_OP); }
-};
-
-class TLParen : Token {
-	TLParen() { setType(LPAREN); }
-};
-
-class TRParen : Token {
-	TRParen() { setType(RPAREN); }
+	const static int numKeywords;
+	const static char **OPERATORS;
+	const static int numOperators;
 };
 
 #endif // TOKEN_H
