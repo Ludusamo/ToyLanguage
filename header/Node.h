@@ -6,7 +6,6 @@
 
 class Node {
 protected:
-	Statement masterStatement;
 	virtual void execute(){};
 };
 

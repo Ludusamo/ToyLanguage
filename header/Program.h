@@ -8,7 +8,6 @@
 class Program() : public Node {
 public:
 	vector<Node> nodes;
-	void execute(){};	
 };
 
 #endif // PROGRAM_H

@@ -1,6 +1,8 @@
 #ifndef STATEMENT_H
 #define STATEMENT_H
 
+#include "Node.h"
+
 #include <vector>
 
 #include "Token.h"
@@ -9,7 +11,7 @@
 #define STRING_FLAG 1
 #define	DELIM_FLAG 2  
 
-class Statement {
+class Statement : public Node {
 public:
 	int depth;
 	char *statement;
@@ -21,6 +23,11 @@ private:
 	int calculateDepth();
 	char peekNextChar(int currIndex);
 	void recordToken(char *token, Token::TOKEN_TYPE type);
+};
+
+class IFStatement : public Statement {
+public:
+	std::vector<Node> childrenStatements;
 };
 
 #endif // STATEMENT_H

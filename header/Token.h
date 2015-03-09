@@ -9,6 +9,7 @@ public:
 	void setToken(char *token) { this->token = token; };
 	void setType(TOKEN_TYPE type) { this->type = type; };
 	char *getType();
+
 	static TOKEN_TYPE identifyTokenType(char *token);
 
 	TOKEN_TYPE type;
