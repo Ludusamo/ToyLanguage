@@ -8,7 +8,6 @@ int main() {
 	char *line = file.getLine();
 	line = file.getLine();
 	line = file.getLine();
-	line = file.getLine();
 	Statement statement;
 	statement.setStatement(line);
 	statement.tokenizeStatement();
