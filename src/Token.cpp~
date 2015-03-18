@@ -49,6 +49,7 @@ void Token::determineSubtype() {
 	default:
 		subtype = -1;
 	}
+	printf("Subtype: %i\n", subtype);
 }
 
 Token::TOKEN_TYPE Token::identifyTokenType(char *token) {
