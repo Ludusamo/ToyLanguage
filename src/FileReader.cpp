@@ -14,12 +14,11 @@ void FileReader::closeFile() {
 char *FileReader::getLine() {
 	if (source == NULL) {
 		perror("No file is opened");
-		return NULL;
 	} else {
-		char *line;
+		char *line = NULL;
 		line = (char*) malloc(200);
 		fgets(line, 200, source);
-		return line;
+		if (line[0] != '\0') return line;
 	}
-	
+	return NULL;
 }

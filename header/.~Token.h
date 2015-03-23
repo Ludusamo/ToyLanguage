@@ -4,20 +4,16 @@
 class Token {
 public:
 	enum TOKEN_TYPE { WHITESPACE, KEYWORD, IDENTIFIER, NUMBER, OPERATOR, PAREN };
-	enum SUB_KEYWORD { IF, ELSE, INT };
-	enum SUB_OPERATOR { ASSIGNMENT, ADD, SUB, MUL, DIV, EQ, LT, GT, LTEQ, GTEQ };
-	enum SUB_PAREN { LPAREN, RPAREN };
 	char *token;
 	
 	void setToken(char *token) { this->token = token; };
 	void setType(TOKEN_TYPE type) { this->type = type; };
 	char *getType();
-	void determineSubtype();
+	void determineSubtype(){};
 
 	static TOKEN_TYPE identifyTokenType(char *token);
 
 	TOKEN_TYPE type;
-	int subtype;
 	
 	static bool iswhitespace(char c);
 	static bool iskeyword(char *token);

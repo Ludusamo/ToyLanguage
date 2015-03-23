@@ -24,15 +24,16 @@ void Statement::tokenizeStatement() {
 			}
 		}	
 
-		if (BitUtil::checkBit(currTokenType, WHITESPACE_FLAG)) {
+		if (BitUtil::checkBit(currTokenType, WHITESPACE_FLAG)) { // WHITESPACE
 			if (!Token::iswhitespace(peekNextChar(i))) {
 				buffer[currIndex + 1] = '\0'; // Terminates the string
-				recordToken(buffer, Token::WHITESPACE);
+				// Not sure if I want to record whitespace tokens
+				//recordToken(buffer, Token::WHITESPACE);
 				currTokenType = 0;
 				currIndex = -1;
 				memset(buffer, ' ', sizeof(buffer));
 			}	
-		} else if (BitUtil::checkBit(currTokenType, STRING_FLAG)) {
+		} else if (BitUtil::checkBit(currTokenType, STRING_FLAG)) { // STRINGS
 			if (!isalnum(peekNextChar(i))) {
 				buffer[currIndex + 1] = '\0'; // Terminates the string
 				recordToken(buffer, Token::identifyTokenType(buffer));
@@ -40,7 +41,7 @@ void Statement::tokenizeStatement() {
 				currIndex = -1;
 				memset(buffer, ' ', sizeof(buffer));
 			}
-		} else if (BitUtil::checkBit(currTokenType, DELIM_FLAG)) {
+		} else if (BitUtil::checkBit(currTokenType, DELIM_FLAG)) { // DELIMINATORS
 			if (Token::iswhitespace(peekNextChar(i)) || isalnum(peekNextChar(i))) {
 				buffer[currIndex + 1] = '\0'; // Terminates the string
 				recordToken(buffer, Token::identifyTokenType(buffer));

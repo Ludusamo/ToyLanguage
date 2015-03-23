@@ -11,9 +11,9 @@ const static char *KEYWORD_BUFFER[] = { "if", "else", "int" };
 const char** Token::KEYWORDS = KEYWORD_BUFFER;
 const int Token::numKeywords = 3;
 
-const static char *OPERATORS_BUFFER[] = { "=", "==", "<", ">", "<=", ">=", "+", "-", "*", "/" };
+const static char *OPERATORS_BUFFER[] = { "=", "+", "-", "*", "/", "==", "!=" "<", ">", "<=", ">=" };
 const char** Token::OPERATORS = OPERATORS_BUFFER;
-const int Token::numOperators = 10;
+const int Token::numOperators = 11;
 
 char *Token::getType() {
 	switch (type) {

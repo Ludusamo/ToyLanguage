@@ -5,8 +5,14 @@
 #include <vector>
 
 class Node {
-protected:
+public:
 	virtual void execute(){};
+private:
+};
+
+class MainNode {
+public:
+		
 };
 
 #endif // NODE_H
