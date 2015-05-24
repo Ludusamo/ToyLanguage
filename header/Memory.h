@@ -8,17 +8,17 @@
 
 #define MAX_DEPTH 20
 
-class Program {
+class Memory {
 public:
-	Program() { variables.resize(MAX_DEPTH); };
-	~Program() {};
+	Memory() { variables.resize(MAX_DEPTH); };
+	~Memory() {};
 	std::vector< std::vector<Variable> > variables;
 	
-	void createVariable(Variable::VAR_TYPE type, const char *id, const char *value, int depth);
+	void createVariable(Variable::VAR_TYPE type, const char *id, int depth);
+	void setValue(const char *id, const char *value);
 	char *operation(const char *id1, const char *id2, Token::SUB_OPERATOR type);
 	bool comparator(const char *id1, const char *id2, Token::SUB_OPERATOR type);
-
-	void execute();
+	Variable *getVariable(const char *id);
 };
 
 #endif // PROGRAM_H

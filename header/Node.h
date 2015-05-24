@@ -1,13 +1,14 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include "Statement.h"
 #include <vector>
+#include "Command.h"
 
 class Node {
 public:
 	virtual void execute(){};
-private:
+protected:
+	std::vector<Command*> commands;
 };
 
 class MainNode {

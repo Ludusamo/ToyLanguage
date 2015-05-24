@@ -1,8 +1,8 @@
-#include "Program.h"
+#include "Memory.h"
 
-#include <stdio.h>
+#include "Debug.h"
 
-void Program::createVariable(Variable::VAR_TYPE type, const char *identifier, const char *value, int depth) {
+void Memory::createVariable(Variable::VAR_TYPE type, const char *identifier, int depth) {
 	/* TODO:
 	 * Currently variables cannot be created with the same identifier no matter the scope.
 	 */
@@ -17,13 +17,17 @@ void Program::createVariable(Variable::VAR_TYPE type, const char *identifier, co
 	Variable v;
 	v.setIdentifier(identifier);
 	v.setType(type);
-	v.assignValue(value);
 
-	printf("Created Variable: %s with value %s.\n", identifier, value);
+	Debug::print("Created Variable:", identifier);
 	variables[depth].push_back(v);
 }
 
-char *Program::operation(const char *id1, const char *id2, Token::SUB_OPERATOR type) {
+void Memory::setValue(const char *id, const char *value) {
+	getVariable(id)->assignValue(value);
+	Debug::print(id, "Assigned:", value);
+}
+
+char *Memory::operation(const char *id1, const char *id2, Token::SUB_OPERATOR type) {
 	Variable *var1 = NULL, *var2 = NULL;
 	for (int i = 0; i < variables.size(); i++) {
 		for (int j = 0; j < variables[i].size(); j++) {
@@ -39,14 +43,14 @@ char *Program::operation(const char *id1, const char *id2, Token::SUB_OPERATOR t
 					return NULL;
 				}
 
-				printf("Operation on %s and %s yielded: %s", var1->identifier, var2->identifier, Variable::operation(var1->getValue(), var2->getValue(), var1->type, type));
+				Debug::print("Operation yielded:", Variable::operation(var1->getValue(), var2->getValue(), var1->type, type));
 				return Variable::operation(var1->getValue(), var2->getValue(), var1->type, type);	
 			}
 		}
 	}
 }
 
-bool Program::comparator(const char *id1, const char *id2, Token::SUB_OPERATOR type) {
+bool Memory::comparator(const char *id1, const char *id2, Token::SUB_OPERATOR type) {
 	Variable *var1 = NULL, *var2 = NULL;
 	for (int i = 0; i < variables.size(); i++) {
 		for (int j = 0; j < variables[i].size(); j++) {
@@ -65,4 +69,14 @@ bool Program::comparator(const char *id1, const char *id2, Token::SUB_OPERATOR t
 			}
 		}
 	}
+}
+
+Variable *Memory::getVariable(const char *id) {
+	for (int i = 0; i < variables.size(); i++) {
+		for (int j = 0; j < variables[i].size(); j++) {
+			if (variables[i][j].identifier == id) {
+				return &(variables[i][j]);
+			}
+		}
+	}		
 }

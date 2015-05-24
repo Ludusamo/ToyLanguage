@@ -1,7 +1,7 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#include "Program.h"
+#include "Memory.h"
 #include "Variable.h"
 #include "Token.h"
 
@@ -9,7 +9,7 @@ class Command {
 public:
 	Command() {};
 	virtual ~Command() {};
-	virtual void execute(Program &program) = 0;		
+	virtual void execute(Memory &mem) = 0;		
 };
 
 class CreateVariableCommand : public Command {
@@ -17,15 +17,28 @@ public:
 	Variable::VAR_TYPE type;
 	char *id, *value;
 	int depth;
-	CreateVariableCommand(Variable::VAR_TYPE type, const char *id, const char *value, int depth) {
+	CreateVariableCommand(Variable::VAR_TYPE type, const char *id, int depth) {
 		this->type = type;
 		this->id = (char *) id;
-		this->value = (char *) value;
 		this->depth = depth;
 	};
 
-	void execute(Program &program) {
-		program.createVariable(type, id, value, depth);
+	void execute(Memory &mem) {
+		mem.createVariable(type, id, depth);
+	};
+};
+
+class SetVariableValueCommand : public Command {
+public:
+	char *id, *value;
+
+	SetVariableValueCommand(const char *id, const char *value) {
+		this->id = (char *) id;
+		this->value = (char *) value;
+	};
+
+	void execute(Memory &mem) {
+		mem.setValue(id, value);
 	};
 };
 
@@ -40,8 +53,8 @@ public:
 		this->op_type = op_type;		
 	};
 
-	void execute(Program &program) {
-		program.operation(var1, var2, op_type);	
+	void execute(Memory &mem) {
+		mem.operation(var1, var2, op_type);	
 	};
 };
 
@@ -56,8 +69,8 @@ public:
 		this->op_type = op_type;		
 	};
 
-	void execute(Program &program) {
-		program.comparator(var1, var2, op_type);	
+	void execute(Memory &mem) {
+		mem.comparator(var1, var2, op_type);	
 	};
 };
 

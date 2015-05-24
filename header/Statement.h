@@ -1,8 +1,6 @@
 #ifndef STATEMENT_H
 #define STATEMENT_H
 
-#include "Node.h"
-
 #include <vector>
 
 #include "Token.h"

@@ -19,14 +19,14 @@ void Script::readScript(const char *path) {
 	file.closeFile();
 }
 
-Program Script::compile() {
+Memory Script::compile() {
 	if (scriptStatements.size() == 0) {
 		perror("No script was loaded for compilation");
-		return Program();
+		return Memory();
 	}
-	Program program;	
+	Memory mem;	
 	for (int i = 0; i < scriptStatements.size(); i++) {
 
 	}		
-	return Program();
+	return Memory();
 }

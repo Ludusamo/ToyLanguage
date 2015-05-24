@@ -4,13 +4,12 @@
 #include <vector>
 
 #include "Statement.h"
-#include "Program.h"
 #include "Parser.h"
 
 class Script {
 public:		
 	void readScript(const char *path);
-	Program compile();
+	Memory compile();
 private:
 	std::vector<Statement> scriptStatements;
 	Parser parser;
