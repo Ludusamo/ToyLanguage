@@ -37,8 +37,9 @@ public:
 		this->value = (char *) value;
 	};
 
-	void execute(Memory &mem) {
+	int execute(Memory &mem) {
 		mem.setValue(id, value);
+		return 0;
 	};
 };
 
@@ -53,8 +54,9 @@ public:
 		this->op_type = op_type;		
 	};
 
-	void execute(Memory &mem) {
+	int execute(Memory &mem) {
 		mem.operation(var1, var2, op_type);	
+		return 0;
 	};
 };
 
@@ -69,8 +71,9 @@ public:
 		this->op_type = op_type;		
 	};
 
-	void execute(Memory &mem) {
-		mem.comparator(var1, var2, op_type);	
+	int execute(Memory &mem) {
+		if (mem.comparator(var1, var2, op_type)) return 0;
+		return 1;
 	};
 };
 

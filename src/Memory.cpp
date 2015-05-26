@@ -1,6 +1,7 @@
 #include "Memory.h"
 
 #include "Debug.h"
+#include "ErrorHandler.h"
 
 void Memory::createVariable(Variable::VAR_TYPE type, const char *identifier, int depth) {
 	/* TODO:

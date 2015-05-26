@@ -9,7 +9,7 @@
 class Script {
 public:		
 	void readScript(const char *path);
-	Memory compile();
+	Node compile();
 private:
 	std::vector<Statement> scriptStatements;
 	Parser parser;
