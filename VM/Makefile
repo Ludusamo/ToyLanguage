@@ -1,0 +1,11 @@
+SRC_FILES = main.c
+
+CC = g++
+COMPILER_FLAGS = 
+LINKER_FLAGS = -Iheader
+
+OBJ_NAME = LAVM
+
+
+all : 
+	$(CC) $(SRC_FILES) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
