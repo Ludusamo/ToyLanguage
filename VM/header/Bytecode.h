@@ -4,6 +4,9 @@
 typedef enum {
 	PUSH,
 	ADD,
+	SUB,
+	MUL,
+	DIV,
 	POP,
 	SET,
 	PRINT,
@@ -13,6 +16,9 @@ typedef enum {
 static char *OPCODES[] = {
 	"PUSH",
 	"ADD",
+	"SUB",
+	"MUL",
+	"DIV",
 	"POP",
 	"SET",
 	"PRINT",

@@ -3,13 +3,13 @@
 
 const int program[] {
 	PUSH, 5,
-	PUSH, 6,
-	ADD,
+	PUSH, 5,
+	DIV,
 	PRINT,
 	HALT
 };
 
 int main() {
-	runProgram(program);
+	runProgram(program, 0);
 	return 0;
 }

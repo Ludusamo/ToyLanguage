@@ -1,7 +1,7 @@
 #ifndef VIRTUALMACHINE_H
 #define VIRTUALMACHINE_H
 
-static int ip = 0; // Instruction Pointer: Points to the current operation being evaluated in the program.
+static int ip; // Instruction Pointer: Points to the current operation being evaluated in the program.
 static int sp = -1; // Stack Pointer: Points to the top value of the stack.
 static int stack[256]; // VM's stack array.
 
@@ -17,6 +17,11 @@ void eval(int op); // Evaluates an individual operation based on the stack.
 int fetch(); // Returns the current operation being evaluated.
 void printStackTrace(int ip, int op);
 
-void runProgram(const int *program);
+void runProgram(const int *program, const int mainIndex);
+
+typedef enum {
+	A, B, C, D, E, F, NUM_OF_REGISTERS
+} Registers;
+static int registers[NUM_OF_REGISTERS];
 
 #endif // VIRTUALMACHINE_H

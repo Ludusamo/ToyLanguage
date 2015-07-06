@@ -20,16 +20,37 @@ void eval(int op) {
 			break;
 		}
 		case ADD: {
-			int a = pop(); // Pops off the top value from the stack.
-			int b = pop(); // Pops off the next value from the stack.
+			registers[A] = pop(); // Pops off the top value from the stack.
+			registers[B] = pop(); // Pops off the next value from the stack.
 
-			int result = a + b;
+			registers[C] = registers[A] + registers[B];
 			// Push the result on to the stack.
-			push(result);
+			push(registers[C]);
+			break;
+		}
+		case SUB: {
+			registers[A] = pop();
+			registers[B] = pop();
+			registers[C] = registers[B] - registers[A];
+			push(registers[C]);
+			break;
+		}
+		case MUL: {
+			registers[A] = pop();
+			registers[B] = pop();
+			registers[C] = registers[A] * registers[B];
+			push(registers[C]);
+			break;
+		}
+		case DIV: {
+			registers[A] = pop();
+			registers[B] = pop();
+			registers[C] = registers[B] / registers[A];
+			push(registers[C]);
 			break;
 		}
 		case POP: {
-			int val_popped = pop();
+			pop();
 			break;
 		}
 		case PRINT: {
@@ -56,7 +77,8 @@ void printStackTrace(int ip, int op) {
 	printf("]\n");
 }
 
-void runProgram(const int *program) {
+void runProgram(const int *program, const int mainIndex) {
+	ip = mainIndex;
 	PROGRAM = program;	
 	while (running) {
 		int op = fetch();
