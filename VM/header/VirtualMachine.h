@@ -12,6 +12,7 @@ static const int *PROGRAM;
 
 void push(int val); // Adds an item to the top of the stack.
 int pop(); // Pops off the top-most item on the stack.
+
 void eval(int op); // Evaluates an individual operation based on the stack.
 int fetch(); // Returns the current operation being evaluated.
 void printStackTrace(int ip, int op);

@@ -30,7 +30,11 @@ void eval(int op) {
 		}
 		case POP: {
 			int val_popped = pop();
-			printf("Popped %d\n", val_popped);
+			break;
+		}
+		case PRINT: {
+			int val = pop();
+			printf("%d\n", val);
 			break;
 		}
 		case HALT: {

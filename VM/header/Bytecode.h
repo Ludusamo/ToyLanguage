@@ -6,6 +6,7 @@ typedef enum {
 	ADD,
 	POP,
 	SET,
+	PRINT,
 	HALT
 } Opcodes;
 
@@ -14,6 +15,7 @@ static char *OPCODES[] = {
 	"ADD",
 	"POP",
 	"SET",
+	"PRINT",
 	"HALT"
 };
 
