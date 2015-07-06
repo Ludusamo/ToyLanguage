@@ -2,11 +2,19 @@
 #define BYTECODE_H
 
 typedef enum {
-	PSH,
+	PUSH,
 	ADD,
 	POP,
 	SET,
-	HLT
+	HALT
 } Opcodes;
+
+static char *OPCODES[] = {
+	"PUSH",
+	"ADD",
+	"POP",
+	"SET",
+	"HALT"
+};
 
 #endif // BYTECODE_H
