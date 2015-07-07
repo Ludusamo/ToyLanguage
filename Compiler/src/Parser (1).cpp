@@ -1,19 +1,21 @@
 #include "Parser.h"
 
-#include <stdio.h>
+#include <iostream>
 
-NodeManager Parser::parse(Statement statement) {
+Node Parser::parse(Statement statement) {
+	Node node;		
 	std::vector<Token> tokens;
 	tokens = statement.tokens;
 	for (int i = statement.depth; i < tokens.size(); i++) {
+		std::cout << i << std::endl;
+		std::cout << tokens[i].getType() << std::endl;
 		if (tokens[i].type == Token::KEYWORD) {
 			if (tokens[i].subtype == Token::IF) {
-				if (tokens[i+1].type != Token::PAREN && tokens[i+1].subtype != Token::LPAREN) perror("Unexpected token.");
 
 			} else if (tokens[i].subtype == Token::ELSE) {
-			
+
 			} else if (tokens[i].subtype == Token::INT) {
-				
+
 			} else {
 				perror("Invalid token");
 			}
@@ -31,4 +33,5 @@ NodeManager Parser::parse(Statement statement) {
 			
 		}
 	}	
+	return Node();
 }

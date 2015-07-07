@@ -19,14 +19,12 @@ void Script::readScript(const char *path) {
 	file.closeFile();
 }
 
-NodeManager Script::compile() {
-	NodeManager nodes;
+Node Script::compile() {
 	if (scriptStatements.size() == 0) {
 		perror("No script was loaded for compilation");
-		return NodeManager();
+		return Memory();
 	}
 	for (int i = 0; i < scriptStatements.size(); i++) {
-		Parser::parse(scriptStatements[i]);
+		return Parser::parse(
 	}		
-	return nodes;
 }
