@@ -13,18 +13,28 @@ int pop() {
 	return stack[sp--];
 }
 
+int getNextOperand() {
+	return PROGRAM[++ip];
+}
+
 void eval(int op) {
 	switch(op) {
+		case HALT: {
+			running = false;
+			break;
+		}
 		case PUSH: {
-			push(PROGRAM[++ip]);
+			push(getNextOperand());
+			break;
+		}
+		case POP: {
+			pop();
 			break;
 		}
 		case ADD: {
-			registers[A] = pop(); // Pops off the top value from the stack.
-			registers[B] = pop(); // Pops off the next value from the stack.
-
+			registers[A] = pop();
+			registers[B] = pop();
 			registers[C] = registers[A] + registers[B];
-			// Push the result on to the stack.
 			push(registers[C]);
 			break;
 		}
@@ -49,19 +59,38 @@ void eval(int op) {
 			push(registers[C]);
 			break;
 		}
-		case POP: {
-			pop();
+		case GSTORE: {
+			registers[A] = getNextOperand();		
+			gmem[registers[A]] = pop();
 			break;
+		}	     
+		case GLOAD: {
+			registers[A] = getNextOperand();
+			push(gmem[registers[A]]);
+			break;
+		}
+		case BR: {
+			ip = getNextOperand() - 1;
+			break;
+		}
+		case BRT: {
+			int addr = getNextOperand();
+			if (pop() == 1) ip = addr - 1;
+			break;
+		}
+		case BRF: {
+			int addr = getNextOperand();
+			if (pop() == 0) ip = addr - 1;
+			break;
+		}
+		case CALL: {
+
 		}
 		case PRINT: {
 			int val = pop();
 			printf("%d\n", val);
 			break;
-		}
-		case HALT: {
-			running = false;
-			break;
-		}
+		}	
 	}
 }
 
@@ -70,20 +99,34 @@ int fetch() {
 }
 
 void printStackTrace(int ip, int op) {
-	printf("%04d: %s %*s", ip, OPCODES[op], (int) (10 - strlen(OPCODES[op])), "[ ");
+	printf("%04d: %s ", ip, OPERATIONS[op].name);
+	for (int i = 0; i < OPERATIONS[op].numOps; i++) {
+		printf("%i ", PROGRAM[ip+i+1]);
+	}
+	printf("%*s", (15 - (strlen(OPERATIONS[op].name) + 2 * OPERATIONS[op].numOps)), "[ ");
 	for (int i = 0; i < sp + 1; i++) {
 		printf("%d ", stack[i]);
 	}
 	printf("]\n");
 }
 
-void runProgram(const int *program, const int mainIndex) {
+void printGlobalMemory(int gMemSize) {
+	printf("\n[ ");	
+	for (int i = 0; i < gMemSize; i++) {
+		printf("%i ", gmem[i]);
+	}
+	printf("]\n");
+}
+
+void runProgram(const int *program, const int mainIndex, const int gMemSize) {
 	ip = mainIndex;
 	PROGRAM = program;	
+	gmem = new int[gMemSize];
 	while (running) {
 		int op = fetch();
-		eval(op);
 		if (trace) printStackTrace(ip, op);
+		eval(op);
 		ip++;
 	}	
+	printGlobalMemory(gMemSize);
 }

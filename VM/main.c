@@ -2,14 +2,15 @@
 #include "VirtualMachine.h"
 
 const int program[] {
-	PUSH, 5,
-	PUSH, 5,
-	DIV,
-	PRINT,
+	PUSH, 2,
+	PUSH, 0, //0
+	BRT, 8,
+	GSTORE, 0,
+	PRINT,//6
 	HALT
 };
 
 int main() {
-	runProgram(program, 0);
+	runProgram(program, 0, 1);
 	return 0;
 }

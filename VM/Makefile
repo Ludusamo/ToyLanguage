@@ -1,4 +1,4 @@
-SRC_FILES = main.c src/VirtualMachine.c
+SRC_FILES = main.c src/VirtualMachine.c src/Bytecode.c
 
 CC = g++
 COMPILER_FLAGS = -w
