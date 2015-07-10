@@ -15,7 +15,6 @@ int getNextOperand();
 
 void eval(int op); // Evaluates an individual operation based on the stack.
 int fetch(); // Returns the current operation being evaluated.
-void printStackTrace(int op);
 
 void runProgram(const int *program, const int mainIndex, const int gMemSize);
 

@@ -1,9 +1,9 @@
 #include "VirtualMachine.h"
 
 #include <stdio.h>
-#include <string.h>
 
 #include "Bytecode.h"
+#include "Debug.h"
 
 #define ip registers[IP]
 #define sp registers[SP]
@@ -130,26 +130,6 @@ int fetch() {
 	return PROGRAM[ip];
 }
 
-void printStackTrace(int op) {
-	printf("%04d: %s ", ip, OPERATIONS[op].name);
-	for (int i = 0; i < OPERATIONS[op].numOps; i++) {
-		printf("%i ", PROGRAM[ip+i+1]);
-	}
-	printf("%*s", (15 - (strlen(OPERATIONS[op].name) + 2 * OPERATIONS[op].numOps)), "[ ");
-	for (int i = 0; i < sp + 1; i++) {
-		printf("%d ", stack[i]);
-	}
-	printf("]\n");
-}
-
-void printGlobalMemory(int gMemSize) {
-	printf("\n[ ");	
-	for (int i = 0; i < gMemSize; i++) {
-		printf("%i ", gmem[i]);
-	}
-	printf("]\n");
-}
-
 void runProgram(const int *program, const int mainIndex, const int gMemSize) {
 	ip = mainIndex;
 	sp = -1;
@@ -157,9 +137,9 @@ void runProgram(const int *program, const int mainIndex, const int gMemSize) {
 	gmem = new int[gMemSize];
 	while (running) {
 		int op = fetch();
-		if (trace) printStackTrace(op);
+		if (trace) printStackTrace(ip, sp, op, PROGRAM, stack);
 		eval(op);
 		ip++;
 	}	
-	printGlobalMemory(gMemSize);
+	dumpMemory(gMemSize);
 }
