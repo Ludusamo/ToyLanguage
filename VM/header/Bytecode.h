@@ -21,7 +21,10 @@ typedef enum {
 	BR,
 	BRT,
 	BRF,
+	LOAD,
+	STORE,
 	CALL,
+	RET,
 	PRINT
 } Opcodes;
 
@@ -38,7 +41,10 @@ static Operation OPERATIONS[] = {
 	new_op("BR", 1),
 	new_op("BRT", 1),
 	new_op("BRF", 1),
+	new_op("LOAD", 1),
+	new_op("STORE", 1),
 	new_op("CALL", 2),
+	new_op("RET", 0),
 	new_op("PRINT", 0)
 };
 

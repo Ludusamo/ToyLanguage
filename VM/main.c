@@ -2,15 +2,25 @@
 #include "VirtualMachine.h"
 
 const int program[] {
+	// FUNCTION A()
+	PUSH, 0, // int B
+	PUSH, 0, // int C
 	PUSH, 2,
-	PUSH, 0, //0
-	BRT, 8,
-	GSTORE, 0,
-	PRINT,//6
-	HALT
+	STORE, 1,
+	PUSH, 3,
+	STORE, 2,
+	LOAD, 1,
+	LOAD, 2,
+	ADD,
+	RET, // 2
+
+	// MAIN FUNCTION
+	CALL, 0, 0,
+	PRINT,
+	HALT 
 };
 
 int main() {
-	runProgram(program, 0, 1);
+	runProgram(program, 18, 0);
 	return 0;
 }

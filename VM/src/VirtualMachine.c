@@ -5,6 +5,10 @@
 
 #include "Bytecode.h"
 
+#define ip registers[IP]
+#define sp registers[SP]
+#define fp registers[FP]
+
 void push(int val) {
 	stack[++sp] = val;
 }
@@ -74,17 +78,45 @@ void eval(int op) {
 			break;
 		}
 		case BRT: {
-			int addr = getNextOperand();
-			if (pop() == 1) ip = addr - 1;
+			registers[A] = getNextOperand() - 1;
+			if (pop() == 1) ip = registers[A];
 			break;
 		}
 		case BRF: {
-			int addr = getNextOperand();
-			if (pop() == 0) ip = addr - 1;
+			registers[A] = getNextOperand() - 1;
+			if (pop() == 0) ip = registers[A];
+			break;
+		}
+		case LOAD: {
+			registers[A] = getNextOperand(); // Offset
+			push(stack[fp + registers[A]]);
+			break;
+		}
+		case STORE: {
+			registers[A] = getNextOperand(); // Offset
+			registers[B] = pop(); // Value to Store
+			stack[fp + registers[A]] = registers[B];
 			break;
 		}
 		case CALL: {
-
+			registers[A] = getNextOperand() - 1; // Address
+			registers[B] = getNextOperand(); // Num Args
+			push(registers[B]);
+			push(fp);
+			push(ip);
+			fp = sp;
+			ip = registers[A];
+			break;
+		}
+		case RET: {
+			registers[A] = pop(); // Return Value
+			sp = fp;
+			ip = pop();
+			fp = pop();
+			registers[B] = pop(); // Num Args
+			sp -= registers[B];
+			push(registers[A]);
+			break;
 		}
 		case PRINT: {
 			int val = pop();
@@ -98,7 +130,7 @@ int fetch() {
 	return PROGRAM[ip];
 }
 
-void printStackTrace(int ip, int op) {
+void printStackTrace(int op) {
 	printf("%04d: %s ", ip, OPERATIONS[op].name);
 	for (int i = 0; i < OPERATIONS[op].numOps; i++) {
 		printf("%i ", PROGRAM[ip+i+1]);
@@ -120,11 +152,12 @@ void printGlobalMemory(int gMemSize) {
 
 void runProgram(const int *program, const int mainIndex, const int gMemSize) {
 	ip = mainIndex;
+	sp = -1;
 	PROGRAM = program;	
 	gmem = new int[gMemSize];
 	while (running) {
 		int op = fetch();
-		if (trace) printStackTrace(ip, op);
+		if (trace) printStackTrace(op);
 		eval(op);
 		ip++;
 	}	
