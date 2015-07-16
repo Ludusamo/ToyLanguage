@@ -1,8 +1,8 @@
 #include "Debug.h"
 
 int numDigits(int num) {
-	int count = 0;
-	while (num != 0) {
+	int count = 1;
+	while (num >= 10) {
 		num /= 10;
 		count++;
 	}

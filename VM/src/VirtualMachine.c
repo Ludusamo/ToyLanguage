@@ -58,6 +58,12 @@ void eval(int op) {
 			push(registers[C]);
 			break;
 		}
+		case EQ: {
+			registers[A] = pop();
+			registers[B] = pop();
+			push(registers[A] == registers[B]);
+			break;
+		}
 		case GSTORE: {
 			registers[A] = getNextOperand();		
 			gmem[registers[A]] = pop();
