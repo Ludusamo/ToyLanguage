@@ -64,6 +64,42 @@ void eval(int op) {
 			push(registers[A] == registers[B]);
 			break;
 		}
+		case LT: {
+			registers[A] = pop();
+			registers[B] = pop();
+			push(registers[B] < registers[A]);
+			break;
+		}
+		case GT: {
+			registers[A] = pop();
+			registers[B] = pop();
+			push(registers[B] > registers[A]);
+			break;
+		}
+		case LTE: {
+			registers[A] = pop();
+			registers[B] = pop();
+			push(registers[B] <= registers[A]);
+			break;
+		}
+		case GTE: {
+			registers[A] = pop();
+			registers[B] = pop();
+			push(registers[B] >= registers[A]);
+			break;
+		}
+		case AND: {
+			registers[A] = pop();
+			registers[B] = pop();
+			push(registers[B] && registers[A]);
+			break;
+		}
+		case OR: {
+			registers[A] = pop();
+			registers[B] = pop();
+			push(registers[B] || registers[A]);
+			break;
+		}
 		case GSTORE: {
 			registers[A] = getNextOperand();		
 			gmem[registers[A]] = pop();
