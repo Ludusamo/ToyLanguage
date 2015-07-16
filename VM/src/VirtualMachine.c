@@ -1,10 +1,5 @@
 #include "VirtualMachine.h"
 
-#include <stdio.h>
-
-#include "Bytecode.h"
-#include "Debug.h"
-
 #define ip registers[IP]
 #define sp registers[SP]
 #define fp registers[FP]
@@ -35,28 +30,28 @@ void eval(int op) {
 			pop();
 			break;
 		}
-		case ADD: {
+		case ADDI: {
 			registers[A] = pop();
 			registers[B] = pop();
 			registers[C] = registers[A] + registers[B];
 			push(registers[C]);
 			break;
 		}
-		case SUB: {
+		case SUBI: {
 			registers[A] = pop();
 			registers[B] = pop();
 			registers[C] = registers[B] - registers[A];
 			push(registers[C]);
 			break;
 		}
-		case MUL: {
+		case MULI: {
 			registers[A] = pop();
 			registers[B] = pop();
 			registers[C] = registers[A] * registers[B];
 			push(registers[C]);
 			break;
 		}
-		case DIV: {
+		case DIVI: {
 			registers[A] = pop();
 			registers[B] = pop();
 			registers[C] = registers[B] / registers[A];
@@ -118,11 +113,16 @@ void eval(int op) {
 			push(registers[A]);
 			break;
 		}
-		case PRINT: {
-			int val = pop();
-			printf("%d\n", val);
+		case PRINTI: {
+			registers[A] = pop();
+			printf("%d\n", registers[A]);
 			break;
 		}	
+		case PRINTC: {
+			registers[A] = pop();
+			printf("%c", registers[A]);
+			break;
+		}
 	}
 }
 
@@ -131,6 +131,8 @@ int fetch() {
 }
 
 void runProgram(const int *program, const int mainIndex, const int gMemSize) {
+	running = true;
+	trace = true;
 	ip = mainIndex;
 	sp = -1;
 	PROGRAM = program;	
@@ -141,5 +143,5 @@ void runProgram(const int *program, const int mainIndex, const int gMemSize) {
 		eval(op);
 		ip++;
 	}	
-	dumpMemory(gMemSize);
+	if (trace) dumpMemory(gMemSize, gmem);
 }

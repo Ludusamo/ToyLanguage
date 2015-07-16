@@ -1,7 +1,7 @@
 #include "Bytecode.h"
 #include "VirtualMachine.h"
 
-const int program[] {
+/*const int program[23] {
 	// FUNCTION A()
 	PUSH, 0,  // int B
 
@@ -15,16 +15,48 @@ const int program[] {
 
 	LOAD, 1,  //| return B + C
 	LOAD, 2,  //|
-	ADD,      //|
+	ADDI,     //|
 	RET,      //|
 
 	// MAIN FUNCTION
 	CALL, 0, 0,
-	PRINT,
+	PRINTI,
 	HALT 
+};*/
+
+const int program[] {
+	PUSH, 104,
+	PRINTC,
+	PUSH, 101,
+	PRINTC,
+	PUSH, 108,
+	PRINTC,
+	PUSH, 108,
+	PRINTC,
+	PUSH, 111,
+	PRINTC,
+	PUSH, 44,
+	PRINTC,
+	PUSH, 32,
+	PRINTC,
+	PUSH, 119,
+	PRINTC,
+	PUSH, 111,
+	PRINTC,
+	PUSH, 114,
+	PRINTC,
+	PUSH, 108,
+	PRINTC,
+	PUSH, 100,
+	PRINTC,
+	PUSH, 10,
+	PRINTC,
+
+	HALT
 };
 
 int main() {
-	runProgram(program, 18, 0);
+	//runProgram(program, 18, 0);
+	runProgram(program, 0, 0);
 	return 0;
 }

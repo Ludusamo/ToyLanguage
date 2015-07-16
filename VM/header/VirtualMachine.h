@@ -1,11 +1,17 @@
+#include <string.h>
+#include <stdio.h>
+
+#include "Bytecode.h"
+#include "Debug.h"
+
 #ifndef VIRTUALMACHINE_H
 #define VIRTUALMACHINE_H
 
 static int stack[256]; // VM's stack array.
 static int *gmem;
 
-static bool running = true; // Boolean value indicating whether the program is currently running.
-static bool trace = true; // Boolean value indicating whether the stack is being traced.
+static bool running; // Boolean value indicating whether the program is currently running.
+static bool trace; // Boolean value indicating whether the stack is being traced.
 
 static const int *PROGRAM;
 
