@@ -15,7 +15,7 @@ public:
 	virtual void throwError(int lineno) = 0;
 };
 
-class TypeMismatchError extends Error {
+class TypeMismatchError : public Error {
 public:
 	void throwError(int lineno) {
 		printf("Type Mismatch Error on line %i.", lineno);

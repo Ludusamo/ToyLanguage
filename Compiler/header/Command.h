@@ -9,7 +9,7 @@ class Command {
 public:
 	Command() {};
 	virtual ~Command() {};
-	virtual void execute(Memory &mem) = 0;		
+	virtual int execute(Memory &mem) = 0;		
 };
 
 class CreateVariableCommand : public Command {
@@ -23,8 +23,9 @@ public:
 		this->depth = depth;
 	};
 
-	void execute(Memory &mem) {
+	int execute(Memory &mem) {
 		mem.createVariable(type, id, depth);
+		return 0;
 	};
 };
 

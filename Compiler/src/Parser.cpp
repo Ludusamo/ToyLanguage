@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-NodeManager Parser::parse(Statement statement) {
+Node Parser::parse(Statement statement) {
 	std::vector<Token> tokens;
 	tokens = statement.tokens;
 	for (int i = statement.depth; i < tokens.size(); i++) {
