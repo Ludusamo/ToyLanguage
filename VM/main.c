@@ -25,17 +25,8 @@
 };*/
 
 const int program[] = {
-	PUSH, 4,
-	PUSH, 1,
-	GT,
-	PUSH, 6,
-	PUSH, 1,
-	LT,
-	GTE,
-	PUSH, 6,
-	PUSH, 4,
-	LTE,
-	AND,
+	PUSH, 128,
+	PRINTC,
 	HALT
 };
 

@@ -1,4 +1,4 @@
-SRC_FILES = main.c src/VirtualMachine.c src/Bytecode.c src/Debug.c
+SRC_FILES = main.c src/VirtualMachine.c src/Debug.c
 
 CC = gcc
 COMPILER_FLAGS = -std=c99

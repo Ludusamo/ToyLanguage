@@ -4,6 +4,7 @@
 
 #include "Bytecode.h"
 #include "Debug.h"
+#include "Error.h"
 
 #ifndef VIRTUALMACHINE_H
 #define VIRTUALMACHINE_H

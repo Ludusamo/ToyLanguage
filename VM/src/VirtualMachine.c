@@ -129,6 +129,11 @@ void eval(int op) {
 			break;
 		case PRINTC: 
 			registers[A] = pop();
+			if (registers[A] > 127) {
+				running = 0;
+				ThrowError(INVALID_CHARACTER_EXCEPTION);	
+				break;
+			}
 			printf("%c", registers[A]);
 			break;
 	}
