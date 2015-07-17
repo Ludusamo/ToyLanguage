@@ -1,0 +1,66 @@
+#ifndef BYTECODE_H
+#define BYTECODE_H
+
+typedef struct {
+	const char *name;
+	int numOps;
+} Operation;
+
+Operation new_op(const char *name, int numOps);
+
+typedef enum {
+	HALT,
+	PUSH,
+	POP,
+	ADDI,
+	SUBI,
+	MULI,
+	DIVI,
+	EQ,
+	LT,
+	GT,
+	LTE,
+	GTE,
+	AND,
+	OR,
+	GSTORE,
+	GLOAD,
+	BR,
+	BRT,
+	BRF,
+	LOAD,
+	STORE,
+	CALL,
+	RET,
+	PRINTI,
+	PRINTC,
+} Opcodes;
+
+static Operation OPERATIONS[];
+OPERATIONS[0] = new_op("HALT", 0);
+OPERATIONS[0] = new_op("PUSH", 1);
+OPERATIONS[0] = new_op("POP", 0);
+OPERATIONS[0] = new_op("ADDI", 0);
+OPERATIONS[0] = new_op("SUBI", 0);
+OPERATIONS[0] = new_op("MULI", 0);
+OPERATIONS[0] = new_op("DIVI", 0);
+OPERATIONS[0] = new_op("EQ", 0);
+OPERATIONS[0] = new_op("LT", 0);
+OPERATIONS[0] = new_op("GT", 0);
+OPERATIONS[0] = new_op("LTE", 0);
+OPERATIONS[0] = new_op("GTE", 0);
+OPERATIONS[0] = new_op("AND", 0);
+OPERATIONS[0] = new_op("OR", 0);
+OPERATIONS[0] = new_op("GSTORE", 1);
+OPERATIONS[0] = new_op("GLOAD", 1);
+OPERATIONS[0] = new_op("BR", 1);
+OPERATIONS[0] = new_op("BRT", 1);
+OPERATIONS[0] = new_op("BRF", 1);
+OPERATIONS[0] = new_op("LOAD", 1),
+OPERATIONS[0] = new_op("STORE", 1),
+OPERATIONS[0] = new_op("CALL", 2),
+OPERATIONS[0] = new_op("RET", 0),
+OPERATIONS[0] = new_op("PRINTI", 0),
+OPERATIONS[0] = new_op("PRINTC", 0)
+
+#endif // BYTECODE_H

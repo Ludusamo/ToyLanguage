@@ -1,7 +1,7 @@
 SRC_FILES = main.c src/VirtualMachine.c src/Bytecode.c src/Debug.c
 
-CC = g++
-COMPILER_FLAGS = -w
+CC = gcc
+COMPILER_FLAGS = -std=c99
 LINKER_FLAGS = -Iheader
 
 OBJ_NAME = lavm

@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "Bytecode.h"
 #include "Debug.h"
@@ -10,14 +11,10 @@
 static int stack[256]; // VM's stack array.
 static int *gmem;
 
-static bool running; // Boolean value indicating whether the program is currently running.
-static bool trace; // Boolean value indicating whether the stack is being traced.
+static int running; // Boolean value indicating whether the program is currently running.
+static int trace; // Boolean value indicating whether the stack is being traced.
 
 static const int *PROGRAM;
-
-void push(int val); // Adds an item to the top of the stack.
-int pop(); // Pops off the top-most item on the stack.
-int getNextOperand();
 
 void eval(int op); // Evaluates an individual operation based on the stack.
 int fetch(); // Returns the current operation being evaluated.

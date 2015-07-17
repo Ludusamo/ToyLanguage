@@ -16,126 +16,96 @@ int getNextOperand() {
 	return PROGRAM[++ip];
 }
 
+void popIntoRegister(int numToPop) {
+	for (int i = 0; i < numToPop; i++) {
+		registers[i] = pop();
+	}
+}
+
 void eval(int op) {
 	switch(op) {
-		case HALT: {
-			running = false;
+		case HALT: 
+			running = 0;
 			break;
-		}
-		case PUSH: {
+		case PUSH: 
 			push(getNextOperand());
 			break;
-		}
-		case POP: {
+		case POP: 
 			pop();
 			break;
-		}
-		case ADDI: {
-			registers[A] = pop();
-			registers[B] = pop();
-			registers[C] = registers[A] + registers[B];
-			push(registers[C]);
+		case ADDI: 
+			popIntoRegister(2);
+			push(registers[A] + registers[B]);
 			break;
-		}
-		case SUBI: {
-			registers[A] = pop();
-			registers[B] = pop();
-			registers[C] = registers[B] - registers[A];
-			push(registers[C]);
+		case SUBI: 
+			popIntoRegister(2);
+			push(registers[B] - registers[A]);
 			break;
-		}
-		case MULI: {
-			registers[A] = pop();
-			registers[B] = pop();
-			registers[C] = registers[A] * registers[B];
-			push(registers[C]);
+		case MULI: 
+			popIntoRegister(2);
+			push(registers[A] * registers[B]);
 			break;
-		}
-		case DIVI: {
-			registers[A] = pop();
-			registers[B] = pop();
-			registers[C] = registers[B] / registers[A];
-			push(registers[C]);
+		case DIVI: 
+			popIntoRegister(2);
+			push(registers[B] / registers[A]);
 			break;
-		}
-		case EQ: {
-			registers[A] = pop();
-			registers[B] = pop();
+		case EQ: 
+			popIntoRegister(2);
 			push(registers[A] == registers[B]);
 			break;
-		}
-		case LT: {
-			registers[A] = pop();
-			registers[B] = pop();
+		case LT: 
+			popIntoRegister(2);
 			push(registers[B] < registers[A]);
 			break;
-		}
-		case GT: {
-			registers[A] = pop();
-			registers[B] = pop();
+		case GT:
+			popIntoRegister(2);
 			push(registers[B] > registers[A]);
 			break;
-		}
-		case LTE: {
-			registers[A] = pop();
-			registers[B] = pop();
+		case LTE:
+			popIntoRegister(2);
 			push(registers[B] <= registers[A]);
 			break;
-		}
-		case GTE: {
-			registers[A] = pop();
-			registers[B] = pop();
+		case GTE:
+			popIntoRegister(2);
 			push(registers[B] >= registers[A]);
 			break;
-		}
-		case AND: {
-			registers[A] = pop();
-			registers[B] = pop();
+		case AND:
+			popIntoRegister(2);
 			push(registers[B] && registers[A]);
 			break;
-		}
-		case OR: {
-			registers[A] = pop();
-			registers[B] = pop();
+		case OR:
+			popIntoRegister(2);
 			push(registers[B] || registers[A]);
 			break;
-		}
-		case GSTORE: {
+		case GSTORE:
 			registers[A] = getNextOperand();		
 			gmem[registers[A]] = pop();
 			break;
-		}	     
-		case GLOAD: {
+		case GLOAD:
 			registers[A] = getNextOperand();
 			push(gmem[registers[A]]);
 			break;
-		}
-		case BR: {
+		case BR:
 			ip = getNextOperand() - 1;
 			break;
-		}
-		case BRT: {
+		case BRT: 
 			registers[A] = getNextOperand() - 1;
 			if (pop() == 1) ip = registers[A];
 			break;
-		}
-		case BRF: {
+		case BRF:
 			registers[A] = getNextOperand() - 1;
 			if (pop() == 0) ip = registers[A];
 			break;
-		}
-		case LOAD: {
+		case LOAD:
 			registers[A] = getNextOperand(); // Offset
 			push(stack[fp + registers[A]]);
 			break;
-		}
-		case STORE: {
+		case STORE:
 			registers[A] = getNextOperand(); // Offset
 			registers[B] = pop(); // Value to Store
 			stack[fp + registers[A]] = registers[B];
 			break;
-		}
-		case CALL: {
+		case CALL:
 			registers[A] = getNextOperand() - 1; // Address
 			registers[B] = getNextOperand(); // Num Args
 			push(registers[B]);
@@ -144,8 +114,7 @@ void eval(int op) {
 			fp = sp;
 			ip = registers[A];
 			break;
-		}
-		case RET: {
+		case RET:
 			registers[A] = pop(); // Return Value
 			sp = fp;
 			ip = pop();
@@ -154,17 +123,14 @@ void eval(int op) {
 			sp -= registers[B];
 			push(registers[A]);
 			break;
-		}
-		case PRINTI: {
+		case PRINTI:
 			registers[A] = pop();
 			printf("%d\n", registers[A]);
 			break;
-		}	
-		case PRINTC: {
+		case PRINTC: 
 			registers[A] = pop();
 			printf("%c", registers[A]);
 			break;
-		}
 	}
 }
 
@@ -173,12 +139,12 @@ int fetch() {
 }
 
 void runProgram(const int *program, const int mainIndex, const int gMemSize) {
-	running = true;
-	trace = true;
+	running = 1;
+	trace = 1;
 	ip = mainIndex;
 	sp = -1;
 	PROGRAM = program;	
-	gmem = new int[gMemSize];
+	gmem = (int *) malloc(sizeof(int) * gMemSize);
 	while (running) {
 		int op = fetch();
 		if (trace) printStackTrace(ip, sp, op, PROGRAM, stack);

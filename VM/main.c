@@ -24,7 +24,7 @@
 	HALT 
 };*/
 
-const int program[] {
+const int program[] = {
 	PUSH, 4,
 	PUSH, 1,
 	GT,

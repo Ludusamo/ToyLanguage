@@ -6,8 +6,6 @@ typedef struct {
 	int numOps;
 } Operation;
 
-Operation new_op(const char *name, int numOps);
-
 typedef enum {
 	HALT,
 	PUSH,
@@ -34,34 +32,35 @@ typedef enum {
 	RET,
 	PRINTI,
 	PRINTC,
+	NUM_OP_CODES
 } Opcodes;
 
-static Operation OPERATIONS[] = {
-	new_op("HALT", 0),
-	new_op("PUSH", 1),
-	new_op("POP", 0),
-	new_op("ADDI", 0),
-	new_op("SUBI", 0),
-	new_op("MULI", 0),
-	new_op("DIVI", 0),
-	new_op("EQ", 0),
-	new_op("LT", 0),
-	new_op("GT", 0),
-	new_op("LTE", 0),
-	new_op("GTE", 0),
-	new_op("AND", 0),
-	new_op("OR", 0),
-	new_op("GSTORE", 1),
-	new_op("GLOAD", 1),
-	new_op("BR", 1),
-	new_op("BRT", 1),
-	new_op("BRF", 1),
-	new_op("LOAD", 1),
-	new_op("STORE", 1),
-	new_op("CALL", 2),
-	new_op("RET", 0),
-	new_op("PRINTI", 0),
-	new_op("PRINTC", 0)
+static Operation OPERATIONS[NUM_OP_CODES] = {
+	{"HALT", 0},
+	{"PUSH", 1},
+	{"POP", 0},
+	{"ADDI", 0},
+	{"SUBI", 0},
+	{"MULI", 0},
+	{"DIVI", 0},
+	{"EQ", 0},
+	{"LT", 0},
+	{"GT", 0},
+	{"LTE", 0},
+	{"GTE", 0},
+	{"AND", 0},
+	{"OR", 0},
+	{"GSTORE", 1},
+	{"GLOAD", 1},
+	{"BR", 1},
+	{"BRT", 1},
+	{"BRF", 1},
+	{"LOAD", 1},
+	{"STORE", 1},
+	{"CALL", 2},
+	{"RET", 0},
+	{"PRINTI", 0},
+	{"PRINTC", 0}
 };
 
 #endif // BYTECODE_H
