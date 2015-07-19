@@ -26,7 +26,7 @@ Node Script::compile() {
 		return Node();
 	}
 	for (int i = 0; i < scriptStatements.size(); i++) {
-		Parser::parse(scriptStatements[i]);
+
 	}		
 	return nodes;
 }

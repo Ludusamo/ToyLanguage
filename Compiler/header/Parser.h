@@ -9,9 +9,20 @@
 
 class Parser {
 public:
-	static Node parse(Statement statement);
+	void parse(Statement &statement);
 private:	
-	bool isDeclaration(Statement statement);
+	int statementIndex;
+	// Statement type check
+	bool isDeclaration(Statement &statement);
+	
+	// Statement component type check
+	bool isValue(Statement &statement);
+
+	// Statement token type check
+	bool isTokenType(Statement &statement, Token::TOKEN_TYPE type);	
+	bool isSubtype(Token token, int subtype);
+
+	bool endOfStatement(Statement &statement);
 };
 
 #endif // PARSER_H

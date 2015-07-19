@@ -18,8 +18,8 @@ int main() {
 	Statement statement;
 	statement.setStatement(reader.getLine());
 	statement.tokenizeStatement();
-	//Parser parser;
-	//parser.parse(statement);
+	Parser parser;
+	parser.parse(statement);
 	
 	return 0;
 }

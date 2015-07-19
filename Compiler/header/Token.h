@@ -3,22 +3,25 @@
 
 class Token {
 public:
+	// Token type declaration
 	enum TOKEN_TYPE { WHITESPACE, DATATYPE, KEYWORD, IDENTIFIER, NUMBER, OPERATOR, PAREN };
 	enum SUB_DATATYPE { INT, NUM_DATATYPES};
 	enum SUB_KEYWORD { IF, ELSE , NUM_KEYWORDS};
 	enum SUB_OPERATOR { ASSIGNMENT, ADD, SUB, MUL, DIV, EQ, NEQ, LT, GT, LTEQ, GTEQ, NUM_OPERATORS };
 	enum SUB_PAREN { LPAREN, RPAREN };
+
+	// Token Attributes
 	char *token;
-	
+	TOKEN_TYPE type;
+	int subtype;
+
 	void setToken(char *token) { this->token = token; };
 	void setType(TOKEN_TYPE type) { this->type = type; };
 	char *getType();
 	void determineSubtype();
-
-	static TOKEN_TYPE identifyTokenType(char *token);
-
-	TOKEN_TYPE type;
-	int subtype;
+		
+	// Functions for determining token type
+	static TOKEN_TYPE identifyTokenType(char *token);	
 	
 	static bool isdatatype(char *token);
 	static bool iswhitespace(char c);
