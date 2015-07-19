@@ -10,8 +10,8 @@
 class Parser {
 public:
 	static Node parse(Statement statement);
-private:
-	
+private:	
+	bool isDeclaration(Statement statement);
 };
 
 #endif // PARSER_H

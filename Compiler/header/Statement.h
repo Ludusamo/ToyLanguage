@@ -15,6 +15,7 @@ public:
 	char *statement;
 	std::vector<Token> tokens;
 
+	Token getToken(int index);
 	void setStatement(char *statement) { this->statement = statement; };
 	void tokenizeStatement();
 private:

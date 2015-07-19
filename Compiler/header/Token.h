@@ -3,9 +3,10 @@
 
 class Token {
 public:
-	enum TOKEN_TYPE { WHITESPACE, KEYWORD, IDENTIFIER, NUMBER, OPERATOR, PAREN };
-	enum SUB_KEYWORD { IF, ELSE, INT };
-	enum SUB_OPERATOR { ASSIGNMENT, ADD, SUB, MUL, DIV, EQ, NEQ, LT, GT, LTEQ, GTEQ };
+	enum TOKEN_TYPE { WHITESPACE, DATATYPE, KEYWORD, IDENTIFIER, NUMBER, OPERATOR, PAREN };
+	enum SUB_DATATYPE { INT, NUM_DATATYPES};
+	enum SUB_KEYWORD { IF, ELSE , NUM_KEYWORDS};
+	enum SUB_OPERATOR { ASSIGNMENT, ADD, SUB, MUL, DIV, EQ, NEQ, LT, GT, LTEQ, GTEQ, NUM_OPERATORS };
 	enum SUB_PAREN { LPAREN, RPAREN };
 	char *token;
 	
@@ -19,15 +20,16 @@ public:
 	TOKEN_TYPE type;
 	int subtype;
 	
+	static bool isdatatype(char *token);
 	static bool iswhitespace(char c);
 	static bool iskeyword(char *token);
 	static bool isoperator(char *token);
 	static bool isnum(char *token);
 private:	
+	const static char **DATATYPES;
+	const static char **SUBTYPE;
 	const static char **KEYWORDS;
-	const static int numKeywords;
 	const static char **OPERATORS;
-	const static int numOperators;
 };
 
 #endif // TOKEN_H

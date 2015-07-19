@@ -7,18 +7,22 @@
 #include "StringUtil.h"
 
 // DEFINITIONS
-const static char *KEYWORD_BUFFER[] = { "if", "else", "int" };
+const static char *DATATYPE_BUFFER[] = { "int" };
+const char** Token::DATATYPES = DATATYPE_BUFFER;
+
+const static char *KEYWORD_BUFFER[] = { "if", "else" };
 const char** Token::KEYWORDS = KEYWORD_BUFFER;
-const int Token::numKeywords = 3;
 
 const static char *OPERATORS_BUFFER[] = { "=", "+", "-", "*", "/", "==", "!=" "<", ">", "<=", ">=" };
 const char** Token::OPERATORS = OPERATORS_BUFFER;
-const int Token::numOperators = 11;
+//////////////
 
 char *Token::getType() {
 	switch (type) {
 	case WHITESPACE:
 		return (char*) "WHITESPACE";
+	case DATATYPE:
+		return (char*) "DATATYPE";
 	case KEYWORD:
 		return (char*) "KEYWORD";
 	case IDENTIFIER:
@@ -34,12 +38,16 @@ char *Token::getType() {
 
 void Token::determineSubtype() {
 	switch (type) {
+	case DATATYPE:
+		for (int i = 0; i < NUM_DATATYPES; i++)
+			if (StringUtil::equal(DATATYPES[i], token)) subtype = i;
+		break;
 	case KEYWORD:
-		for (int i = 0; i < numKeywords; i++) 
+		for (int i = 0; i < NUM_KEYWORDS; i++) 
 			if (StringUtil::equal(KEYWORDS[i], token)) subtype = i;
 		break;
 	case OPERATOR:
-		for (int i = 0; i < numOperators; i++)
+		for (int i = 0; i < NUM_OPERATORS; i++)
 			if (StringUtil::equal(OPERATORS[i], token)) subtype = i;
 		break;
 	case PAREN:	
@@ -53,6 +61,7 @@ void Token::determineSubtype() {
 
 Token::TOKEN_TYPE Token::identifyTokenType(char *token) {
 	if (iswhitespace(token[0])) return WHITESPACE;
+	if (isdatatype(token)) return DATATYPE;
 	if (iskeyword(token)) return KEYWORD;
 	if (isoperator(token)) return OPERATOR;
 	if (token[0] == '(' || token[0] == ')') return PAREN;
@@ -64,15 +73,22 @@ bool Token::iswhitespace(char c) {
 	return (c == ' ') || (c == '\t') || (c == '\n');
 }
 
+bool Token::isdatatype(char *token) {
+	for (int i = 0; i < NUM_DATATYPES; i++) {
+		if (StringUtil::equal(DATATYPES[i], token)) return true;
+	}
+	return false;
+}
+
 bool Token::iskeyword(char *token) {
-	for (int i = 0; i < numKeywords; i++) {
+	for (int i = 0; i < NUM_KEYWORDS; i++) {
 		if (StringUtil::equal(KEYWORDS[i], token)) return true;
 	}
 	return false;
 }
 
 bool Token::isoperator(char *token) {
-	for (int i = 0; i < numOperators; i++) {
+	for (int i = 0; i < NUM_OPERATORS; i++) {
 		if (StringUtil::equal(OPERATORS[i], token)) return true;
 	}
 	return false;

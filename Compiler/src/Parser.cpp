@@ -32,3 +32,10 @@ Node Parser::parse(Statement statement) {
 		}
 	}	
 }
+
+bool Parser::isDeclaration(Statement statement) {
+	for (int i = 0; i < statement.tokens.size(); i++) {
+		statement.getToken(i);
+	}
+	return false;
+}
