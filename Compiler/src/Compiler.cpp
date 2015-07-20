@@ -7,6 +7,10 @@ std::vector<int> Compiler::compileDeclaration(Statement &statement) {
 	bytecode.push_back(varIndex);
 	bytecode.push_back(GSTORE);
 	if (statement.tokens.size() > 2) compileValue(statement, 3);
+	else {
+		bytecode.push_back(0);
+		bytecode.push_back(PUSH);
+	}
 	return bytecode;
 }
 

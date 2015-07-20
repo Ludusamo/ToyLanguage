@@ -25,13 +25,12 @@
 };*/
 
 const int program[] = {
-	PUSH, 128,
-	PRINTC,
+	1, 5, 1, 5, 1, 2, 3, 6, 14, 0,
 	HALT
 };
 
 int main() {
 	//runProgram(program, 18, 0);
-	runProgram(program, 0, 0);
+	runProgram(program, 0, 1);
 	return 0;
 }
