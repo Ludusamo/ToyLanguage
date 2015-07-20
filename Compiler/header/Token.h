@@ -1,6 +1,9 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
+#include "StringUtil.h"
+#include <stdio.h>
+
 class Token {
 public:
 	// Token type declaration
@@ -15,13 +18,14 @@ public:
 	TOKEN_TYPE type;
 	int subtype;
 
-	void setToken(char *token) { this->token = token; };
+	void setToken(char *token) { this->token = StringUtil::copy(token); };
+	char *getToken() { return token; };
 	void setType(TOKEN_TYPE type) { this->type = type; };
 	char *getType();
 	void determineSubtype();
 		
 	// Functions for determining token type
-	static TOKEN_TYPE identifyTokenType(char *token);	
+	static TOKEN_TYPE identifyTokenType(char *token);
 	
 	static bool isdatatype(char *token);
 	static bool iswhitespace(char c);

@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "StringUtil.h"
-
 // DEFINITIONS
 const static char *DATATYPE_BUFFER[] = { "int" };
 const char** Token::DATATYPES = DATATYPE_BUFFER;

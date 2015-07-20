@@ -79,7 +79,7 @@ void Statement::recordToken(char *token, Token::TOKEN_TYPE type) {
 	t.setType(type);
 	t.determineSubtype();
 
-	printf("Token: %s\n", token);
+	printf("Token: %s\n", t.token);
 	printf("Token Type: %s\n", t.getType());
 
 	tokens.push_back(t);

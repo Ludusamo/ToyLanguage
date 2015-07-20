@@ -9,9 +9,11 @@
 
 class Parser {
 public:
-	void parse(Statement &statement);
+	std::vector<int> parse(Statement &statement);
 private:	
+	std::vector<int> bytecode;
 	int statementIndex;
+
 	// Statement type check
 	bool isDeclaration(Statement &statement);
 	

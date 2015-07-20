@@ -40,3 +40,11 @@ char *StringUtil::itoa(int x) {
 
 	return (char *) ss.str().c_str();
 }
+
+char *StringUtil::copy(char *origin) {
+	char *destination = (char*) malloc(sizeof(origin));
+	for (int i = 0; i < strlen(origin); i++) {
+		destination[i] = origin[i];
+	}
+	return destination;
+}
