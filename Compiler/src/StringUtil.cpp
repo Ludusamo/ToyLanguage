@@ -43,7 +43,7 @@ char *StringUtil::itoa(int x) {
 
 char *StringUtil::copy(char *origin) {
 	char *destination = (char*) malloc(sizeof(origin));
-	for (int i = 0; i < strlen(origin); i++) {
+	for (int i = 0; i < strlen(origin) + 1; i++) {
 		destination[i] = origin[i];
 	}
 	return destination;

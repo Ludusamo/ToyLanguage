@@ -42,7 +42,7 @@ void Statement::tokenizeStatement() {
 				memset(buffer, ' ', sizeof(buffer));
 			}
 		} else if (BitUtil::checkBit(currTokenType, DELIM_FLAG)) { // DELIMINATORS
-			if (Token::iswhitespace(peekNextChar(i)) || isalnum(peekNextChar(i))) {
+			if (Token::iswhitespace(peekNextChar(i)) || isalnum(peekNextChar(i)) || peekNextChar(i) == '(' || peekNextChar(i) == ')') {
 				buffer[currIndex + 1] = '\0'; // Terminates the string
 				recordToken(buffer, Token::identifyTokenType(buffer));
 				currTokenType = 0;
@@ -75,6 +75,7 @@ Token Statement::getToken(int index) {
 
 void Statement::recordToken(char *token, Token::TOKEN_TYPE type) {
 	Token t;
+
 	t.setToken(token);
 	t.setType(type);
 	t.determineSubtype();

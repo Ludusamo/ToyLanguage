@@ -5,11 +5,11 @@
 #include <string.h>
 
 // DEFINITIONS
-const static char *DATATYPE_BUFFER[] = { "int" };
+const static char *DATATYPE_BUFFER[] = { "int", "bool"};
 const char** Token::DATATYPES = DATATYPE_BUFFER;
 
-const static char *KEYWORD_BUFFER[] = { "if", "else" };
-const char** Token::KEYWORDS = KEYWORD_BUFFER;
+const static char *CONTROL_BUFFER[] = { "if", "else" };
+const char** Token::CONTROLS = CONTROL_BUFFER;
 
 const static char *OPERATORS_BUFFER[] = { "=", "+", "-", "*", "/", "==", "!=" "<", ">", "<=", ">=" };
 const char** Token::OPERATORS = OPERATORS_BUFFER;
@@ -21,12 +21,14 @@ char *Token::getType() {
 		return (char*) "WHITESPACE";
 	case DATATYPE:
 		return (char*) "DATATYPE";
-	case KEYWORD:
-		return (char*) "KEYWORD";
+	case CONTROL:
+		return (char*) "CONTROL";
 	case IDENTIFIER:
 		return (char*) "IDENTIFIER";
 	case NUMBER:
 		return (char*) "NUMBER";
+	case BOOL:
+		return (char*) "BOOL";
 	case OPERATOR:
 		return (char*) "OPERATOR";
 	case PAREN:
@@ -40,9 +42,9 @@ void Token::determineSubtype() {
 		for (int i = 0; i < NUM_DATATYPES; i++)
 			if (StringUtil::equal(DATATYPES[i], token)) subtype = i;
 		break;
-	case KEYWORD:
-		for (int i = 0; i < NUM_KEYWORDS; i++) 
-			if (StringUtil::equal(KEYWORDS[i], token)) subtype = i;
+	case CONTROL:
+		for (int i = 0; i < NUM_CONTROLS; i++) 
+			if (StringUtil::equal(CONTROLS[i], token)) subtype = i;
 		break;
 	case OPERATOR:
 		for (int i = 0; i < NUM_OPERATORS; i++)
@@ -60,10 +62,11 @@ void Token::determineSubtype() {
 Token::TOKEN_TYPE Token::identifyTokenType(char *token) {
 	if (iswhitespace(token[0])) return WHITESPACE;
 	if (isdatatype(token)) return DATATYPE;
-	if (iskeyword(token)) return KEYWORD;
+	if (iscontrol(token)) return CONTROL;
 	if (isoperator(token)) return OPERATOR;
 	if (token[0] == '(' || token[0] == ')') return PAREN;
 	if (isnum(token)) return NUMBER;
+	if (isbool(token)) return BOOL;
 	return IDENTIFIER;	
 }
 
@@ -78,9 +81,9 @@ bool Token::isdatatype(char *token) {
 	return false;
 }
 
-bool Token::iskeyword(char *token) {
-	for (int i = 0; i < NUM_KEYWORDS; i++) {
-		if (StringUtil::equal(KEYWORDS[i], token)) return true;
+bool Token::iscontrol(char *token) {
+	for (int i = 0; i < NUM_CONTROLS; i++) {
+		if (StringUtil::equal(CONTROLS[i], token)) return true;
 	}
 	return false;
 }
@@ -97,4 +100,8 @@ bool Token::isnum(char *token) {
 		if (!isdigit(token[i])) return false;
 		return true;
 	}
+}
+
+bool Token::isbool(char *token) {
+	return (StringUtil::equal("true", token) || StringUtil::equal("false", token));
 }

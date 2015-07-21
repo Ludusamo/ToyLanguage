@@ -39,7 +39,21 @@ void Compiler::compileValue(Statement &statement, int index) {
 		compileValue(statement, index + 1);	
 	}
 
-	if (statement.getToken(index).type == Token::PAREN) {
+	if (statement.getToken(index).type == Token::PAREN
+		&& statement.getToken(index).subtype == Token::LPAREN) {
+		int parenCount = 1;
+		for (int i = index + 1; i < statement.tokens.size(); i++) {
+			if (statement.getToken(i).type == Token::PAREN) {
+				if (statement.getToken(i).subtype == Token::LPAREN) {
+					parenCount++;
+				}
+				if (statement.getToken(i).subtype == Token::RPAREN) {	
+					parenCount--;
+					if (parenCount == 0)
+						compileValue(statement, i + 1);
+				}
+			}
+		}
 		compileValue(statement, index + 1);
 	}
 }

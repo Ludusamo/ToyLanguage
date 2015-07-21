@@ -7,9 +7,9 @@
 class Token {
 public:
 	// Token type declaration
-	enum TOKEN_TYPE { WHITESPACE, DATATYPE, KEYWORD, IDENTIFIER, NUMBER, OPERATOR, PAREN };
-	enum SUB_DATATYPE { INT, NUM_DATATYPES};
-	enum SUB_KEYWORD { IF, ELSE , NUM_KEYWORDS};
+	enum TOKEN_TYPE { WHITESPACE, DATATYPE, CONTROL, IDENTIFIER, NUMBER, BOOL, OPERATOR, PAREN };
+	enum SUB_DATATYPE { INT, BOOLEAN, NUM_DATATYPES};
+	enum SUB_CONTROL { IF, ELSE , NUM_CONTROLS};
 	enum SUB_OPERATOR { ASSIGNMENT, ADD, SUB, MUL, DIV, EQ, NEQ, LT, GT, LTEQ, GTEQ, NUM_OPERATORS };
 	enum SUB_PAREN { LPAREN, RPAREN };
 
@@ -29,13 +29,14 @@ public:
 	
 	static bool isdatatype(char *token);
 	static bool iswhitespace(char c);
-	static bool iskeyword(char *token);
+	static bool iscontrol(char *token);
 	static bool isoperator(char *token);
 	static bool isnum(char *token);
+	static bool isbool(char *token);
 private:	
 	const static char **DATATYPES;
 	const static char **SUBTYPE;
-	const static char **KEYWORDS;
+	const static char **CONTROLS;
 	const static char **OPERATORS;
 };
 

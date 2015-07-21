@@ -16,9 +16,11 @@ private:
 
 	// Statement type check
 	bool isDeclaration(Statement &statement);
+	bool isControl(Statement &statement);
 	
 	// Statement component type check
-	bool isValue(Statement &statement);
+	bool isIntValue(Statement &statement);
+	bool isBoolValue(Statement &statement);
 
 	// Statement token type check
 	bool isTokenType(Statement &statement, Token::TOKEN_TYPE type);	
