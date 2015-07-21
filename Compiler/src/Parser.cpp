@@ -15,9 +15,11 @@ bool Parser::isControl(Statement &statement) {
 		if (isTokenType(statement, Token::PAREN) 
 			&& isSubtype(statement.getToken(statementIndex), Token::LPAREN)) {
 			if (isBoolValue(statement)) {
-
+				if (isTokenType(statement, Token::PAREN)
+					&& isSubtype(statement.getToken(statementIndex), Token::RPAREN)) {
+					return true;	
+				}
 			}
-
 		}
 	}
 	return false;
@@ -27,7 +29,7 @@ bool Parser::isDeclaration(Statement &statement) {
 	statementIndex = -1;
 	int datatype = statement.getToken(0).subtype;
 	if (isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER)) {
-		if (isTokenType(statement, Token::OPERATOR) 
+		if (isTokenType(statement, Token::ARTH_OPERATOR) 
 				&& isSubtype(statement.getToken(statementIndex), (int) Token::ASSIGNMENT)) {
 			switch(datatype) {
 			case Token::INT:
@@ -58,7 +60,7 @@ bool Parser::isSubtype(Token token, int subtype) {
 bool Parser::isIntValue(Statement &statement) {
 	//VALUE
 	if (isTokenType(statement, Token::NUMBER)) {
-		if (isTokenType(statement, Token::OPERATOR)) {
+		if (isTokenType(statement, Token::ARTH_OPERATOR)) {
 			if (isIntValue(statement)) return true;
 			else return false;
 		} 
@@ -71,7 +73,7 @@ bool Parser::isIntValue(Statement &statement) {
 		if (isIntValue(statement)) {
 			if (isTokenType(statement, Token::PAREN)
 				&& isSubtype(statement.getToken(statementIndex), (int) Token::RPAREN)) {
-				if (isTokenType(statement, Token::OPERATOR)) {
+				if (isTokenType(statement, Token::ARTH_OPERATOR)) {
 					if (isIntValue(statement)) return true;
 					else return false;
 				}
@@ -86,7 +88,7 @@ bool Parser::isIntValue(Statement &statement) {
 bool Parser::isBoolValue(Statement &statement) {
 	//VALUE
 	if (isTokenType(statement, Token::BOOL)) {
-		if (isTokenType(statement, Token::OPERATOR)) {
+		if (isTokenType(statement, Token::BOOL_OPERATOR)) {
 			if (isBoolValue(statement)) return true;
 			else return false;
 		} 
@@ -99,7 +101,7 @@ bool Parser::isBoolValue(Statement &statement) {
 		if (isBoolValue(statement)) {
 			if (isTokenType(statement, Token::PAREN)
 				&& isSubtype(statement.getToken(statementIndex), (int) Token::RPAREN)) {
-				if (isTokenType(statement, Token::OPERATOR)) {
+				if (isTokenType(statement, Token::BOOL_OPERATOR)) {
 					if (isBoolValue(statement)) return true;
 					else return false;
 				}

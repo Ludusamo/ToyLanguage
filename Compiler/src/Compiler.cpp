@@ -21,7 +21,7 @@ void Compiler::compileValue(Statement &statement, int index) {
 		bytecode.push_back(PUSH);
 	}
 
-	if (statement.getToken(index).type == Token::OPERATOR) {
+	if (statement.getToken(index).type == Token::ARTH_OPERATOR) {
 		switch (statement.getToken(index).subtype) {
 		case Token::ADD:
 			bytecode.push_back(ADDI);

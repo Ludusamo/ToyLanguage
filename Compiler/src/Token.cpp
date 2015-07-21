@@ -11,8 +11,11 @@ const char** Token::DATATYPES = DATATYPE_BUFFER;
 const static char *CONTROL_BUFFER[] = { "if", "else" };
 const char** Token::CONTROLS = CONTROL_BUFFER;
 
-const static char *OPERATORS_BUFFER[] = { "=", "+", "-", "*", "/", "==", "!=" "<", ">", "<=", ">=" };
-const char** Token::OPERATORS = OPERATORS_BUFFER;
+const static char *ARTH_OPERATORS_BUFFER[] = { "=", "+", "-", "*", "/" };
+const char** Token::ARTH_OPERATORS = ARTH_OPERATORS_BUFFER;
+
+const static char *BOOL_OPERATORS_BUFFER[] = { "==", "!=" "<", ">", "<=", ">=" };
+const char** Token::BOOL_OPERATORS = BOOL_OPERATORS_BUFFER;
 //////////////
 
 char *Token::getType() {
@@ -29,8 +32,10 @@ char *Token::getType() {
 		return (char*) "NUMBER";
 	case BOOL:
 		return (char*) "BOOL";
-	case OPERATOR:
-		return (char*) "OPERATOR";
+	case ARTH_OPERATOR:
+		return (char*) "ARTH_OPERATOR";
+	case BOOL_OPERATOR:
+		return (char*) "BOOL_OPERATOR";
 	case PAREN:
 		return (char*) "PAREN";
 	}
@@ -46,9 +51,13 @@ void Token::determineSubtype() {
 		for (int i = 0; i < NUM_CONTROLS; i++) 
 			if (StringUtil::equal(CONTROLS[i], token)) subtype = i;
 		break;
-	case OPERATOR:
-		for (int i = 0; i < NUM_OPERATORS; i++)
-			if (StringUtil::equal(OPERATORS[i], token)) subtype = i;
+	case ARTH_OPERATOR:
+		for (int i = 0; i < NUM_ARTH_OPERATORS; i++)
+			if (StringUtil::equal(ARTH_OPERATORS[i], token)) subtype = i;
+		break;
+	case BOOL_OPERATOR:
+		for (int i = 0; i < NUM_BOOL_OPERATORS; i++)
+			if (StringUtil::equal(BOOL_OPERATORS[i], token)) subtype = i;
 		break;
 	case PAREN:	
 		if (token[0] == '(') subtype = 0;
@@ -63,7 +72,8 @@ Token::TOKEN_TYPE Token::identifyTokenType(char *token) {
 	if (iswhitespace(token[0])) return WHITESPACE;
 	if (isdatatype(token)) return DATATYPE;
 	if (iscontrol(token)) return CONTROL;
-	if (isoperator(token)) return OPERATOR;
+	if (isarthoperator(token)) return ARTH_OPERATOR;
+	if (isbooloperator(token)) return BOOL_OPERATOR;
 	if (token[0] == '(' || token[0] == ')') return PAREN;
 	if (isnum(token)) return NUMBER;
 	if (isbool(token)) return BOOL;
@@ -88,9 +98,16 @@ bool Token::iscontrol(char *token) {
 	return false;
 }
 
-bool Token::isoperator(char *token) {
-	for (int i = 0; i < NUM_OPERATORS; i++) {
-		if (StringUtil::equal(OPERATORS[i], token)) return true;
+bool Token::isarthoperator(char *token) {
+	for (int i = 0; i < NUM_ARTH_OPERATORS; i++) {
+		if (StringUtil::equal(ARTH_OPERATORS[i], token)) return true;
+	}
+	return false;
+}
+
+bool Token::isbooloperator(char *token) {
+	for (int i = 0; i < NUM_BOOL_OPERATORS; i++) {
+		if (StringUtil::equal(BOOL_OPERATORS[i], token)) return true;
 	}
 	return false;
 }
