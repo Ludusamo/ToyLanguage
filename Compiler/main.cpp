@@ -22,6 +22,9 @@ int main() {
 
 	Compiler compiler;
 	std::vector<int> bytecode = compiler.compileDeclaration(statement);
+	for (int i = bytecode.size() - 1; i != -1; i--) {
+		printf("%i\n", bytecode[i]);
+	}
 
 	return 0;
 }

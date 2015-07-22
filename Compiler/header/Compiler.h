@@ -43,7 +43,8 @@ private:
 	std::vector<int> bytecode;
 	Memory mem;
 
-	void compileValue(Statement &statement, int index);
+	void compileIntValue(Statement &statement, int index);
+	void compileBoolValue(Statement &statement, int index);
 };
 
 #endif // COMPILER_H

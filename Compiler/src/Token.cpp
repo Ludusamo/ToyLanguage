@@ -14,7 +14,7 @@ const char** Token::CONTROLS = CONTROL_BUFFER;
 const static char *ARTH_OPERATORS_BUFFER[] = { "=", "+", "-", "*", "/" };
 const char** Token::ARTH_OPERATORS = ARTH_OPERATORS_BUFFER;
 
-const static char *BOOL_OPERATORS_BUFFER[] = { "==", "!=" "<", ">", "<=", ">=" };
+const static char *BOOL_OPERATORS_BUFFER[] = { "==", "!=", "<", ">", "<=", ">=" };
 const char** Token::BOOL_OPERATORS = BOOL_OPERATORS_BUFFER;
 //////////////
 
@@ -72,8 +72,8 @@ Token::TOKEN_TYPE Token::identifyTokenType(char *token) {
 	if (iswhitespace(token[0])) return WHITESPACE;
 	if (isdatatype(token)) return DATATYPE;
 	if (iscontrol(token)) return CONTROL;
-	if (isarthoperator(token)) return ARTH_OPERATOR;
 	if (isbooloperator(token)) return BOOL_OPERATOR;
+	if (isarthoperator(token)) return ARTH_OPERATOR;
 	if (token[0] == '(' || token[0] == ')') return PAREN;
 	if (isnum(token)) return NUMBER;
 	if (isbool(token)) return BOOL;

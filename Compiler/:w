@@ -75,8 +75,7 @@ void Compiler::compileBoolValue(Statement &statement, int index) {
 
 	if (statement.getToken(index).type == Token::BOOL) {
 		compileBoolValue(statement, index + 1);
-		int boolVal = StringUtil::equal(statement.getToken(index).token, "true") ? 1 : 0;
-		bytecode.push_back(boolVal);
+		bytecode.push_back(StringUtil::);
 		bytecode.push_back(PUSH);
 	}
 
@@ -99,7 +98,6 @@ void Compiler::compileBoolValue(Statement &statement, int index) {
 	}
 
 	if (statement.getToken(index).type == Token::BOOL_OPERATOR) {
-		printf("BOOL OP %i\n", statement.getToken(index).subtype);
 		switch (statement.getToken(index).subtype) {
 		case Token::EQ:
 			bytecode.push_back(EQ);

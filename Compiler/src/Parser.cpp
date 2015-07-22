@@ -87,6 +87,14 @@ bool Parser::isIntValue(Statement &statement) {
 
 bool Parser::isBoolValue(Statement &statement) {
 	//VALUE
+	if (isIntValue(statement)) {
+		if (isTokenType(statement, Token::BOOL_OPERATOR)) {
+			if (isIntValue(statement)) return true;
+			return false;
+		}
+		return true;
+	}
+
 	if (isTokenType(statement, Token::BOOL)) {
 		if (isTokenType(statement, Token::BOOL_OPERATOR)) {
 			if (isBoolValue(statement)) return true;
