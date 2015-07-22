@@ -4,14 +4,18 @@
 
 std::vector<int> Parser::parse(Statement &statement) {
 	if (isDeclaration(statement)) {
-		printf("TRUE\n");
-	} else printf("FALSE\n");
+		printf("Is Declaration\n");
+	} else printf("Is not Declaration\n");
+	if (isIfStatement(statement)) {
+		printf("Is If Statement\n");	
+	} else printf("Is not if statement\n");
 	return bytecode;
 }
 
-bool Parser::isControl(Statement &statement) {
+bool Parser::isIfStatement(Statement &statement) {
 	statementIndex = -1;
-	if (isTokenType(statement, Token::CONTROL)) {
+	if (isTokenType(statement, Token::CONTROL) 
+		&& isSubtype(statement.getToken(statementIndex), Token::IF)) {
 		if (isTokenType(statement, Token::PAREN) 
 			&& isSubtype(statement.getToken(statementIndex), Token::LPAREN)) {
 			if (isBoolValue(statement)) {

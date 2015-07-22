@@ -39,6 +39,8 @@ typedef enum {
 class Compiler {
 public:
 	std::vector<int> compileDeclaration(Statement &statement);
+	std::vector<int> compileIfStatement(Statement &statement);
+	std::vector<int> compileWhileStatement(Statement &statement);
 private:
 	std::vector<int> bytecode;
 	Memory mem;

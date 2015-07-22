@@ -16,7 +16,7 @@ private:
 
 	// Statement type check
 	bool isDeclaration(Statement &statement);
-	bool isControl(Statement &statement);
+	bool isIfStatement(Statement &statement);
 	
 	// Statement component type check
 	bool isIntValue(Statement &statement);

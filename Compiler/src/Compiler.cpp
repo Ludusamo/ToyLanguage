@@ -3,7 +3,8 @@
 #include <iostream>
 
 std::vector<int> Compiler::compileDeclaration(Statement &statement) {
-	int varIndex = mem.createVariable(statement.tokens[1].token);
+	bytecode.clear();
+	int varIndex = mem.createVariable(statement.tokens[1].token, statement.tokens[0].subtype);
 	bytecode.push_back(varIndex);
 	bytecode.push_back(GSTORE);
 	if (statement.tokens.size() > 2) {
@@ -20,6 +21,10 @@ std::vector<int> Compiler::compileDeclaration(Statement &statement) {
 		bytecode.push_back(PUSH);
 	}
 	return bytecode;
+}
+
+std::vector<int> Compiler::compileIfStatement(Statement &statement) {
+
 }
 
 void Compiler::compileIntValue(Statement &statement, int index) {

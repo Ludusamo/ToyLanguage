@@ -7,17 +7,23 @@
 
 class Memory {
 public:
+	typedef struct {
+		char *id;
+		int type;
+	} Variable;
+
 	Memory() {};
 	~Memory() {};
-	std::vector<char*> variables;
+	std::vector<Variable> variables;
 	
-	int createVariable(const char *id) {
-		variables.push_back((char*)id);
+	int createVariable(const char *id, int type) {
+		Variable var = {(char*)id, type};
+		variables.push_back(var);
 		return variables.size() - 1;
 	}
 	int getVariable(const char *id) {
 		for (int i = 0; i < variables.size(); i++) {
-			if (variables[i] == (char*)id) return i;
+			if (variables[i].id == (char*)id) return i;
 		}
 	}
 };
