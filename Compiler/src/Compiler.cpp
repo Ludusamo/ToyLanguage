@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-std::vector<int> Compiler::compileDeclaration(Statement &statement) {
+std::vector<int> Compiler::compileDeclaration(Statement &statement, Memory &mem) {
 	bytecode.clear();
 	int varIndex = mem.createVariable(statement.tokens[1].token, statement.tokens[0].subtype);
 	bytecode.push_back(varIndex);

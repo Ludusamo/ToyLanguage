@@ -3,23 +3,36 @@
 
 #include <stdio.h>
 
-class ErrorHandler {
+class UndeclaredVariableError {
 public:
-	
-};
-
-class Error {
-public:
-	Error() {};
-	virtual ~Error() {};
-	virtual void throwError(int lineno) = 0;
-};
-
-class TypeMismatchError : public Error {
-public:
-	void throwError(int lineno) {
-		printf("Type Mismatch Error on line %i.", lineno);
+	static void throwError(int lineno) {
+		printf("Variable was not Declared on line %i.\n", lineno);
 	};
 };
 
+class TypeMismatchError {
+public:
+	static void throwError(int lineno) {
+		printf("Type Mismatch Error on line %i.\n", lineno);
+	};
+};
+
+class ErrorHandler {
+public:
+	typedef enum {
+		UndeclaredVariable,
+		TypeMismatch
+	} ERRORS;
+
+	static void throwError(int lineno, int errorType) {
+		switch (errorType) {
+		case UndeclaredVariable:
+			UndeclaredVariableError::throwError(lineno);
+			break;
+		case TypeMismatch:
+			TypeMismatchError::throwError(lineno);
+			break;
+		}	
+	}
+};
 #endif // ERRORHANDLER_H

@@ -21,10 +21,12 @@ public:
 		variables.push_back(var);
 		return variables.size() - 1;
 	}
+
 	int getVariable(const char *id) {
 		for (int i = 0; i < variables.size(); i++) {
 			if (variables[i].id == (char*)id) return i;
 		}
+		return -1;
 	}
 };
 
