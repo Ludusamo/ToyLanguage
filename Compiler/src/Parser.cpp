@@ -4,6 +4,7 @@
 
 bool Parser::parse(std::vector<Statement> &statements, Memory &mem) {
 	parsingIndex++;
+	statementIndex = -1;
 	if (parsingIndex == statements.size()) return true;
 	if (isDeclaration(statements[parsingIndex], mem)) {
 		statements[parsingIndex].tagType(Statement::DECL);
@@ -69,7 +70,7 @@ bool Parser::isSubtype(Token token, int subtype) {
 bool Parser::variableExists(const char *id, Memory &mem) {
 	int varIndex = mem.getVariable(id); 
 	if (varIndex == -1) {
-		ErrorHandler::throwError(0, 0);
+		ErrorHandler::throwError(parsingIndex, 0);
 		return false;
 	}
 	return true;

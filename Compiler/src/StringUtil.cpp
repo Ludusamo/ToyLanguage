@@ -27,10 +27,12 @@ char *StringUtil::add(const char *str1, const char *str2) {
 }
 
 int StringUtil::atoi(const char *str) {
+	printf("%s ", str);
 	int output;
 	std::stringstream ss;
 	ss << str;
 	ss >> output;
+	printf("%i\n", output);
 
 	return output;
 }

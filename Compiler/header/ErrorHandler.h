@@ -6,7 +6,7 @@
 class UndeclaredVariableError {
 public:
 	static void throwError(int lineno) {
-		printf("Variable was not Declared on line %i.\n", lineno);
+		printf("Variable was not declared on line %i.\n", lineno);
 	};
 };
 

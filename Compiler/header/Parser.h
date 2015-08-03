@@ -11,7 +11,6 @@
 class Parser {
 public:
 	Parser() {
-		statementIndex = -1;
 		parsingIndex = -1;	
 	};
 	~Parser() {};

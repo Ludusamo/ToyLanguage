@@ -43,10 +43,11 @@ public:
 	void compileIfStatement(Statement &statement, Memory &mem);
 	void compileWhileStatement(Statement &statement, Memory &mem);
 private:
+	int statementIndex;
 	std::vector<int> bytecode;
 
-	void compileIntValue(Statement &statement, int index);
-	void compileBoolValue(Statement &statement, int index);
+	void compileIntValue(Statement &statement, Memory &mem);
+	void compileBoolValue(Statement &statement, Memory &mem);
 };
 
 #endif // COMPILER_H
