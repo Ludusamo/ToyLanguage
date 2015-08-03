@@ -2,18 +2,23 @@
 
 #include <stdio.h>
 
-std::vector<int> Parser::parse(Statement &statement, Memory &mem) {
-	if (isDeclaration(statement, mem)) {
-		printf("Is Declaration\n");
-	} else printf("Is not Declaration\n");
-	if (isIfStatement(statement, mem)) {
-		printf("Is If Statement\n");	
-	} else printf("Is not if statement\n");
-	return bytecode;
+bool Parser::parse(std::vector<Statement> &statements, Memory &mem) {
+	parsingIndex++;
+	if (parsingIndex == statements.size()) return true;
+	if (isDeclaration(statements[parsingIndex], mem)) {
+		statements[parsingIndex].tagType(Statement::DECL);
+		printf("%i is a declaration.\n", parsingIndex);
+		if (parse(statements, mem)) return true;
+	}
+	if (isIfStatement(statements[parsingIndex], mem)) {
+		statements[parsingIndex].tagType(Statement::IF);
+		printf("%i is an if statement.\n", parsingIndex);		
+		if (parse(statements, mem)) return true;
+	}
+	return false;
 }
 
 bool Parser::isIfStatement(Statement &statement, Memory &mem) {
-	statementIndex = -1;
 	if (isTokenType(statement, Token::CONTROL) 
 		&& isSubtype(statement.getToken(statementIndex), Token::IF)) {
 		if (isTokenType(statement, Token::PAREN) 
@@ -30,8 +35,8 @@ bool Parser::isIfStatement(Statement &statement, Memory &mem) {
 }
 
 bool Parser::isDeclaration(Statement &statement, Memory &mem) {
-	statementIndex = -1;
 	int datatype = statement.getToken(0).subtype;
+	mem.createVariable(statement.tokens[1].token, datatype);
 	if (isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER)) {
 		if (isTokenType(statement, Token::ARTH_OPERATOR) 
 				&& isSubtype(statement.getToken(statementIndex), (int) Token::ASSIGNMENT)) {

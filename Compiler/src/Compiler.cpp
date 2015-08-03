@@ -2,11 +2,27 @@
 
 #include <iostream>
 
-std::vector<int> Compiler::compileDeclaration(Statement &statement, Memory &mem) {
+std::vector<int> Compiler::compile(std::vector<Statement> &statements, Memory &mem) {
 	bytecode.clear();
-	int varIndex = mem.createVariable(statement.tokens[1].token, statement.tokens[0].subtype);
+	for (int i = 0; i < statements.size(); i++) {
+		switch(statements[i].type) {
+		case Statement::DECL:
+			compileGlobalDeclaration(statements[i], mem);
+			break;
+		case Statement::IF:
+			compileIfStatement(statements[i], mem);
+			break;
+		}
+	}
+	return bytecode;
+}
+
+void Compiler::compileGlobalDeclaration(Statement &statement, Memory &mem) {
+	// Creating a storing variable
+	int varIndex = mem.getVariable(statement.getToken(1).token);
 	bytecode.push_back(varIndex);
 	bytecode.push_back(GSTORE);
+
 	if (statement.tokens.size() > 2) {
 		switch (statement.getToken(0).subtype) {
 		case Token::INT:	
@@ -20,10 +36,9 @@ std::vector<int> Compiler::compileDeclaration(Statement &statement, Memory &mem)
 		bytecode.push_back(0);
 		bytecode.push_back(PUSH);
 	}
-	return bytecode;
 }
 
-std::vector<int> Compiler::compileIfStatement(Statement &statement) {
+void Compiler::compileIfStatement(Statement &statement, Memory &mem) {
 
 }
 

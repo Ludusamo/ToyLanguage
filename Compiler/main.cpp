@@ -16,21 +16,19 @@ int main() {
 	Statement statement;
 	statement.setStatement(reader.getLine());
 	statement.tokenizeStatement();
+	std::vector<Statement> statements;
+	statements.push_back(statement);
+
 	Parser parser;
-	parser.parse(statement, mem);
+	parser.parse(statements, mem);
 
 	Compiler compiler;
-	std::vector<int> bytecode = compiler.compileDeclaration(statement, mem);
+	std::vector<int> bytecode = compiler.compile(statements, mem);
 
-	printf("\n\n");
-	statement.setStatement(reader.getLine());
-	statement.tokenizeStatement();
-	parser.parse(statement, mem);
-	compiler.compileDeclaration(statement, mem);
-
-	/*for (int i = bytecode.size() - 1; i != -1; i--) {
-		printf("%i\n", bytecode[i]);
-	}*/
+	printf("\nBytecode: \n");
+	for (int i = bytecode.size() - 1; i >= 0; i--) {
+		printf("%i\n", bytecode[i]);	
+	}
 
 	return 0;
 }

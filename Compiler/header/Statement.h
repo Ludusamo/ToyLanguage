@@ -11,9 +11,13 @@
 
 class Statement {
 public:
+	enum TYPE { DECL, IF };
 	int depth;
 	char *statement;
 	std::vector<Token> tokens;
+	TYPE type;
+
+	void tagType(TYPE type) {this->type = type;};
 
 	Token getToken(int index);
 	void setStatement(char *statement) { this->statement = statement; };

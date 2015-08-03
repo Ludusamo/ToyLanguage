@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "Node.h"
 #include "Statement.h"
 #include "Token.h"
 #include "Memory.h"
@@ -11,10 +10,15 @@
 
 class Parser {
 public:
-	std::vector<int> parse(Statement &statement, Memory &mem);
+	Parser() {
+		statementIndex = -1;
+		parsingIndex = -1;	
+	};
+	~Parser() {};
+	bool parse(std::vector<Statement> &statements, Memory &mem);
 private:	
-	std::vector<int> bytecode;
 	int statementIndex;
+	int parsingIndex;
 
 	// Statement type check
 	bool isDeclaration(Statement &statement, Memory &mem);
