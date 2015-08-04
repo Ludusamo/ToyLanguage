@@ -14,27 +14,40 @@ public:
 	enum SUB_BOOL_OPERATOR { EQ, NEQ, LT, GT, LTEQ, GTEQ, NUM_BOOL_OPERATORS };
 	enum SUB_PAREN { LPAREN, RPAREN };
 
+	Token() {
+		token = new char;	
+	};
+	Token(const Token &obj) {
+		token = StringUtil::copy(obj.token);
+		type = obj.type;
+		subtype = obj.subtype;
+	};
+	~Token(){
+		delete token;
+		token = NULL;
+	};
+
 	// Token Attributes
-	char *token;
+	const char *token;
 	TOKEN_TYPE type;
 	int subtype;
 
-	void setToken(char *token) { this->token = StringUtil::copy(token); };
-	char *getToken() { return token; };
+	void setToken(const char *token) { this->token = StringUtil::copy(token); };
+	const char *getToken() { return token; };
 	void setType(TOKEN_TYPE type) { this->type = type; };
 	char *getType();
 	void determineSubtype();
 		
 	// Functions for determining token type
-	static TOKEN_TYPE identifyTokenType(char *token);
+	static TOKEN_TYPE identifyTokenType(const char *token);
 	
-	static bool isdatatype(char *token);
+	static bool isdatatype(const char *token);
 	static bool iswhitespace(char c);
-	static bool iscontrol(char *token);
-	static bool isarthoperator(char *token);
-	static bool isbooloperator(char *token);
-	static bool isnum(char *token);
-	static bool isbool(char *token);
+	static bool iscontrol(const char *token);
+	static bool isarthoperator(const char *token);
+	static bool isbooloperator(const char *token);
+	static bool isnum(const char *token);
+	static bool isbool(const char *token);
 private:	
 	const static char **DATATYPES;
 	const static char **SUBTYPE;

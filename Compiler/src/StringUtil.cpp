@@ -27,12 +27,10 @@ char *StringUtil::add(const char *str1, const char *str2) {
 }
 
 int StringUtil::atoi(const char *str) {
-	printf("%s ", str);
 	int output;
 	std::stringstream ss;
 	ss << str;
 	ss >> output;
-	printf("%i\n", output);
 
 	return output;
 }
@@ -44,7 +42,7 @@ char *StringUtil::itoa(int x) {
 	return (char *) ss.str().c_str();
 }
 
-char *StringUtil::copy(char *origin) {
+char *StringUtil::copy(const char *origin) {
 	char *destination = (char*) malloc(sizeof(origin));
 	for (int i = 0; i < strlen(origin) + 1; i++) {
 		destination[i] = origin[i];

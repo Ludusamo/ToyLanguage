@@ -11,7 +11,7 @@ void Statement::tokenizeStatement() {
 	char currTokenType = 0;
 	char *buffer = (char*) malloc(sizeof(statement));
 	int i = 0, currIndex = 0;
-					
+
 	while (i != strlen(statement)) {
 		buffer[currIndex] = statement[i];	
 		if (currTokenType == 0) { // If no flags are set
@@ -73,7 +73,7 @@ Token Statement::getToken(int index) {
 	return tokens[index];
 }
 
-void Statement::recordToken(char *token, Token::TOKEN_TYPE type) {
+void Statement::recordToken(const char *token, Token::TOKEN_TYPE type) {
 	Token t;
 
 	t.setToken(token);

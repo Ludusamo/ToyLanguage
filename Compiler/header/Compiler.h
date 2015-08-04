@@ -44,6 +44,10 @@ public:
 	void compileWhileStatement(Statement &statement, Memory &mem);
 private:
 	int statementIndex;
+	int lineno;
+	std::vector<int> placeholderIndex; // In case I need to update a value to branch/jump to
+	int previousDepth; // Check if we have changed depths
+
 	std::vector<int> bytecode;
 
 	void compileIntValue(Statement &statement, Memory &mem);

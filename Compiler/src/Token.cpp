@@ -68,7 +68,7 @@ void Token::determineSubtype() {
 	}
 }
 
-Token::TOKEN_TYPE Token::identifyTokenType(char *token) {
+Token::TOKEN_TYPE Token::identifyTokenType(const char *token) {
 	if (iswhitespace(token[0])) return WHITESPACE;
 	if (isdatatype(token)) return DATATYPE;
 	if (iscontrol(token)) return CONTROL;
@@ -84,41 +84,41 @@ bool Token::iswhitespace(char c) {
 	return (c == ' ') || (c == '\t') || (c == '\n');
 }
 
-bool Token::isdatatype(char *token) {
+bool Token::isdatatype(const char *token) {
 	for (int i = 0; i < NUM_DATATYPES; i++) {
 		if (StringUtil::equal(DATATYPES[i], token)) return true;
 	}
 	return false;
 }
 
-bool Token::iscontrol(char *token) {
+bool Token::iscontrol(const char *token) {
 	for (int i = 0; i < NUM_CONTROLS; i++) {
 		if (StringUtil::equal(CONTROLS[i], token)) return true;
 	}
 	return false;
 }
 
-bool Token::isarthoperator(char *token) {
+bool Token::isarthoperator(const char *token) {
 	for (int i = 0; i < NUM_ARTH_OPERATORS; i++) {
 		if (StringUtil::equal(ARTH_OPERATORS[i], token)) return true;
 	}
 	return false;
 }
 
-bool Token::isbooloperator(char *token) {
+bool Token::isbooloperator(const char *token) {
 	for (int i = 0; i < NUM_BOOL_OPERATORS; i++) {
 		if (StringUtil::equal(BOOL_OPERATORS[i], token)) return true;
 	}
 	return false;
 }
 
-bool Token::isnum(char *token) {
+bool Token::isnum(const char *token) {
 	for (int i = 0; i < sizeof(token); i++) {
 		if (!isdigit(token[i])) return false;
 		return true;
 	}
 }
 
-bool Token::isbool(char *token) {
+bool Token::isbool(const char *token) {
 	return (StringUtil::equal("true", token) || StringUtil::equal("false", token));
 }

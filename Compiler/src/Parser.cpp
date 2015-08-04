@@ -7,6 +7,7 @@ bool Parser::parse(std::vector<Statement> &statements, Memory &mem) {
 	statementIndex = -1;
 	if (parsingIndex == statements.size()) return true;
 	if (isDeclaration(statements[parsingIndex], mem)) {
+		mem.createVariable(statements[parsingIndex].tokens[1].token, statements[parsingIndex].getToken(0).subtype);
 		statements[parsingIndex].tagType(Statement::DECL);
 		printf("%i is a declaration.\n", parsingIndex);
 		if (parse(statements, mem)) return true;
@@ -37,7 +38,6 @@ bool Parser::isIfStatement(Statement &statement, Memory &mem) {
 
 bool Parser::isDeclaration(Statement &statement, Memory &mem) {
 	int datatype = statement.getToken(0).subtype;
-	mem.createVariable(statement.tokens[1].token, datatype);
 	if (isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER)) {
 		if (isTokenType(statement, Token::ARTH_OPERATOR) 
 				&& isSubtype(statement.getToken(statementIndex), (int) Token::ASSIGNMENT)) {
@@ -57,6 +57,7 @@ bool Parser::isDeclaration(Statement &statement, Memory &mem) {
 }
 
 bool Parser::isTokenType(Statement &statement, Token::TOKEN_TYPE type) {
+	if (statementIndex + 1 == statement.tokens.size()) return false;
 	statementIndex++;
 	if (statement.getToken(statementIndex).type == type) return true;
 	statementIndex--;
@@ -83,10 +84,11 @@ bool Parser::isVariableType(const char *id, int type, Memory &mem) {
 bool Parser::isIntValue(Statement &statement, Memory &mem) {
 	//VALUE
 	if (isTokenType(statement, Token::NUMBER) ||
-		isTokenType(statement, Token::IDENTIFIER) 
+	   	(isTokenType(statement, Token::IDENTIFIER) 
 		&& variableExists(statement.getToken(statementIndex).token, mem)
-		&& isVariableType(statement.getToken(statementIndex).token, Token::INT, mem)) {
+		&& isVariableType(statement.getToken(statementIndex).token, Token::INT, mem))) {
 		if (isTokenType(statement, Token::ARTH_OPERATOR)) {
+			printf("hi\n");
 			if (isIntValue(statement, mem)) return true;
 			else return false;
 		} 

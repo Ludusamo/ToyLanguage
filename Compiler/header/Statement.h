@@ -12,20 +12,36 @@
 class Statement {
 public:
 	enum TYPE { DECL, IF };
+
+	Statement() {
+	
+	};
+
+	Statement(const Statement &obj) {
+		statement = new char(*obj.statement);
+		type = obj.type;
+		int depth = obj.depth;
+		tokens = obj.tokens;
+	};
+
+	~Statement() {
+
+	};
+
 	int depth;
-	char *statement;
+	const char *statement;
 	std::vector<Token> tokens;
 	TYPE type;
 
 	void tagType(TYPE type) {this->type = type;};
 
 	Token getToken(int index);
-	void setStatement(char *statement) { this->statement = statement; };
+	void setStatement(const char *statement) { this->statement = statement; };
 	void tokenizeStatement();
 private:
 	int calculateDepth();
 	char peekNextChar(int currIndex);
-	void recordToken(char *token, Token::TOKEN_TYPE type);
+	void recordToken(const char *token, Token::TOKEN_TYPE type);
 };
 
 #endif // STATEMENT_H
