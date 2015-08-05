@@ -38,6 +38,8 @@ typedef enum {
 
 class Compiler {
 public:
+	Compiler() {lineno = -1;};
+
 	std::vector<int> compile(std::vector<Statement> &statements, Memory &mem);
 	void compileGlobalDeclaration(Statement &statement, Memory &mem);
 	void compileIfStatement(Statement &statement, Memory &mem);

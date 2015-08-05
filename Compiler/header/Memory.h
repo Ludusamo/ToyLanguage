@@ -20,7 +20,6 @@ public:
 	int createVariable(const char *id, int type) {
 		Variable var = {(char*)id, type};
 		variables.push_back(var);
-		printf("Variable %s created.\n", id);
 		return variables.size() - 1;
 	}
 
@@ -28,7 +27,6 @@ public:
 		for (int i = 0; i < variables.size(); i++) {
 			if (StringUtil::equal(variables[i].id, id)) return i;
 		}
-		printf("Variable %s not found.\n", id);
 		return -1;
 	}
 };

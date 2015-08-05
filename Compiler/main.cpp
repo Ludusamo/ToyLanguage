@@ -29,16 +29,11 @@ int main() {
 	Parser parser;
 	parser.parse(statements, mem);
 
-	printf("Num variables: %i\n", mem.variables.size());
-	for (int i = 0; i < mem.variables.size(); i++) {
-		printf("%s\n", mem.variables[i].id);
-	}
-
 	Compiler compiler;
 	std::vector<int> bytecode = compiler.compile(statements, mem);
 
 	printf("\nBytecode: \n");
-	for (int i = bytecode.size() - 1; i >= 0; i--) {
+	for (int i = 0; i < bytecode.size(); i++) {
 		printf("%i\n", bytecode[i]);	
 	}
 
