@@ -37,7 +37,7 @@ public:
 	}
 
 	int getFunction(const char *id) {
-		for (int i = 0; i < variables.size(); i++) {
+		for (int i = 0; i < globalFunctions.size(); i++) {
 			if (StringUtil::equal(globalFunctions[i].id, id)) return i;
 		}	
 		return -1;

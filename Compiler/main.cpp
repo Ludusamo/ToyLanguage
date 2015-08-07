@@ -10,8 +10,10 @@
 
 int main() {
 	Memory mem;
-
-	printf("%i\n", mem.createFunction("Test", 0, 0, 0));
+	mem.createFunction("Test", 0, 0, 0);
+	int index = mem.getFunction("Test");
+	printf("%i\n", index);
+	printf("%s\n", mem.globalFunctions[index].id);
 
 	FileReader reader;
 	reader.openFile("res/test.ls");
