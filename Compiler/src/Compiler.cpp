@@ -3,6 +3,7 @@
 #include <iostream>
 
 std::vector<int> Compiler::compile(std::vector<Statement> &statements, Memory &mem) {
+	if (lineno + 1 == statements.size()) return bytecode;
 	lineno++;	
 	switch(statements[lineno].type) {
 	case Statement::DECL:
@@ -11,14 +12,15 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements, Memory &m
 	case Statement::IF:
 		int index = lineno;
 		compileIfStatement(statements[index], mem);
+		int initialBytecodeSize = bytecode.size(); // The index in bytecode where the if branch statement is
 		while (statements[index].depth < statements[lineno + 1].depth) {
 			compile(statements, mem);	
 		}
-		bytecode[placeholderIndex[placeholderIndex.size() - 1]] = bytecode.size();
+		bytecode[placeholderIndex[placeholderIndex.size() - 1]] = bytecode.size() - initialBytecodeSize;
 		placeholderIndex.pop_back();
-		compile(statements, mem);
 		break;
 	}
+	compile(statements, mem);
 	return bytecode;
 }
 

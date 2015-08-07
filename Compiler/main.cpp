@@ -11,6 +11,8 @@
 int main() {
 	Memory mem;
 
+	printf("%i\n", mem.createFunction("Test", 0, 0, 0));
+
 	FileReader reader;
 	reader.openFile("res/test.ls");
 
