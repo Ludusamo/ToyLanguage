@@ -5,7 +5,7 @@
 #include <string.h>
 
 // DEFINITIONS
-const static char *DATATYPE_BUFFER[] = { "int", "bool"};
+const static char *DATATYPE_BUFFER[] = { "void", "int", "bool"};
 const char** Token::DATATYPES = DATATYPE_BUFFER;
 
 const static char *CONTROL_BUFFER[] = { "if", "else" };
@@ -19,7 +19,7 @@ const char** Token::BOOL_OPERATORS = BOOL_OPERATORS_BUFFER;
 //////////////
 
 char *Token::getType() {
-	switch (type) {
+	switch (type) { 
 	case WHITESPACE:
 		return (char*) "WHITESPACE";
 	case DATATYPE:
@@ -38,6 +38,8 @@ char *Token::getType() {
 		return (char*) "BOOL_OPERATOR";
 	case PAREN:
 		return (char*) "PAREN";
+	case COMMA:
+		return (char*) "COMMA";
 	}
 }
 
@@ -69,6 +71,7 @@ void Token::determineSubtype() {
 }
 
 Token::TOKEN_TYPE Token::identifyTokenType(const char *token) {
+	if (iscomma(token[0])) return COMMA;
 	if (iswhitespace(token[0])) return WHITESPACE;
 	if (isdatatype(token)) return DATATYPE;
 	if (iscontrol(token)) return CONTROL;
@@ -78,6 +81,10 @@ Token::TOKEN_TYPE Token::identifyTokenType(const char *token) {
 	if (isnum(token)) return NUMBER;
 	if (isbool(token)) return BOOL;
 	return IDENTIFIER;	
+}
+
+bool Token::iscomma(char c) {
+	return (c == ',');
 }
 
 bool Token::iswhitespace(char c) {

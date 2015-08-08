@@ -18,9 +18,9 @@ public:
 
 	typedef struct {
 		const char *id;
-		int addr;
 		int numArgs;
 		int returnType;
+		int addr;
 		Variable variables[MAX_LOCAL_VARS];
 		Variable args[MAX_ARGS];
 	} Function;
@@ -30,8 +30,9 @@ public:
 	std::vector<Variable> variables;
 	std::vector<Function> globalFunctions;
 
-	int createFunction(const char *id, int addr, int numArgs, int returnType) {
-		Function func = {id, addr, numArgs, returnType};
+	int createFunction(const char *id, int numArgs, int returnType) {
+		//printf("%s\n", statements[parsingIndex].getToken(1).token);
+		Function func = {id, numArgs, returnType};
 		globalFunctions.push_back(func);
 		return globalFunctions.size() - 1;
 	}

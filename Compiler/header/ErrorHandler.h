@@ -3,34 +3,24 @@
 
 #include <stdio.h>
 
-class UndeclaredVariableError {
-public:
-	static void throwError(int lineno) {
-		printf("Variable was not declared on line %i.\n", lineno);
-	};
-};
-
-class TypeMismatchError {
-public:
-	static void throwError(int lineno) {
-		printf("Type Mismatch Error on line %i.\n", lineno);
-	};
-};
-
 class ErrorHandler {
 public:
 	typedef enum {
 		UndeclaredVariable,
+		UndeclaredFunction,
 		TypeMismatch
 	} ERRORS;
 
 	static void throwError(int lineno, int errorType) {
 		switch (errorType) {
 		case UndeclaredVariable:
-			UndeclaredVariableError::throwError(lineno);
+			printf("Variable was not declared on line %i.\n", lineno);
+			break;
+		case UndeclaredFunction:
+			printf("Function was not declared on line %i.\n", lineno);
 			break;
 		case TypeMismatch:
-			TypeMismatchError::throwError(lineno);
+			printf("Type Mismatch Error on line %i.\n", lineno);
 			break;
 		}	
 	}

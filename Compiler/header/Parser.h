@@ -18,9 +18,13 @@ public:
 private:	
 	int statementIndex;
 	int parsingIndex;
+	int argNumBuffer;
 
 	// Statement type check
 	bool isDeclaration(Statement &statement, Memory &mem);
+	bool isFunctionDeclaration(Statement &statement, Memory &mem);
+	bool isFunctionCall(Statement &statement, Memory &mem);
+	bool isReturnStatement(Statement &statement, Memory &mem);
 	bool isIfStatement(Statement &statement, Memory &mem);
 	
 	// Statement component type check
@@ -32,6 +36,7 @@ private:
 	bool isSubtype(Token token, int subtype);
 	bool variableExists(const char *id, Memory &mem);
 	bool isVariableType(const char *id, int type, Memory &mem);
+	bool functionExists(const char *id, Memory &mem);
 
 	bool endOfStatement(Statement &statement);
 };
