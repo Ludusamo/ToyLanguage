@@ -69,10 +69,6 @@ char Statement::peekNextChar(int currIndex) {
 	return statement[currIndex + 1];
 }
 
-Token Statement::getToken(int index) {
-	return tokens[index];
-}
-
 void Statement::recordToken(const char *token, Token::TOKEN_TYPE type) {
 	Token t;
 

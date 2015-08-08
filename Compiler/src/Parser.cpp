@@ -7,13 +7,13 @@ bool Parser::parse(std::vector<Statement> &statements, Memory &mem) {
 	if (parsingIndex == statements.size()) return true;
 	statementIndex = -1;
 	if (isDeclaration(statements[parsingIndex], mem)) {
-		mem.createVariable(statements[parsingIndex].tokens[1].token, statements[parsingIndex].getToken(0).subtype);
+		mem.createVariable(statements[parsingIndex].tokens[1].token, statements[parsingIndex].tokens[0].subtype);
 		statements[parsingIndex].tagType(Statement::DECL);
 		if (parse(statements, mem)) return true;
 	}
 	statementIndex = -1;
 	if (isFunctionDeclaration(statements[parsingIndex], mem)) {
-		mem.createFunction(statements[parsingIndex].tokens[1].token, argNumBuffer, statements[parsingIndex].getToken(0).subtype);
+		mem.createFunction(statements[parsingIndex].tokens[1].token, argNumBuffer, statements[parsingIndex].tokens[0].subtype);
 		if (parse(statements, mem)) return true;
 	}
 	statementIndex = -1;
@@ -26,12 +26,12 @@ bool Parser::parse(std::vector<Statement> &statements, Memory &mem) {
 
 bool Parser::isIfStatement(Statement &statement, Memory &mem) {
 	if (isTokenType(statement, Token::CONTROL) 
-		&& isSubtype(statement.getToken(statementIndex), Token::IF)) {
+		&& isSubtype(statement.tokens[statementIndex], Token::IF)) {
 		if (isTokenType(statement, Token::PAREN) 
-			&& isSubtype(statement.getToken(statementIndex), Token::LPAREN)) {
+			&& isSubtype(statement.tokens[statementIndex], Token::LPAREN)) {
 			if (isBoolValue(statement, mem)) {
 				if (isTokenType(statement, Token::PAREN)
-					&& isSubtype(statement.getToken(statementIndex), Token::RPAREN)) {
+					&& isSubtype(statement.tokens[statementIndex], Token::RPAREN)) {
 					return true;	
 				}
 			}
@@ -41,10 +41,10 @@ bool Parser::isIfStatement(Statement &statement, Memory &mem) {
 }
 
 bool Parser::isDeclaration(Statement &statement, Memory &mem) {
-	int datatype = statement.getToken(0).subtype;
+	int datatype = statement.tokens[0].subtype;
 	if (isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER)) {
 		if (isTokenType(statement, Token::ARTH_OPERATOR) 
-				&& isSubtype(statement.getToken(statementIndex), (int) Token::ASSIGNMENT)) {
+				&& isSubtype(statement.tokens[statementIndex], (int) Token::ASSIGNMENT)) {
 			switch(datatype) {
 			case Token::INT:
 				if (isIntValue(statement, mem)) return true;
@@ -61,9 +61,9 @@ bool Parser::isDeclaration(Statement &statement, Memory &mem) {
 }
 
 bool Parser::isFunctionDeclaration(Statement &statement, Memory &mem) {
-	int datatype = statement.getToken(0).subtype;
+	int datatype = statement.tokens[0].subtype;
 	if (isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER)) {
-		if (isTokenType(statement, Token::PAREN) && isSubtype(statement.getToken(statementIndex), (int) Token::LPAREN)) {
+		if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {
 			bool hasArgs = isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER);
 			argNumBuffer = hasArgs ? 1 : 0;
 			while (hasArgs) {
@@ -75,7 +75,7 @@ bool Parser::isFunctionDeclaration(Statement &statement, Memory &mem) {
 					} 
 				}
 			}
-			if (isTokenType(statement, Token::PAREN) && isSubtype(statement.getToken(statementIndex), (int) Token::RPAREN)) return true;
+			if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) return true;
 		}
 	}
 	return false;
@@ -83,8 +83,8 @@ bool Parser::isFunctionDeclaration(Statement &statement, Memory &mem) {
 
 bool Parser::isFunctionCall(Statement &statement, Memory &mem) {
 	if (isTokenType(statement, Token::IDENTIFIER) 
-		&& functionExists(statement.getToken(statementIndex).token, mem)) {
-		if (isTokenType(statement, Token::PAREN) && isSubtype(statement.getToken(statementIndex), (int) Token::LPAREN)) {
+		&& functionExists(statement.tokens[statementIndex].token, mem)) {
+		if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {
 			
 		}
 	}
@@ -93,7 +93,7 @@ bool Parser::isFunctionCall(Statement &statement, Memory &mem) {
 bool Parser::isTokenType(Statement &statement, Token::TOKEN_TYPE type) {
 	if (statementIndex + 1 == statement.tokens.size()) return false;
 	statementIndex++;
-	if (statement.getToken(statementIndex).type == type) return true;
+	if (statement.tokens[statementIndex].type == type) return true;
 	statementIndex--;
 	return false;
 }
@@ -128,8 +128,8 @@ bool Parser::isIntValue(Statement &statement, Memory &mem) {
 	//VALUE
 	if (isTokenType(statement, Token::NUMBER) ||
 	   	(isTokenType(statement, Token::IDENTIFIER) 
-		&& variableExists(statement.getToken(statementIndex).token, mem)
-		&& isVariableType(statement.getToken(statementIndex).token, Token::INT, mem))) {
+		&& variableExists(statement.tokens[statementIndex].token, mem)
+		&& isVariableType(statement.tokens[statementIndex].token, Token::INT, mem))) {
 		if (isTokenType(statement, Token::ARTH_OPERATOR)) {
 			if (isIntValue(statement, mem)) return true;
 			else return false;
@@ -139,10 +139,10 @@ bool Parser::isIntValue(Statement &statement, Memory &mem) {
 
 	//(VALUE)
 	if (isTokenType(statement, Token::PAREN) 
-		&& isSubtype(statement.getToken(statementIndex), (int) Token::LPAREN)) {
+		&& isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {
 		if (isIntValue(statement, mem)) {
 			if (isTokenType(statement, Token::PAREN)
-				&& isSubtype(statement.getToken(statementIndex), (int) Token::RPAREN)) {
+				&& isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) {
 				if (isTokenType(statement, Token::ARTH_OPERATOR)) {
 					if (isIntValue(statement, mem)) return true;
 					else return false;
@@ -175,10 +175,10 @@ bool Parser::isBoolValue(Statement &statement, Memory &mem) {
 
 	//(VALUE)
 	if (isTokenType(statement, Token::PAREN) 
-		&& isSubtype(statement.getToken(statementIndex), (int) Token::LPAREN)) {
+		&& isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {
 		if (isBoolValue(statement, mem)) {
 			if (isTokenType(statement, Token::PAREN)
-				&& isSubtype(statement.getToken(statementIndex), (int) Token::RPAREN)) {
+				&& isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) {
 				if (isTokenType(statement, Token::BOOL_OPERATOR)) {
 					if (isBoolValue(statement, mem)) return true;
 					else return false;

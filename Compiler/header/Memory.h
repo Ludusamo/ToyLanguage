@@ -31,7 +31,6 @@ public:
 	std::vector<Function> globalFunctions;
 
 	int createFunction(const char *id, int numArgs, int returnType) {
-		//printf("%s\n", statements[parsingIndex].getToken(1).token);
 		Function func = {id, numArgs, returnType};
 		globalFunctions.push_back(func);
 		return globalFunctions.size() - 1;

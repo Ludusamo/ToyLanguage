@@ -35,7 +35,6 @@ public:
 
 	void tagType(TYPE type) {this->type = type;};
 
-	Token getToken(int index);
 	void setStatement(const char *statement) { this->statement = statement; };
 	void tokenizeStatement();
 private:

@@ -26,11 +26,11 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements, Memory &m
 
 void Compiler::compileGlobalDeclaration(Statement &statement, Memory &mem) {
 	// Creating a storing variable
-	int varIndex = mem.getVariable(statement.getToken(1).token);	
+	int varIndex = mem.getVariable(statement.tokens[1].token);	
 
 	if (statement.tokens.size() > 2) {
 		statementIndex = 2;
-		switch (statement.getToken(0).subtype) {
+		switch (statement.tokens[0].subtype) {
 		case Token::INT:	
 			compileIntValue(statement, mem);
 			break;
@@ -57,23 +57,23 @@ void Compiler::compileIfStatement(Statement &statement, Memory &mem) {
 void Compiler::compileIntValue(Statement &statement, Memory &mem) {
 	if (statementIndex == statement.tokens.size() - 1) return;
 	statementIndex++;
-	if (statement.getToken(statementIndex).type == Token::NUMBER) {	
+	if (statement.tokens[statementIndex].type == Token::NUMBER) {	
 		bytecode.push_back(PUSH);
 		bytecode.push_back(StringUtil::atoi(statement.tokens[statementIndex].token));
 		compileIntValue(statement, mem);
 		
 	}
 
-	if (statement.getToken(statementIndex).type == Token::IDENTIFIER) {
+	if (statement.tokens[statementIndex].type == Token::IDENTIFIER) {
 		bytecode.push_back(GLOAD);
-		bytecode.push_back(mem.getVariable(statement.getToken(statementIndex).token));
+		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token));
 		compileIntValue(statement, mem);		
 	}
 
-	if (statement.getToken(statementIndex).type == Token::ARTH_OPERATOR) {
+	if (statement.tokens[statementIndex].type == Token::ARTH_OPERATOR) {
 		int index = statementIndex;
 		compileIntValue(statement, mem);	
-		switch (statement.getToken(index).subtype) {
+		switch (statement.tokens[index].subtype) {
 		case Token::ADD:
 			bytecode.push_back(ADDI);
 			break;
@@ -89,15 +89,15 @@ void Compiler::compileIntValue(Statement &statement, Memory &mem) {
 		}
 	}
 
-	if (statement.getToken(statementIndex).type == Token::PAREN
-		&& statement.getToken(statementIndex).subtype == Token::LPAREN) {
+	if (statement.tokens[statementIndex].type == Token::PAREN
+		&& statement.tokens[statementIndex].subtype == Token::LPAREN) {
 		int parenCount = 1;
 		for (int i = statementIndex + 1; i < statement.tokens.size(); i++) {
-			if (statement.getToken(i).type == Token::PAREN) {
-				if (statement.getToken(i).subtype == Token::LPAREN) {
+			if (statement.tokens[i].type == Token::PAREN) {
+				if (statement.tokens[i].subtype == Token::LPAREN) {
 					parenCount++;
 				}
-				if (statement.getToken(i).subtype == Token::RPAREN) {	
+				if (statement.tokens[i].subtype == Token::RPAREN) {	
 					parenCount--;
 					if (parenCount == 0) {
 						int bufferIndex = statementIndex;
@@ -115,29 +115,29 @@ void Compiler::compileIntValue(Statement &statement, Memory &mem) {
 void Compiler::compileBoolValue(Statement &statement, Memory &mem) {
 	if (statementIndex == statement.tokens.size() - 1) return;
 	statementIndex++;
-	if (statement.getToken(statementIndex).type == Token::NUMBER) {	
+	if (statement.tokens[statementIndex].type == Token::NUMBER) {	
 		bytecode.push_back(PUSH);
 		bytecode.push_back(StringUtil::atoi(statement.tokens[statementIndex].token));
 		compileBoolValue(statement, mem);	
 	}
 
-	if (statement.getToken(statementIndex).type == Token::BOOL) {
-		int boolVal = StringUtil::equal(statement.getToken(statementIndex).token, "true") ? 1 : 0;	
+	if (statement.tokens[statementIndex].type == Token::BOOL) {
+		int boolVal = StringUtil::equal(statement.tokens[statementIndex].token, "true") ? 1 : 0;	
 		bytecode.push_back(PUSH);
 		bytecode.push_back(boolVal);
 		compileBoolValue(statement, mem);
 	}
 
-	if (statement.getToken(statementIndex).type == Token::IDENTIFIER) {
+	if (statement.tokens[statementIndex].type == Token::IDENTIFIER) {
 		bytecode.push_back(GLOAD);
-		bytecode.push_back(mem.getVariable(statement.getToken(statementIndex).token));
+		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token));
 		compileIntValue(statement, mem);	
 	}
 
-	if (statement.getToken(statementIndex).type == Token::ARTH_OPERATOR) {
+	if (statement.tokens[statementIndex].type == Token::ARTH_OPERATOR) {
 		int index = statementIndex;
 		compileBoolValue(statement, mem);	
-		switch (statement.getToken(index).subtype) {
+		switch (statement.tokens[statementIndex].subtype) {
 		case Token::ADD:
 			bytecode.push_back(ADDI);
 			break;
@@ -153,10 +153,10 @@ void Compiler::compileBoolValue(Statement &statement, Memory &mem) {
 		}
 	}
 
-	if (statement.getToken(statementIndex).type == Token::BOOL_OPERATOR) {
+	if (statement.tokens[statementIndex].type == Token::BOOL_OPERATOR) {
 		int index = statementIndex;
 		compileBoolValue(statement, mem);	
-		switch (statement.getToken(index).subtype) {
+		switch (statement.tokens[statementIndex].subtype) {
 		case Token::EQ:
 			bytecode.push_back(EQ);
 			break;
@@ -175,15 +175,15 @@ void Compiler::compileBoolValue(Statement &statement, Memory &mem) {
 		}
 	}
 
-	if (statement.getToken(statementIndex).type == Token::PAREN
-		&& statement.getToken(statementIndex).subtype == Token::LPAREN) {
+	if (statement.tokens[statementIndex].type == Token::PAREN
+		&& statement.tokens[statementIndex].subtype == Token::LPAREN) {
 		int parenCount = 1;
 		for (int i = statementIndex + 1; i < statement.tokens.size(); i++) {
-			if (statement.getToken(i).type == Token::PAREN) {
-				if (statement.getToken(i).subtype == Token::LPAREN) {
+			if (statement.tokens[statementIndex].type == Token::PAREN) {
+				if (statement.tokens[i].subtype == Token::LPAREN) {
 					parenCount++;
 				}
-				if (statement.getToken(i).subtype == Token::RPAREN) {	
+				if (statement.tokens[i].subtype == Token::RPAREN) {	
 					parenCount--;
 					if (parenCount == 0) {
 						int bufferIndex = statementIndex;
