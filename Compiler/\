@@ -26,7 +26,7 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements, Memory &m
 
 void Compiler::compileGlobalDeclaration(Statement &statement, Memory &mem) {
 	// Creating a storing variable
-	int varIndex = mem.getVariable(statement.tokens[1].token, 0);	
+	int varIndex = mem.getVariable(statement.tokens[1].token);	
 
 	if (statement.tokens.size() > 2) {
 		statementIndex = 2;
@@ -48,7 +48,6 @@ void Compiler::compileGlobalDeclaration(Statement &statement, Memory &mem) {
 
 void Compiler::compileGlobalFunction(Statement &statement, Memory &mem) {
 	statementIndex = 0;
-	
 }
 
 void Compiler::compileIfStatement(Statement &statement, Memory &mem) {
@@ -71,7 +70,7 @@ void Compiler::compileIntValue(Statement &statement, Memory &mem) {
 
 	if (statement.tokens[statementIndex].type == Token::IDENTIFIER) {
 		bytecode.push_back(GLOAD);
-		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, 0));
+		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token));
 		compileIntValue(statement, mem);		
 	}
 
@@ -135,7 +134,7 @@ void Compiler::compileBoolValue(Statement &statement, Memory &mem) {
 
 	if (statement.tokens[statementIndex].type == Token::IDENTIFIER) {
 		bytecode.push_back(GLOAD);
-		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, 0));
+		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token));
 		compileIntValue(statement, mem);	
 	}
 

@@ -18,8 +18,8 @@ public:
 
 	typedef struct {
 		const char *id;
-		int numArgs;
 		int returnType;
+		int numArgs;
 		int addr;
 		Variable variables[MAX_LOCAL_VARS];
 		Variable args[MAX_ARGS];
@@ -27,8 +27,13 @@ public:
 
 	Memory() {};
 	~Memory() {};
-	std::vector<Variable> variables;
+	std::vector< std::vector<Variable> > variables;
 	std::vector<Function> globalFunctions;
+
+	int addGlobalFunction(Function f) {
+		globalFunctions.push_back(f);
+		return globalFunctions.size() - 1;
+	}
 
 	int createFunction(const char *id, int numArgs, int returnType) {
 		Function func = {id, numArgs, returnType};
@@ -43,15 +48,15 @@ public:
 		return -1;
 	}
 	
-	int createVariable(const char *id, int type) {
+	int createVariable(const char *id, int type, int depth) {
 		Variable var = {id, type};
-		variables.push_back(var);
+		variables[depth].push_back(var);
 		return variables.size() - 1;
 	}
 
-	int getVariable(const char *id) {
+	int getVariable(const char *id, int depth) {
 		for (int i = 0; i < variables.size(); i++) {
-			if (StringUtil::equal(variables[i].id, id)) return i;
+			if (StringUtil::equal(variables[depth][i].id, id)) return i;
 		}
 		return -1;
 	}

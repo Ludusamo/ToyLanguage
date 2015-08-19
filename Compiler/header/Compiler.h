@@ -42,6 +42,7 @@ public:
 
 	std::vector<int> compile(std::vector<Statement> &statements, Memory &mem);
 	void compileGlobalDeclaration(Statement &statement, Memory &mem);
+	void compileGlobalFunction(Statement &statement, Memory &mem);
 	void compileIfStatement(Statement &statement, Memory &mem);
 	void compileWhileStatement(Statement &statement, Memory &mem);
 private:

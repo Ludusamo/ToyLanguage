@@ -27,7 +27,10 @@ int main() {
 	parser.parse(statements, mem);
 
 	for (int i = 0; i < mem.globalFunctions.size(); i++) {
-		printf("%i %s\n", i, mem.globalFunctions[i].id);
+		printf("Function: %i, %s, %i\n", i, mem.globalFunctions[i].id, mem.globalFunctions[i].numArgs);
+		for (int j = 0; j < mem.globalFunctions[i].numArgs; j++) {
+			printf("Arg: %s", mem.globalFunctions[i].args[j].id);
+		}
 	}
 
 	Compiler compiler;

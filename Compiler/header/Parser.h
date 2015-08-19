@@ -18,7 +18,7 @@ public:
 private:	
 	int statementIndex;
 	int parsingIndex;
-	int argNumBuffer;
+	int currentDepth;
 
 	// Statement type check
 	bool isDeclaration(Statement &statement, Memory &mem);

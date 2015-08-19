@@ -5,15 +5,16 @@
 bool Parser::parse(std::vector<Statement> &statements, Memory &mem) {
 	parsingIndex++;
 	if (parsingIndex == statements.size()) return true;
+	currentDepth = statements[parsingIndex].depth;
+
 	statementIndex = -1;
 	if (isDeclaration(statements[parsingIndex], mem)) {
-		mem.createVariable(statements[parsingIndex].tokens[1].token, statements[parsingIndex].tokens[0].subtype);
+		mem.createVariable(statements[parsingIndex].tokens[1].token, statements[parsingIndex].tokens[0].subtype, currentDepth);
 		statements[parsingIndex].tagType(Statement::DECL);
 		if (parse(statements, mem)) return true;
 	}
 	statementIndex = -1;
 	if (isFunctionDeclaration(statements[parsingIndex], mem)) {
-		mem.createFunction(statements[parsingIndex].tokens[1].token, argNumBuffer, statements[parsingIndex].tokens[0].subtype);
 		if (parse(statements, mem)) return true;
 	}
 	statementIndex = -1;
@@ -61,21 +62,37 @@ bool Parser::isDeclaration(Statement &statement, Memory &mem) {
 }
 
 bool Parser::isFunctionDeclaration(Statement &statement, Memory &mem) {
+	Memory::Function f;
+	f.id = statement.tokens[1].token;
+	f.returnType = statement.tokens[0].subtype;
 	int datatype = statement.tokens[0].subtype;
 	if (isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER)) {
 		if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {
 			bool hasArgs = isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER);
-			argNumBuffer = hasArgs ? 1 : 0;
+			Memory::Variable arg;
+			arg.id = statement.tokens[statementIndex].token;
+			arg.type = statement.tokens[statementIndex - 1].subtype;
+			f.args[f.numArgs] = arg;
+
+			f.numArgs = hasArgs ? 1 : 0;
 			while (hasArgs) {
 				hasArgs = false;
 				if (isTokenType(statement, Token::COMMA)) {
 					if (isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER)) {
-						argNumBuffer++;
+						Memory::Variable arg;
+						arg.id = statement.tokens[statementIndex].token;
+						arg.type = statement.tokens[statementIndex - 1].subtype;
+						f.args[f.numArgs] = arg;
+						f.numArgs++;
+
 						hasArgs = true;
 					} 
 				}
 			}
-			if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) return true;
+			if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) {
+				mem.addGlobalFunction(f);
+				return true;
+			}
 		}
 	}
 	return false;
@@ -103,7 +120,7 @@ bool Parser::isSubtype(Token token, int subtype) {
 }
 
 bool Parser::variableExists(const char *id, Memory &mem) {
-	int varIndex = mem.getVariable(id); 
+	int varIndex = mem.getVariable(id, 0); 
 	if (varIndex == -1) {
 		ErrorHandler::throwError(parsingIndex, ErrorHandler::UndeclaredVariable);
 		return false;
@@ -121,7 +138,7 @@ bool Parser::functionExists(const char *id, Memory &mem) {
 }
 
 bool Parser::isVariableType(const char *id, int type, Memory &mem) {
-	return (mem.variables[mem.getVariable(id)].type == type);
+	return (mem.variables[0][mem.getVariable(id, 0)].type == type);
 }
 
 bool Parser::isIntValue(Statement &statement, Memory &mem) {
