@@ -1,5 +1,5 @@
-int a = 0
-int b = a
+bool a = true
+bool b = a
 
 int a = 5 * 2
 int b = 10

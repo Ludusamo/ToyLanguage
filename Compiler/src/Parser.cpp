@@ -141,6 +141,7 @@ bool Parser::functionExists(const char *id, Memory &mem) {
 }
 
 bool Parser::isVariableType(const char *id, int type, Memory &mem) {
+	statementIndex--;
 	return (mem.getVariableType(id, currentDepth) == type);
 }
 
@@ -185,7 +186,10 @@ bool Parser::isBoolValue(Statement &statement, Memory &mem) {
 		return true;
 	}
 
-	if (isTokenType(statement, Token::BOOL)) {
+	if (isTokenType(statement, Token::BOOL) ||
+	   	(isTokenType(statement, Token::IDENTIFIER) 
+		&& variableExists(statement.tokens[statementIndex].token, mem)
+		&& isVariableType(statement.tokens[statementIndex].token, Token::BOOLEAN, mem))) {
 		if (isTokenType(statement, Token::BOOL_OPERATOR)) {
 			if (isBoolValue(statement, mem)) return true;
 			else return false;
