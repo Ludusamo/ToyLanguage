@@ -125,15 +125,10 @@ bool Parser::isSubtype(Token token, int subtype) {
 }
 
 bool Parser::variableExists(const char *id, Memory &mem) {
-	int varIndex = -1;
-	for (int i = currentDepth; i >= 0; i--) {
-		varIndex = mem.getVariable(id, 0); 
-	}	
-	if (varIndex == -1) {
-		ErrorHandler::throwError(parsingIndex, ErrorHandler::UndeclaredVariable);
-		return false;
-	}
-	return true;
+	int varIndex = mem.getVariable(id, currentDepth); 
+	if (varIndex != -1) return true;		
+	ErrorHandler::throwError(parsingIndex + 1, ErrorHandler::UndeclaredVariable);
+	return false;
 }
 
 bool Parser::functionExists(const char *id, Memory &mem) {
@@ -146,11 +141,7 @@ bool Parser::functionExists(const char *id, Memory &mem) {
 }
 
 bool Parser::isVariableType(const char *id, int type, Memory &mem) {
-	for (int i = currentDepth; i >= 0; i--) {
-		int index = mem.getVariable(id, 0);
-		if (index != -1) 
-			return (mem.variables[i][index].type == type);
-	}
+	return (mem.getVariableType(id, currentDepth) == type);
 }
 
 bool Parser::isIntValue(Statement &statement, Memory &mem) {

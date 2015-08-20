@@ -5,6 +5,8 @@
 std::vector<int> Compiler::compile(std::vector<Statement> &statements, Memory &mem) {
 	if (lineno + 1 == statements.size()) return bytecode;
 	lineno++;	
+	currentDepth = statements[lineno].depth;
+
 	switch(statements[lineno].type) {
 	case Statement::DECL:
 		compileGlobalDeclaration(statements[lineno], mem);
@@ -26,7 +28,7 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements, Memory &m
 
 void Compiler::compileGlobalDeclaration(Statement &statement, Memory &mem) {
 	// Creating a storing variable
-	int varIndex = mem.getVariable(statement.tokens[1].token, 0);	
+	int varIndex = mem.getVariable(statement.tokens[1].token, currentDepth);
 
 	if (statement.tokens.size() > 2) {
 		statementIndex = 2;
@@ -71,7 +73,7 @@ void Compiler::compileIntValue(Statement &statement, Memory &mem) {
 
 	if (statement.tokens[statementIndex].type == Token::IDENTIFIER) {
 		bytecode.push_back(GLOAD);
-		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, 0));
+		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
 		compileIntValue(statement, mem);		
 	}
 
@@ -135,7 +137,7 @@ void Compiler::compileBoolValue(Statement &statement, Memory &mem) {
 
 	if (statement.tokens[statementIndex].type == Token::IDENTIFIER) {
 		bytecode.push_back(GLOAD);
-		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, 0));
+		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
 		compileIntValue(statement, mem);	
 	}
 

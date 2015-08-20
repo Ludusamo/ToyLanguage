@@ -6,6 +6,7 @@
 #include "Statement.h"
 #include "StringUtil.h"
 
+#define MAX_DEPTH 255
 #define MAX_LOCAL_VARS 255
 #define MAX_ARGS 255
 
@@ -14,6 +15,7 @@ public:
 	typedef struct {
 		const char *id;
 		int type;
+		int memAddr;
 	} Variable;
 
 	typedef struct {
@@ -25,10 +27,18 @@ public:
 		Variable args[MAX_ARGS];
 	} Function;
 
-	Memory() {};
+	Memory() {
+		numVariables = 0;
+		for (int i = 0; i < MAX_DEPTH; i++) {
+			std::vector<Variable> v;
+			variables.push_back(v);
+		}	
+	};
 	~Memory() {};
 	std::vector< std::vector<Variable> > variables;
 	std::vector<Function> globalFunctions;
+
+	int numVariables;
 
 	int addGlobalFunction(Function f) {
 		globalFunctions.push_back(f);
@@ -49,14 +59,29 @@ public:
 	}
 	
 	int createVariable(const char *id, int type, int depth) {
-		Variable var = {id, type};
+		Variable var = {id, type, numVariables};
 		variables[depth].push_back(var);
+		numVariables++;
 		return variables.size() - 1;
 	}
 
 	int getVariable(const char *id, int depth) {
-		for (int i = 0; i < variables.size(); i++) {
-			if (StringUtil::equal(variables[depth][i].id, id)) return i;
+		for (int i = depth; i >= 0; i--) {
+			for (int j = 0; j < variables[i].size(); j++) {
+				if (StringUtil::equal(variables[i][j].id, id)) 
+					return variables[i][j].memAddr;
+			}
+		}
+		return -1;
+	}
+
+	int getVariableType(const char *id, int depth) {
+		for (int i = depth; i >= 0; i--) {
+			for (int j = 0; j < variables[i].size(); j++) {
+				if (StringUtil::equal(variables[i][j].id, id)) {
+					return variables[i][j].type;
+				}
+			}
 		}
 		return -1;
 	}
