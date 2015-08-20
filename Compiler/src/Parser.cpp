@@ -15,6 +15,11 @@ bool Parser::parse(std::vector<Statement> &statements, Memory &mem) {
 	}
 	statementIndex = -1;
 	if (isFunctionDeclaration(statements[parsingIndex], mem)) {
+		statements[parsingIndex].tagType(Statement::FUNC);
+		while (statements[parsingIndex + 1].depth > currentDepth) {
+			parsingIndex++;	
+			
+		}
 		if (parse(statements, mem)) return true;
 	}
 	statementIndex = -1;
@@ -120,7 +125,10 @@ bool Parser::isSubtype(Token token, int subtype) {
 }
 
 bool Parser::variableExists(const char *id, Memory &mem) {
-	int varIndex = mem.getVariable(id, 0); 
+	int varIndex = -1;
+	for (int i = currentDepth; i >= 0; i--) {
+		varIndex = mem.getVariable(id, 0); 
+	}	
 	if (varIndex == -1) {
 		ErrorHandler::throwError(parsingIndex, ErrorHandler::UndeclaredVariable);
 		return false;
@@ -138,7 +146,11 @@ bool Parser::functionExists(const char *id, Memory &mem) {
 }
 
 bool Parser::isVariableType(const char *id, int type, Memory &mem) {
-	return (mem.variables[0][mem.getVariable(id, 0)].type == type);
+	for (int i = currentDepth; i >= 0; i--) {
+		int index = mem.getVariable(id, 0);
+		if (index != -1) 
+			return (mem.variables[i][index].type == type);
+	}
 }
 
 bool Parser::isIntValue(Statement &statement, Memory &mem) {

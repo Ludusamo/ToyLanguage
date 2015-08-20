@@ -11,11 +11,9 @@
 
 class Statement {
 public:
-	enum TYPE { DECL, IF };
+	enum TYPE { DECL, IF, FUNC };
 
-	Statement() {
-	
-	};
+	Statement() { };
 
 	Statement(const Statement &obj) {
 		statement = new char(*obj.statement);
@@ -24,9 +22,7 @@ public:
 		tokens = obj.tokens;
 	};
 
-	~Statement() {
-
-	};
+	~Statement() { };
 
 	int depth;
 	const char *statement;

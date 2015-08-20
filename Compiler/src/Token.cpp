@@ -88,7 +88,7 @@ bool Token::iscomma(char c) {
 }
 
 bool Token::iswhitespace(char c) {
-	return (c == ' ') || (c == '\t') || (c == '\n');
+	return (c <= 32);
 }
 
 bool Token::isdatatype(const char *token) {

@@ -17,8 +17,9 @@ int main() {
 	Statement statement;
 	std::vector<Statement> statements;
 	statements.push_back(statement);
+	statements.push_back(statement);
 
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < statements.size(); i++) {
 		statements[i].setStatement(reader.getLine());
 		statements[i].tokenizeStatement();
 	}
