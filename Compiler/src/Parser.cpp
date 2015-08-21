@@ -38,6 +38,10 @@ bool Parser::parse(std::vector<Statement> &statements) {
 		mem.returnVariables(statements[index].tokens[1].token);
 	}
 	statementIndex = -1;
+	if (isFunctionCall(statements[parsingIndex])) {
+		printf("%i is a function call\n", parsingIndex + 1);
+	}
+	statementIndex = -1;
 	if (isIfStatement(statements[parsingIndex])) {
 		statements[parsingIndex].tagType(Statement::IF);
 	}
@@ -88,10 +92,17 @@ bool Parser::isFunctionDeclaration(Statement &statement) {
 	if (isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER)) {
 		if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {
 			bool hasArgs = isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER);
+			if (hasArgs) {
+				f.argTypes[0] = statement.tokens[3].subtype;
+			}
+			f.numArgs = hasArgs ? 1 : 0;
 			while (hasArgs) {
 				hasArgs = false;
 				if (isTokenType(statement, Token::COMMA)) {
 					if (isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER)) {
+						f.argTypes[f.numArgs] = statement.tokens[statementIndex - 1].subtype;
+						f.numArgs++;
+
 						hasArgs = true;
 					} 
 				}
@@ -103,7 +114,7 @@ bool Parser::isFunctionDeclaration(Statement &statement) {
 		}
 	}
 	return false;
-}
+}	
 
 bool Parser::isReturnStatement(Statement &statement, int returnType) {
 	if (isTokenType(statement, Token::RETURN)) {
@@ -123,9 +134,21 @@ bool Parser::isFunctionCall(Statement &statement) {
 	if (isTokenType(statement, Token::IDENTIFIER) 
 		&& functionExists(statement.tokens[statementIndex].token)) {
 		if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {
-			
+			Memory::Function f = mem.globalFunctions[mem.getFunction(statement.tokens[0].token)];
+			printf("%s %i\n", f.id, f.argTypes[0]);
+			for (int i = 0; i < f.numArgs; i++) {
+				if (f.argTypes[i] == Token::INT) {
+					printf("%i\n", statementIndex);
+					if (!isIntValue(statement)) return false;
+				} else if (f.argTypes[i] == Token::BOOL) {
+					if (!isBoolValue(statement)) return false;
+				}
+				if (!isTokenType(statement, Token::COMMA) || i == f.numArgs - 1) return false;
+			}
+			if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) return true;
 		}
 	}
+	return false;
 }
 
 bool Parser::isTokenType(Statement &statement, Token::TOKEN_TYPE type) {
@@ -227,6 +250,12 @@ bool Parser::isBoolValue(Statement &statement) {
 			}
 		}
 	}
+
+	/*if ((isTokenType(statement, Token::PAREN)
+		&& isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN))
+		|| isTokenType(statement, Token::COMMA)) {
+		return true;
+	}*/
 
 	return false;
 }

@@ -1,7 +1,9 @@
-void a()
+bool b = (5 + (6 * 2)) == 17
+
+void a(int a)
 	int b
 	return
-int d
+a(3)
 
 bool a = true
 bool b = a

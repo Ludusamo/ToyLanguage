@@ -44,6 +44,7 @@ public:
 	void compileDeclaration(Statement &statement);
 	void compileGlobalFunction(Statement &statement);
 	void compileReturnStatement(Statement &statement, int returnType);
+	void compileFunctionCall(Statement &statement);
 	void compileIfStatement(Statement &statement);
 	void compileWhileStatement(Statement &statement);
 private:

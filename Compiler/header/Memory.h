@@ -24,7 +24,7 @@ public:
 		int numArgs;
 		int addr;
 		std::vector< std::vector<Variable> > bufferVariables;
-		int argsAddr[MAX_ARGS];
+		int argTypes[MAX_ARGS];
 	} Function;
 
 	Memory() {
@@ -52,7 +52,7 @@ public:
 	}
 	
 	void clearVariablesForFunction() {
-		popVariableLayers(1, 255);
+		popVariableLayers(1, MAX_DEPTH);
 	}
 
 	int addGlobalFunction(Function f) {

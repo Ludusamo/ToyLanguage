@@ -103,8 +103,7 @@ void Compiler::compileIntValue(Statement &statement) {
 	if (statement.tokens[statementIndex].type == Token::NUMBER) {	
 		bytecode.push_back(PUSH);
 		bytecode.push_back(StringUtil::atoi(statement.tokens[statementIndex].token));
-		compileIntValue(statement);
-		
+		compileIntValue(statement);	
 	}
 
 	if (statement.tokens[statementIndex].type == Token::IDENTIFIER) {
@@ -134,9 +133,10 @@ void Compiler::compileIntValue(Statement &statement) {
 
 	if (statement.tokens[statementIndex].type == Token::PAREN
 		&& statement.tokens[statementIndex].subtype == Token::LPAREN) {
+		compileIntValue(statement);
 		int parenCount = 1;
 		for (int i = statementIndex + 1; i < statement.tokens.size(); i++) {
-			if (statement.tokens[i].type == Token::PAREN) {
+			if (statement.tokens[i].type == Token::PAREN) {	
 				if (statement.tokens[i].subtype == Token::LPAREN) {
 					parenCount++;
 				}
@@ -145,7 +145,6 @@ void Compiler::compileIntValue(Statement &statement) {
 					if (parenCount == 0) {
 						int bufferIndex = statementIndex;
 						statementIndex = i;
-						compileIntValue(statement);
 						statementIndex = bufferIndex;
 					}
 				}
@@ -220,6 +219,7 @@ void Compiler::compileBoolValue(Statement &statement) {
 
 	if (statement.tokens[statementIndex].type == Token::PAREN
 		&& statement.tokens[statementIndex].subtype == Token::LPAREN) {
+		compileBoolValue(statement);
 		int parenCount = 1;
 		for (int i = statementIndex + 1; i < statement.tokens.size(); i++) {
 			if (statement.tokens[statementIndex].type == Token::PAREN) {
@@ -231,7 +231,6 @@ void Compiler::compileBoolValue(Statement &statement) {
 					if (parenCount == 0) {
 						int bufferIndex = statementIndex;
 						statementIndex = i;
-						compileBoolValue(statement);
 						statementIndex = bufferIndex;
 					}
 				}

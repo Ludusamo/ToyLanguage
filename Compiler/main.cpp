@@ -15,9 +15,6 @@ int main() {
 	Statement statement;
 	std::vector<Statement> statements;
 	statements.push_back(statement);
-	statements.push_back(statement);
-	statements.push_back(statement);
-	statements.push_back(statement);
 
 	for (int i = 0; i < statements.size(); i++) {
 		statements[i].setStatement(reader.getLine());
