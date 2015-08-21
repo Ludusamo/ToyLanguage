@@ -9,8 +9,6 @@
 #include "ErrorHandler.h"
 
 int main() {
-	Memory mem;
-
 	FileReader reader;
 	reader.openFile("res/test.ls");
 
@@ -25,17 +23,10 @@ int main() {
 	}
 
 	Parser parser;
-	parser.parse(statements, mem);
-
-	for (int i = 0; i < mem.globalFunctions.size(); i++) {
-		printf("Function: %i, %s, %i\n", i, mem.globalFunctions[i].id, mem.globalFunctions[i].numArgs);
-		for (int j = 0; j < mem.globalFunctions[i].numArgs; j++) {
-			printf("Arg: %s", mem.globalFunctions[i].args[j].id);
-		}
-	}
+	parser.parse(statements);
 
 	Compiler compiler;
-	std::vector<int> bytecode = compiler.compile(statements, mem);
+	std::vector<int> bytecode = compiler.compile(statements);
 
 	printf("\nBytecode: \n");
 	for (int i = 0; i < bytecode.size(); i++) {

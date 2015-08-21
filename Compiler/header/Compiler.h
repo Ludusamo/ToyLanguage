@@ -40,22 +40,23 @@ class Compiler {
 public:
 	Compiler() {lineno = -1;};
 
-	std::vector<int> compile(std::vector<Statement> &statements, Memory &mem);
-	void compileGlobalDeclaration(Statement &statement, Memory &mem);
-	void compileGlobalFunction(Statement &statement, Memory &mem);
-	void compileIfStatement(Statement &statement, Memory &mem);
-	void compileWhileStatement(Statement &statement, Memory &mem);
+	std::vector<int> compile(std::vector<Statement> &statements);
+	void compileGlobalDeclaration(Statement &statement);
+	void compileGlobalFunction(Statement &statement);
+	void compileIfStatement(Statement &statement);
+	void compileWhileStatement(Statement &statement);
 private:
 	int statementIndex;
 	int lineno;
 	int currentDepth;
 	std::vector<int> placeholderIndex; // In case I need to update a value to branch/jump to
 	int previousDepth; // Check if we have changed depths
+	Memory mem;
 
 	std::vector<int> bytecode;
 
-	void compileIntValue(Statement &statement, Memory &mem);
-	void compileBoolValue(Statement &statement, Memory &mem);
+	void compileIntValue(Statement &statement);
+	void compileBoolValue(Statement &statement);
 };
 
 #endif // COMPILER_H

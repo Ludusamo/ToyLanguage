@@ -23,7 +23,7 @@ public:
 		int returnType;
 		int numArgs;
 		int addr;
-		Variable variables[MAX_LOCAL_VARS];
+		std::vector< std::vector<Variable> > variables;
 		Variable args[MAX_ARGS];
 	} Function;
 
@@ -39,6 +39,12 @@ public:
 	std::vector<Function> globalFunctions;
 
 	int numVariables;
+
+	void popVariableLayers(int currentDepth, int previousDepth) {
+		for (int i = currentDepth; i < previousDepth; i++) {
+			variables[i + 1].clear();
+		}
+	}
 
 	int addGlobalFunction(Function f) {
 		globalFunctions.push_back(f);
@@ -62,7 +68,7 @@ public:
 		Variable var = {id, type, numVariables};
 		variables[depth].push_back(var);
 		numVariables++;
-		return variables.size() - 1;
+		return numVariables - 1;
 	}
 
 	int getVariable(const char *id, int depth) {

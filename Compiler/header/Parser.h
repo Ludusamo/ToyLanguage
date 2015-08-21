@@ -14,29 +14,30 @@ public:
 		parsingIndex = -1;	
 	};
 	~Parser() {};
-	bool parse(std::vector<Statement> &statements, Memory &mem);
+	bool parse(std::vector<Statement> &statements);
 private:	
+	Memory mem;
 	int statementIndex;
 	int parsingIndex;
 	int currentDepth;
 
 	// Statement type check
-	bool isDeclaration(Statement &statement, Memory &mem);
-	bool isFunctionDeclaration(Statement &statement, Memory &mem);
-	bool isFunctionCall(Statement &statement, Memory &mem);
-	bool isReturnStatement(Statement &statement, Memory &mem);
-	bool isIfStatement(Statement &statement, Memory &mem);
+	bool isDeclaration(Statement &statement);
+	bool isFunctionDeclaration(Statement &statement);
+	bool isFunctionCall(Statement &statement);
+	bool isReturnStatement(Statement &statement);
+	bool isIfStatement(Statement &statement);
 	
 	// Statement component type check
-	bool isIntValue(Statement &statement, Memory &mem);
-	bool isBoolValue(Statement &statement, Memory &mem);
+	bool isIntValue(Statement &statement);
+	bool isBoolValue(Statement &statement);
 
 	// Statement token type check
 	bool isTokenType(Statement &statement, Token::TOKEN_TYPE type);	
 	bool isSubtype(Token token, int subtype);
-	bool variableExists(const char *id, Memory &mem);
-	bool isVariableType(const char *id, int type, Memory &mem);
-	bool functionExists(const char *id, Memory &mem);
+	bool variableExists(const char *id);
+	bool isVariableType(const char *id, int type);
+	bool functionExists(const char *id);
 
 	bool endOfStatement(Statement &statement);
 };
