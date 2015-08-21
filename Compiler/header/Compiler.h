@@ -9,31 +9,31 @@
 #include "StringUtil.h"
 
 typedef enum {
-	HALT,
-	PUSH,
-	POP,
-	ADDI,
-	SUBI,
-	MULI,
-	DIVI,
-	EQ,
-	LT,
-	GT,
-	LTE,
-	GTE,
-	AND,
-	OR,
-	GSTORE,
-	GLOAD,
-	BR,
-	BRT,
-	BRF,
-	LOAD,
-	STORE,
-	CALL,
-	RET,
-	PRINTI,
-	PRINTC
+	HALT, //0
+	PUSH, //1
+	POP, //2
+	ADDI, //3
+	SUBI, //4
+	MULI, //5
+	DIVI, //6
+	EQ, //7
+	LT, //8
+	GT, //9
+	LTE, //10
+	GTE, //11
+	AND, //12
+	OR, //13
+	GSTORE, // 14
+	GLOAD, //15
+	BR, //16
+	BRT, //17
+	BRF, //18
+	LOAD, //19
+	STORE, //20
+	CALL, //21
+	RET, //22
+	PRINTI, //23
+	PRINTC //24
 } Opcodes;
 
 class Compiler {
@@ -41,7 +41,7 @@ public:
 	Compiler() {lineno = -1;};
 
 	std::vector<int> compile(std::vector<Statement> &statements);
-	void compileGlobalDeclaration(Statement &statement);
+	void compileDeclaration(Statement &statement);
 	void compileGlobalFunction(Statement &statement);
 	void compileIfStatement(Statement &statement);
 	void compileWhileStatement(Statement &statement);

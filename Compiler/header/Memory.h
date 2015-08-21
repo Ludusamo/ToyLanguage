@@ -28,7 +28,6 @@ public:
 	} Function;
 
 	Memory() {
-		numVariables = 0;
 		for (int i = 0; i < MAX_DEPTH; i++) {
 			std::vector<Variable> v;
 			variables.push_back(v);
@@ -37,8 +36,6 @@ public:
 	~Memory() {};
 	std::vector< std::vector<Variable> > variables;
 	std::vector<Function> globalFunctions;
-
-	int numVariables;
 
 	void popVariableLayers(int currentDepth, int previousDepth) {
 		for (int i = currentDepth; i < previousDepth; i++) {
@@ -65,10 +62,9 @@ public:
 	}
 	
 	int createVariable(const char *id, int type, int depth) {
-		Variable var = {id, type, numVariables};
+		Variable var = {id, type, variables[depth].size()};
 		variables[depth].push_back(var);
-		numVariables++;
-		return numVariables - 1;
+		return var.memAddr;
 	}
 
 	int getVariable(const char *id, int depth) {

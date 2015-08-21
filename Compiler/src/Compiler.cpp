@@ -7,32 +7,29 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 	lineno++;	
 	currentDepth = statements[lineno].depth;
 
+	if (statements[lineno].depth < statements[lineno - 1].depth &&
+		placeholderIndex.size() > 0) {
+		bytecode[placeholderIndex[placeholderIndex.size() - 1]] = bytecode.size();
+		placeholderIndex.pop_back();
+	}
+
 	mem.popVariableLayers(currentDepth, statements[lineno - 1].depth);
 
 	switch(statements[lineno].type) {
 	case Statement::DECL:
-		compileGlobalDeclaration(statements[lineno]);
+		compileDeclaration(statements[lineno]);
 		break;
 	case Statement::IF:
-		int index = lineno;
-		compileIfStatement(statements[index]);
-		int initialBytecodeSize = bytecode.size(); // The index in bytecode where the if branch statement is
-		while (statements[index].depth < statements[lineno + 1].depth) {
-			compile(statements);	
-		}
-		bytecode[placeholderIndex[placeholderIndex.size() - 1]] = bytecode.size() - initialBytecodeSize;
-		placeholderIndex.pop_back();
+		compileIfStatement(statements[lineno]);
 		break;
 	}
 	compile(statements);
 	return bytecode;
 }
 
-void Compiler::compileGlobalDeclaration(Statement &statement) {
-	mem.createVariable(statement.tokens[1].token, statement.tokens[0].subtype, currentDepth);
-	// Creating a storing variable
-	int varIndex = mem.getVariable(statement.tokens[1].token, currentDepth);
-
+void Compiler::compileDeclaration(Statement &statement) {
+	int varIndex = mem.createVariable(statement.tokens[1].token, statement.tokens[0].subtype, currentDepth);
+	
 	if (statement.tokens.size() > 2) {
 		statementIndex = 2;
 		switch (statement.tokens[0].subtype) {
@@ -47,7 +44,8 @@ void Compiler::compileGlobalDeclaration(Statement &statement) {
 		bytecode.push_back(PUSH);
 		bytecode.push_back(0);
 	}
-	bytecode.push_back(GSTORE);
+	if (currentDepth != 0) bytecode.push_back(STORE);
+	else bytecode.push_back(GSTORE);
 	bytecode.push_back(varIndex);
 }
 
@@ -62,6 +60,10 @@ void Compiler::compileIfStatement(Statement &statement) {
 	bytecode.push_back(BRF);
 	placeholderIndex.push_back(bytecode.size());
 	bytecode.push_back(0);
+	for (int i = 0; i < mem.variables[currentDepth].size(); i++) {
+		bytecode.push_back(PUSH);
+		bytecode.push_back(0);
+	}
 }
 
 void Compiler::compileIntValue(Statement &statement) {
@@ -147,7 +149,7 @@ void Compiler::compileBoolValue(Statement &statement) {
 	if (statement.tokens[statementIndex].type == Token::ARTH_OPERATOR) {
 		int index = statementIndex;
 		compileBoolValue(statement);	
-		switch (statement.tokens[statementIndex].subtype) {
+		switch (statement.tokens[index].subtype) {
 		case Token::ADD:
 			bytecode.push_back(ADDI);
 			break;
@@ -166,7 +168,7 @@ void Compiler::compileBoolValue(Statement &statement) {
 	if (statement.tokens[statementIndex].type == Token::BOOL_OPERATOR) {
 		int index = statementIndex;
 		compileBoolValue(statement);	
-		switch (statement.tokens[statementIndex].subtype) {
+		switch (statement.tokens[index].subtype) {
 		case Token::EQ:
 			bytecode.push_back(EQ);
 			break;

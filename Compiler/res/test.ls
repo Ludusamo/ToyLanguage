@@ -1,5 +1,6 @@
+if (1 == 1)
 	int a
-int b
+	int b
 int c
 
 int a()
