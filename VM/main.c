@@ -25,10 +25,10 @@
 };*/
 
 const int program[] = {
-	PUSH, 1,
+	PUSH, 2,
 	PUSH, 1,
 	EQ,
-	BRF, 18,
+	BRF, 15,
 
 	PUSH, 1,
 	STORE, 0,
