@@ -71,6 +71,10 @@ void Compiler::compileGlobalFunction(Statement &statement) {
 	if (statement.tokens.size() > 4) {
 		for (int i = 3; i < statement.tokens.size(); i+=3) {
 			int addr = mem.createVariable(statement.tokens[i+1].token, statement.tokens[i].subtype, statement.depth + 1);
+			bytecode.push_back(PUSH);
+			bytecode.push_back(0);
+			bytecode.push_back(STORE);
+			bytecode.push_back(addr);
 		}
 	}
 	mem.addGlobalFunction(f);

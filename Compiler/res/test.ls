@@ -1,5 +1,3 @@
-bool b = (5 + (6 * 2)) == 17
-
 void a(int a)
 	int b
 	return

@@ -138,12 +138,15 @@ bool Parser::isFunctionCall(Statement &statement) {
 			printf("%s %i\n", f.id, f.argTypes[0]);
 			for (int i = 0; i < f.numArgs; i++) {
 				if (f.argTypes[i] == Token::INT) {
-					printf("%i\n", statementIndex);
-					if (!isIntValue(statement)) return false;
+					printf("Arg: %i\n", statementIndex);
+					if (!isIntValue(statement)) {
+						printf("Not an int value\n");
+						return false;
+					}
 				} else if (f.argTypes[i] == Token::BOOL) {
 					if (!isBoolValue(statement)) return false;
 				}
-				if (!isTokenType(statement, Token::COMMA) || i == f.numArgs - 1) return false;
+				if (!isTokenType(statement, Token::COMMA)) return false;
 			}
 			if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) return true;
 		}
@@ -251,11 +254,11 @@ bool Parser::isBoolValue(Statement &statement) {
 		}
 	}
 
-	/*if ((isTokenType(statement, Token::PAREN)
-		&& isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN))
-		|| isTokenType(statement, Token::COMMA)) {
+	if ((isTokenType(statement, Token::PAREN) &&
+		isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) ||
+		isTokenType(statement, Token::COMMA)) {
 		return true;
-	}*/
+	}
 
 	return false;
 }
