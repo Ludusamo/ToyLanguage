@@ -8,7 +8,8 @@ public:
 	typedef enum {
 		UndeclaredVariable,
 		UndeclaredFunction,
-		TypeMismatch
+		TypeMismatch,
+		InvalidReturnValue
 	} ERRORS;
 
 	static void throwError(int lineno, int errorType) {
@@ -21,6 +22,9 @@ public:
 			break;
 		case TypeMismatch:
 			printf("Type Mismatch Error on line %i.\n", lineno);
+			break;
+		case InvalidReturnValue:
+			printf("Invalid return value on line %i.\n", lineno);
 			break;
 		}	
 	}

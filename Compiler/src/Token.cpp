@@ -40,6 +40,8 @@ char *Token::getType() {
 		return (char*) "PAREN";
 	case COMMA:
 		return (char*) "COMMA";
+	case RETURN:
+		return (char*) "RETURN";
 	}
 }
 
@@ -80,6 +82,7 @@ Token::TOKEN_TYPE Token::identifyTokenType(const char *token) {
 	if (token[0] == '(' || token[0] == ')') return PAREN;
 	if (isnum(token)) return NUMBER;
 	if (isbool(token)) return BOOL;
+	if (isreturn(token)) return RETURN;
 	return IDENTIFIER;	
 }
 
@@ -128,4 +131,8 @@ bool Token::isnum(const char *token) {
 
 bool Token::isbool(const char *token) {
 	return (StringUtil::equal("true", token) || StringUtil::equal("false", token));
+}
+
+bool Token::isreturn(const char *token) {
+	return (StringUtil::equal("return", token));
 }

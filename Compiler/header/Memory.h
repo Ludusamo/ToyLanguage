@@ -23,8 +23,8 @@ public:
 		int returnType;
 		int numArgs;
 		int addr;
-		std::vector< std::vector<Variable> > variables;
-		Variable args[MAX_ARGS];
+		std::vector< std::vector<Variable> > bufferVariables;
+		int argsAddr[MAX_ARGS];
 	} Function;
 
 	Memory() {
@@ -47,13 +47,24 @@ public:
 		}
 	}
 
+	void returnVariables(const char *id) {
+		variables = globalFunctions[getFunction(id)].bufferVariables;
+	}
+	
+	void clearVariablesForFunction() {
+		popVariableLayers(1, 255);
+	}
+
 	int addGlobalFunction(Function f) {
+		f.bufferVariables = variables;
 		globalFunctions.push_back(f);
+		clearVariablesForFunction();
 		return globalFunctions.size() - 1;
 	}
 
 	int createFunction(const char *id, int numArgs, int returnType) {
 		Function func = {id, numArgs, returnType};
+		func.bufferVariables = variables;
 		globalFunctions.push_back(func);
 		return globalFunctions.size() - 1;
 	}
@@ -66,7 +77,11 @@ public:
 	}
 	
 	int createVariable(const char *id, int type, int depth) {
-		int memAddr = depth > 0 ? numLocalVars++:variables[depth].size();
+		int memAddr;
+		if (depth > 0) {
+			memAddr = numLocalVars;
+			numLocalVars++;
+		} else memAddr = variables[depth].size();
 		Variable var = {id, type, memAddr};
 		variables[depth].push_back(var);
 		return var.memAddr;

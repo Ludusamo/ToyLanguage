@@ -27,6 +27,8 @@ int main() {
 	Parser parser;
 	parser.parse(statements);
 
+	printf("===================\n");
+
 	Compiler compiler;
 	std::vector<int> bytecode = compiler.compile(statements);
 

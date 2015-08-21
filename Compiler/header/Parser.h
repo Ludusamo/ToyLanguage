@@ -25,7 +25,7 @@ private:
 	bool isDeclaration(Statement &statement);
 	bool isFunctionDeclaration(Statement &statement);
 	bool isFunctionCall(Statement &statement);
-	bool isReturnStatement(Statement &statement);
+	bool isReturnStatement(Statement &statement, int returnType);
 	bool isIfStatement(Statement &statement);
 	
 	// Statement component type check

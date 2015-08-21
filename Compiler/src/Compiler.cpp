@@ -6,18 +6,33 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 	if (lineno + 1 == statements.size()) return bytecode;
 	lineno++;	
 	currentDepth = statements[lineno].depth;
+	
+	mem.popVariableLayers(currentDepth, statements[lineno - 1].depth);
 
+	int index = lineno;
 	if (statements[lineno].depth < statements[lineno - 1].depth &&
 		placeholderIndex.size() > 0) {
 		bytecode[placeholderIndex[placeholderIndex.size() - 1]] = bytecode.size();
 		placeholderIndex.pop_back();
 	}
 
-	mem.popVariableLayers(currentDepth, statements[lineno - 1].depth);
-
 	switch(statements[lineno].type) {
 	case Statement::DECL:
 		compileDeclaration(statements[lineno]);
+		break;
+	case Statement::FUNC:
+		compileGlobalFunction(statements[lineno]);
+		while (statements[lineno + 1].depth >= currentDepth) {
+			lineno++;
+			currentDepth = statements[lineno].depth;
+			if (statements[lineno].type == Statement::DECL)
+				compileDeclaration(statements[lineno]);
+			else if (statements[lineno].type == Statement::IF)
+				compileIfStatement(statements[lineno]);
+			else if (statements[lineno].type == Statement::RET)
+				compileReturnStatement(statements[lineno], statements[index].tokens[0].subtype);
+		}
+		mem.returnVariables(statements[index].tokens[1].token);
 		break;
 	case Statement::IF:
 		compileIfStatement(statements[lineno]);
@@ -50,8 +65,28 @@ void Compiler::compileDeclaration(Statement &statement) {
 }
 
 void Compiler::compileGlobalFunction(Statement &statement) {
+	Memory::Function f;
+	f.id = statement.tokens[1].token;
+	f.addr = bytecode.size();
+	if (statement.tokens.size() > 4) {
+		for (int i = 3; i < statement.tokens.size(); i+=3) {
+			int addr = mem.createVariable(statement.tokens[i+1].token, statement.tokens[i].subtype, statement.depth + 1);
+		}
+	}
+	mem.addGlobalFunction(f);
+}
+
+void Compiler::compileReturnStatement(Statement &statement, int returnType) {
 	statementIndex = 0;
-	
+	if (returnType == Token::VOID) {
+		bytecode.push_back(PUSH);
+		bytecode.push_back(0);
+	} else if (returnType == Token::INT) {
+		compileIntValue(statement);
+	} else if (returnType == Token::BOOLEAN) {
+		compileBoolValue(statement);
+	}
+	bytecode.push_back(RET);
 }
 
 void Compiler::compileIfStatement(Statement &statement) {
@@ -60,10 +95,6 @@ void Compiler::compileIfStatement(Statement &statement) {
 	bytecode.push_back(BRF);
 	placeholderIndex.push_back(bytecode.size());
 	bytecode.push_back(0);
-	for (int i = 0; i < mem.variables[currentDepth].size(); i++) {
-		bytecode.push_back(PUSH);
-		bytecode.push_back(0);
-	}
 }
 
 void Compiler::compileIntValue(Statement &statement) {

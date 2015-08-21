@@ -1,14 +1,7 @@
-if (1 == 1)
-	int a
+void a()
 	int b
-int c
-
-int a()
-	int b
-	int c
-	b = 2
-	c = 3
-	return b + c
+	return
+int d
 
 bool a = true
 bool b = a

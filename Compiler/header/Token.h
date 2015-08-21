@@ -7,7 +7,7 @@
 class Token {
 public:
 	// Token type declaration
-	enum TOKEN_TYPE { WHITESPACE, DATATYPE, CONTROL, IDENTIFIER, NUMBER, BOOL, ARTH_OPERATOR, BOOL_OPERATOR, PAREN, COMMA };
+	enum TOKEN_TYPE { WHITESPACE, DATATYPE, CONTROL, IDENTIFIER, NUMBER, BOOL, ARTH_OPERATOR, BOOL_OPERATOR, PAREN, COMMA, RETURN };
 	enum SUB_DATATYPE { VOID, INT, BOOLEAN, NUM_DATATYPES};
 	enum SUB_CONTROL { IF, ELSE , NUM_CONTROLS};
 	enum SUB_ARTH_OPERATOR { ASSIGNMENT, ADD, SUB, MUL, DIV, NUM_ARTH_OPERATORS };
@@ -49,6 +49,7 @@ public:
 	static bool isbooloperator(const char *token);
 	static bool isnum(const char *token);
 	static bool isbool(const char *token);
+	static bool isreturn(const char *token);
 private:	
 	const static char **DATATYPES;
 	const static char **SUBTYPE;
