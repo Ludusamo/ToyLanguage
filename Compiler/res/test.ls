@@ -1,10 +1,6 @@
-if (1 == 1)
-	int a = 1
-	int b = a
-int c = 1
-void a(int a)
-	int b
-	return
+int a(int b)
+	int c = b
+	return c
 a(3)
 
 bool a = true

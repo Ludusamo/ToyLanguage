@@ -39,7 +39,7 @@ bool Parser::parse(std::vector<Statement> &statements) {
 	}
 	statementIndex = -1;
 	if (isFunctionCall(statements[parsingIndex])) {
-		printf("%i is a function call\n", parsingIndex + 1);
+		statements[parsingIndex].tagType(Statement::FUNC_CALL);
 	}
 	statementIndex = -1;
 	if (isIfStatement(statements[parsingIndex])) {
@@ -89,19 +89,18 @@ bool Parser::isFunctionDeclaration(Statement &statement) {
 	Memory::Function f;
 	f.id = statement.tokens[1].token;
 	f.returnType = statement.tokens[0].subtype;
+	f.numArgs = 0;
 	if (isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER)) {
 		if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {
 			bool hasArgs = isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER);
 			if (hasArgs) {
-				f.argTypes[0] = statement.tokens[3].subtype;
+				mem.addArgument(f, statement.tokens[4].token, statement.tokens[3].subtype);
 			}
-			f.numArgs = hasArgs ? 1 : 0;
 			while (hasArgs) {
 				hasArgs = false;
 				if (isTokenType(statement, Token::COMMA)) {
 					if (isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER)) {
-						f.argTypes[f.numArgs] = statement.tokens[statementIndex - 1].subtype;
-						f.numArgs++;
+						mem.addArgument(f, statement.tokens[statementIndex].token, statement.tokens[statementIndex - 1].subtype);
 
 						hasArgs = true;
 					} 
@@ -152,7 +151,9 @@ bool Parser::isFunctionCall(Statement &statement) {
 					}
 				}
 				printf("Statement Index: %i\n", statementIndex);
-				if (!isTokenType(statement, Token::COMMA) && (i != f.numArgs - 1)) return false;
+				if (!isTokenType(statement, Token::COMMA) && (i != f.numArgs - 1)){
+				       	return false;
+				}
 			}
 			if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) return true;
 		}

@@ -40,6 +40,9 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 	case Statement::IF:
 		compileIfStatement(statements[lineno]);
 		break;
+	case Statement::FUNC_CALL:
+		compileFunctionCall(statements[lineno]);
+		break;
 	}
 	compile(statements);
 	return bytecode;
@@ -47,6 +50,11 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 
 void Compiler::compileDeclaration(Statement &statement) {
 	int varIndex = mem.createVariable(statement.tokens[1].token, statement.tokens[0].subtype, currentDepth);
+
+	if (currentDepth != 0) {
+		bytecode.push_back(PUSH);
+		bytecode.push_back(0);
+	}
 	
 	if (statement.tokens.size() > 2) {
 		statementIndex = 2;
@@ -64,24 +72,21 @@ void Compiler::compileDeclaration(Statement &statement) {
 	}
 
 	// Store globally
-	if (currentDepth == 0) {
-		bytecode.push_back(GSTORE);
-		bytecode.push_back(varIndex);
-	}
+	if (currentDepth == 0) bytecode.push_back(GSTORE);
+	else bytecode.push_back(STORE);
+	bytecode.push_back(varIndex);
 }
 
 void Compiler::compileGlobalFunction(Statement &statement) {
 	Memory::Function f;
 	f.id = statement.tokens[1].token;
 	f.addr = bytecode.size();
+	mem.addGlobalFunction(f);
 	if (statement.tokens.size() > 4) {
 		for (int i = 3; i < statement.tokens.size(); i+=3) {
-			int addr = mem.createVariable(statement.tokens[i+1].token, statement.tokens[i].subtype, statement.depth + 1);
-			bytecode.push_back(PUSH);
-			bytecode.push_back(0);
+			mem.addArgument(mem.globalFunctions[mem.globalFunctions.size() - 1], statement.tokens[i+1].token, statement.tokens[i].subtype);
 		}
 	}
-	mem.addGlobalFunction(f);
 }
 
 void Compiler::compileReturnStatement(Statement &statement, int returnType) {
@@ -95,6 +100,29 @@ void Compiler::compileReturnStatement(Statement &statement, int returnType) {
 		compileBoolValue(statement);
 	}
 	bytecode.push_back(RET);
+}
+
+void Compiler::compileFunctionCall(Statement &statement) {
+	statementIndex = 0;
+	Memory::Function f = mem.globalFunctions[mem.getFunction(statement.tokens[0].token)];
+	for (int i = 0; i < f.numArgs; i++) {
+		bytecode.push_back(PUSH);
+		bytecode.push_back(0);	
+	}
+	for (int i = 0; i < f.numArgs; i++) {	
+		statementIndex++;
+		printf("%i\n", f.argTypes[i]);
+		if (f.argTypes[i] == Token::INT) {
+			compileIntValue(statement);
+		} else if (f.argTypes[i] == Token::BOOLEAN) {
+			compileBoolValue(statement);
+		}
+		bytecode.push_back(STORE);
+		bytecode.push_back(mem.variables[1][i].memAddr + 4);
+	}
+	bytecode.push_back(CALL);
+	bytecode.push_back(f.addr);
+	bytecode.push_back(f.numArgs);
 }
 
 void Compiler::compileIfStatement(Statement &statement) {
@@ -115,7 +143,7 @@ void Compiler::compileIntValue(Statement &statement) {
 	}
 
 	if (statement.tokens[statementIndex].type == Token::IDENTIFIER) {
-		bytecode.push_back(GLOAD);
+		bytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
 		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
 		compileIntValue(statement);		
 	}
@@ -179,7 +207,7 @@ void Compiler::compileBoolValue(Statement &statement) {
 	}
 
 	if (statement.tokens[statementIndex].type == Token::IDENTIFIER) {
-		bytecode.push_back(GLOAD);
+		bytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
 		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
 		compileIntValue(statement);	
 	}

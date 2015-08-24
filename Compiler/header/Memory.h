@@ -77,6 +77,14 @@ public:
 		}	
 		return -1;
 	}
+
+	int addArgument(Function &f, const char *id, int type) {
+		f.argTypes[f.numArgs] = type;
+		f.numArgs++;
+		Variable var = {id, type, -f.numArgs - 2};
+		variables[1].push_back(var);
+		return var.memAddr;
+	}
 	
 	int createVariable(const char *id, int type, int depth) {
 		int memAddr;
@@ -108,6 +116,13 @@ public:
 			}
 		}
 		return -1;
+	}
+
+	bool isLocalVariable(const char *id, int depth) {
+		for (int i = 0; i < variables[0].size(); i++) {
+			if (StringUtil::equal(variables[0][i].id, id)) return false;
+		}
+		return true;
 	}
 };
 

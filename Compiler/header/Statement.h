@@ -11,7 +11,7 @@
 
 class Statement {
 public:
-	enum TYPE { DECL, IF, FUNC, RET };
+	enum TYPE { DECL, IF, FUNC, RET, FUNC_CALL };
 
 	Statement() { };
 
