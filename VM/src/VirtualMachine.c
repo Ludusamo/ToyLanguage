@@ -98,12 +98,12 @@ void eval(int op) {
 			break;
 		case LOAD:
 			registers[A] = getNextOperand(); // Offset
-			push(localmem[registers[A]]);
+			push(stack[fp + registers[A]]);
 			break;
 		case STORE:
 			registers[A] = getNextOperand(); // Offset
 			registers[B] = pop(); // Value to Store
-			localmem[registers[A]] = registers[B];
+			stack[fp + registers[A]] = registers[B];
 			break;
 		case CALL:
 			registers[A] = getNextOperand() - 1; // Address
@@ -143,19 +143,18 @@ int fetch() {
 	return PROGRAM[ip];
 }
 
-void runProgram(const int *program, const int mainIndex, const int memSize) {
+void runProgram(const int *program, const int mainIndex, const int gMemSize) {
 	running = 1;
 	trace = 1;
 	ip = mainIndex;
 	sp = -1;
 	PROGRAM = program;	
-	gmem = (int *) malloc(sizeof(int) * memSize);
-	localmem = (int *) malloc(sizeof(int) * memSize);
+	gmem = (int *) malloc(sizeof(int) * gMemSize);
 	while (running) {
 		int op = fetch();
 		if (trace) printStackTrace(ip, sp, op, PROGRAM, stack);
 		eval(op);
 		ip++;
 	}	
-	if (trace) dumpMemory(memSize, gmem, memSize, localmem);
+	if (trace) dumpMemory(gMemSize, gmem);
 }

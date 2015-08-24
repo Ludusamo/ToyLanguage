@@ -23,15 +23,10 @@ void printStackTrace(int ip, int sp, int op, const int *PROGRAM, int *stack) {
 	fprintf(stderr, "]\n");
 }
 
-void dumpMemory(int gMemSize, int *gmem, int localMemSize, int *localmem) {
-	fprintf(stderr, "Global: [ ");	
+void dumpMemory(int gMemSize, int *gmem) {
+	fprintf(stderr, "[ ");	
 	for (int i = 0; i < gMemSize; i++) {
 		fprintf(stderr, "%i ", gmem[i]);
-	}
-	fprintf(stderr, "]\n");
-	fprintf(stderr, "Local: [ ");	
-	for (int i = 0; i < localMemSize; i++) {
-		fprintf(stderr, "%i ", localmem[i]);
 	}
 	fprintf(stderr, "]\n");
 }

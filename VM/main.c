@@ -25,18 +25,18 @@
 };*/
 
 const int program[] = {
-	PUSH, 2,
-	PUSH, 1,
-	EQ,
-	BRF, 15,
+	1, 5,
+	1, 6,
+	7,
+	18, 15,
 
-	PUSH, 1,
-	STORE, 0,
-	PUSH, 1,
-	STORE, 1,
+	1, 1,
+	14, 0,
+	1, 1,
+	14, 1,
 	
-	PUSH, 1,
-	GSTORE, 0,
+	1, 1,
+	14, 2,
 	HALT
 };
 
