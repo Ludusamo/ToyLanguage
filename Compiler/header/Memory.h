@@ -40,11 +40,13 @@ public:
 
 	int numLocalVars;
 
-	void popVariableLayers(int currentDepth, int previousDepth) {
+	int popVariableLayers(int currentDepth, int previousDepth) {
+		int initialNumLocalVars = numLocalVars;
 		for (int i = currentDepth; i < previousDepth; i++) {
 			numLocalVars -= variables[i + 1].size();
 			variables[i + 1].clear();
 		}
+		return initialNumLocalVars - numLocalVars;
 	}
 
 	void returnVariables(const char *id) {
@@ -79,9 +81,9 @@ public:
 	int createVariable(const char *id, int type, int depth) {
 		int memAddr;
 		if (depth > 0) {
-			memAddr = numLocalVars;
 			numLocalVars++;
-		} else memAddr = variables[depth].size();
+			memAddr = numLocalVars;
+		} else memAddr = variables[0].size();
 		Variable var = {id, type, memAddr};
 		variables[depth].push_back(var);
 		return var.memAddr;

@@ -148,6 +148,7 @@ void runProgram(const int *program, const int mainIndex, const int gMemSize) {
 	trace = 1;
 	ip = mainIndex;
 	sp = -1;
+	fp = -1;
 	PROGRAM = program;	
 	gmem = (int *) malloc(sizeof(int) * gMemSize);
 	while (running) {

@@ -7,7 +7,10 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 	lineno++;	
 	currentDepth = statements[lineno].depth;
 	
-	mem.popVariableLayers(currentDepth, statements[lineno - 1].depth);
+	int numLocalsPopped = mem.popVariableLayers(currentDepth, statements[lineno - 1].depth);
+	for (int i = 0; i < numLocalsPopped; i++) {
+		bytecode.push_back(POP);
+	}
 
 	int index = lineno;
 	if (statements[lineno].depth < statements[lineno - 1].depth &&
@@ -59,9 +62,12 @@ void Compiler::compileDeclaration(Statement &statement) {
 		bytecode.push_back(PUSH);
 		bytecode.push_back(0);
 	}
-	if (currentDepth != 0) bytecode.push_back(STORE);
-	else bytecode.push_back(GSTORE);
-	bytecode.push_back(varIndex);
+
+	// Store globally
+	if (currentDepth == 0) {
+		bytecode.push_back(GSTORE);
+		bytecode.push_back(varIndex);
+	}
 }
 
 void Compiler::compileGlobalFunction(Statement &statement) {
@@ -73,8 +79,6 @@ void Compiler::compileGlobalFunction(Statement &statement) {
 			int addr = mem.createVariable(statement.tokens[i+1].token, statement.tokens[i].subtype, statement.depth + 1);
 			bytecode.push_back(PUSH);
 			bytecode.push_back(0);
-			bytecode.push_back(STORE);
-			bytecode.push_back(addr);
 		}
 	}
 	mem.addGlobalFunction(f);
