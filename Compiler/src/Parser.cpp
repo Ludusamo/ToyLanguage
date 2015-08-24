@@ -135,18 +135,24 @@ bool Parser::isFunctionCall(Statement &statement) {
 		&& functionExists(statement.tokens[statementIndex].token)) {
 		if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {
 			Memory::Function f = mem.globalFunctions[mem.getFunction(statement.tokens[0].token)];
-			printf("%s %i\n", f.id, f.argTypes[0]);
+			printf("%s %i %i\n", f.id, f.argTypes[1], f.numArgs);
 			for (int i = 0; i < f.numArgs; i++) {
+				printf("Argument number: %i\n", i);
 				if (f.argTypes[i] == Token::INT) {
 					printf("Arg: %i\n", statementIndex);
 					if (!isIntValue(statement)) {
 						printf("Not an int value\n");
 						return false;
 					}
-				} else if (f.argTypes[i] == Token::BOOL) {
-					if (!isBoolValue(statement)) return false;
+				} else if (f.argTypes[i] == Token::BOOLEAN) {
+					printf("Arg: %i\n", statementIndex);
+					if (!isBoolValue(statement)) {
+						printf("Not an bool value\n");
+						return false;
+					}
 				}
-				if (!isTokenType(statement, Token::COMMA)) return false;
+				printf("Statement Index: %i\n", statementIndex);
+				if (!isTokenType(statement, Token::COMMA) && (i != f.numArgs - 1)) return false;
 			}
 			if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) return true;
 		}
@@ -252,12 +258,6 @@ bool Parser::isBoolValue(Statement &statement) {
 				return true;
 			}
 		}
-	}
-
-	if ((isTokenType(statement, Token::PAREN) &&
-		isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) ||
-		isTokenType(statement, Token::COMMA)) {
-		return true;
 	}
 
 	return false;
