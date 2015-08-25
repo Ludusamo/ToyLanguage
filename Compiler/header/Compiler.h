@@ -42,6 +42,7 @@ public:
 
 	std::vector<int> compile(std::vector<Statement> &statements);
 	void compileDeclaration(Statement &statement);
+	void compileAssignment(Statement &statement);
 	void compileGlobalFunction(Statement &statement);
 	void compileReturnStatement(Statement &statement, int returnType);
 	void compileFunctionCall(Statement &statement);

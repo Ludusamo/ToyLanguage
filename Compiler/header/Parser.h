@@ -23,6 +23,7 @@ private:
 
 	// Statement type check
 	bool isDeclaration(Statement &statement);
+	bool isAssignment(Statement &statement);
 	bool isFunctionDeclaration(Statement &statement);
 	bool isFunctionCall(Statement &statement);
 	bool isReturnStatement(Statement &statement, int returnType);

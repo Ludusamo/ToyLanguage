@@ -1,7 +1,13 @@
-int a(int b, int d)
-	int c = b + d
-	return c
-a(3, 4)
+int x = 0
+x = x + 1
+
+
+int recurse()
+	if (x == 5)
+		return x
+	x = x + 1
+	recurse()
+recurse()
 
 bool a = true
 bool b = a
