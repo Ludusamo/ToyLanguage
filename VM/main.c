@@ -26,19 +26,20 @@
 
 const int program[] = {
 	1, 0,
+	19, -4,
 	19, -3,
+	3,
 	20, 1,
 	19, 1,
 	22,
-	1, 0,
 	1, 3,
-	20, 1,
-	21, 0, 1,
+	1, 4,
+	21, 0, 2,
 	HALT
 };
 
 int main() {
 	//runProgram(program, 18, 0);
-	runProgram(program, 9, 3);
+	runProgram(program, 12, 3);
 	return 0;
 }

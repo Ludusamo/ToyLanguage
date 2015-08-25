@@ -81,7 +81,10 @@ public:
 	int addArgument(Function &f, const char *id, int type) {
 		f.argTypes[f.numArgs] = type;
 		f.numArgs++;
-		Variable var = {id, type, -f.numArgs - 2};
+		Variable var = {id, type, -3};
+		for (int i = 0; i < variables[1].size(); i++) {
+			variables[1][i].memAddr--;
+		}
 		variables[1].push_back(var);
 		return var.memAddr;
 	}

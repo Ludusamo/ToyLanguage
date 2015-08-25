@@ -1,7 +1,7 @@
-int a(int b)
-	int c = b
+int a(int b, int d)
+	int c = b + d
 	return c
-a(3)
+a(3, 4)
 
 bool a = true
 bool b = a

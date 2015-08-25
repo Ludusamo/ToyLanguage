@@ -103,22 +103,15 @@ void Compiler::compileReturnStatement(Statement &statement, int returnType) {
 }
 
 void Compiler::compileFunctionCall(Statement &statement) {
-	statementIndex = 0;
+	statementIndex = 1;
 	Memory::Function f = mem.globalFunctions[mem.getFunction(statement.tokens[0].token)];
-	for (int i = 0; i < f.numArgs; i++) {
-		bytecode.push_back(PUSH);
-		bytecode.push_back(0);	
-	}
 	for (int i = 0; i < f.numArgs; i++) {	
-		statementIndex++;
-		printf("%i\n", f.argTypes[i]);
+		printf("%i\n", statementIndex);
 		if (f.argTypes[i] == Token::INT) {
 			compileIntValue(statement);
 		} else if (f.argTypes[i] == Token::BOOLEAN) {
 			compileBoolValue(statement);
 		}
-		bytecode.push_back(STORE);
-		bytecode.push_back(mem.variables[1][i].memAddr + 4);
 	}
 	bytecode.push_back(CALL);
 	bytecode.push_back(f.addr);
