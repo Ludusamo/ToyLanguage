@@ -28,14 +28,22 @@ const int program[] = {
 	1, 0,
 	14, 0,
 	15, 0,
+	1, 5,
+	7,
+	18, 14,
+	15, 0,
+	22,
+	15, 0,
 	1, 1,
 	3,
 	14, 0,
+	21, 4, 0,
+	21, 4, 0,
 	HALT
 };
 
 int main() {
 	//runProgram(program, 18, 0);
-	runProgram(program, 0, 3);
+	runProgram(program, 24, 3);
 	return 0;
 }

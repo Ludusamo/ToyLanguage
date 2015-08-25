@@ -22,17 +22,16 @@ bool Parser::parse(std::vector<Statement> &statements) {
 		while (statements[parsingIndex + 1].depth >= originalDepth) {
 			parsingIndex++;
 			currentDepth = statements[parsingIndex].depth;;
-			statementIndex = -1;
 			if (isDeclaration(statements[parsingIndex])) {
 				mem.createVariable(statements[parsingIndex].tokens[1].token, statements[parsingIndex].tokens[0].subtype, currentDepth);
 				statements[parsingIndex].tagType(Statement::DECL);
-			}
-			statementIndex = -1;
-			if (isIfStatement(statements[parsingIndex])) {
+			} else if (isAssignment(statements[parsingIndex])) {
+				statements[parsingIndex].tagType(Statement::ASSIGN);	
+			} else if (isFunctionCall(statements[parsingIndex])) {
+				statements[parsingIndex].tagType(Statement::FUNC_CALL);
+			} else if (isIfStatement(statements[parsingIndex])) {
 				statements[parsingIndex].tagType(Statement::IF);
-			}
-			statementIndex = -1;
-			if (isReturnStatement(statements[parsingIndex], statements[index].tokens[0].subtype)) {
+			} else if (isReturnStatement(statements[parsingIndex], statements[index].tokens[0].subtype)) {
 				statements[parsingIndex].tagType(Statement::RET);
 			}
 		}

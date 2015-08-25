@@ -1,7 +1,4 @@
 int x = 0
-x = x + 1
-
-
 int recurse()
 	if (x == 5)
 		return x

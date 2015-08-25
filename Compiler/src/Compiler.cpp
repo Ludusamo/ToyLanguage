@@ -37,8 +37,12 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 			}
 			if (statements[lineno].type == Statement::DECL)
 				compileDeclaration(statements[lineno]);
+			else if (statements[lineno].type == Statement::ASSIGN)
+				compileAssignment(statements[lineno]);
 			else if (statements[lineno].type == Statement::IF)
 				compileIfStatement(statements[lineno]);
+			else if (statements[lineno].type == Statement::FUNC_CALL)
+				compileFunctionCall(statements[lineno]);
 			else if (statements[lineno].type == Statement::RET)
 				compileReturnStatement(statements[lineno], statements[index].tokens[0].subtype);
 		}
@@ -92,8 +96,10 @@ void Compiler::compileAssignment(Statement &statement) {
 		compileBoolValue(statement);
 		break;
 	}
-	if (currentDepth == 0) bytecode.push_back(GSTORE);
-	else bytecode.push_back(STORE);
+	if (mem.isLocalVariable(statement.tokens[0].token, currentDepth)) 
+		bytecode.push_back(STORE);
+	else 
+		bytecode.push_back(GSTORE);
 	bytecode.push_back(memAddr);
 }
 
