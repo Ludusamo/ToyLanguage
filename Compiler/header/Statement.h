@@ -5,9 +5,9 @@
 
 #include "Token.h"
 
-#define WHITESPACE_FLAG 0
-#define STRING_FLAG 1
-#define	DELIM_FLAG 2  
+#define WHITESPACE 0
+#define STRING 1
+#define	DELIM 2  
 
 class Statement {
 public:

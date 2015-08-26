@@ -4,7 +4,6 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-#include "BitUtil.h"
 
 void Statement::tokenizeStatement() {
 	depth = calculateDepth();
@@ -16,15 +15,15 @@ void Statement::tokenizeStatement() {
 		buffer[currIndex] = statement[i];	
 		if (currTokenType == 0) { // If no flags are set
 			if (Token::iswhitespace(statement[i])) {
-				BitUtil::turnOnBit(currTokenType, WHITESPACE_FLAG);
+				currTokenType = WHITESPACE;
 			} else if (isalnum(statement[i])) {
-				BitUtil::turnOnBit(currTokenType, STRING_FLAG);
+				currTokenType = STRING;
 			} else {
-				BitUtil::turnOnBit(currTokenType, DELIM_FLAG);
+				currTokenType = DELIM;
 			}
 		}	
 
-		if (BitUtil::checkBit(currTokenType, WHITESPACE_FLAG)) { // WHITESPACE
+		if (currTokenType == WHITESPACE) { // WHITESPACE
 			if (!Token::iswhitespace(peekNextChar(i))) {
 				buffer[currIndex + 1] = '\0'; // Terminates the string
 				// Not sure if I want to record whitespace tokens
@@ -33,7 +32,7 @@ void Statement::tokenizeStatement() {
 				currIndex = -1;
 				memset(buffer, ' ', sizeof(buffer));
 			}	
-		} else if (BitUtil::checkBit(currTokenType, STRING_FLAG)) { // STRINGS
+		} else if (currTokenType == STRING) { // STRINGS
 			if (!isalnum(peekNextChar(i))) {
 				buffer[currIndex + 1] = '\0'; // Terminates the string
 				recordToken(buffer, Token::identifyTokenType(buffer));
@@ -41,7 +40,7 @@ void Statement::tokenizeStatement() {
 				currIndex = -1;
 				memset(buffer, ' ', sizeof(buffer));
 			}
-		} else if (BitUtil::checkBit(currTokenType, DELIM_FLAG)) { // DELIMINATORS
+		} else if (currTokenType == DELIM) { // DELIMINATORS
 			if (Token::iswhitespace(peekNextChar(i)) || isalnum(peekNextChar(i)) || peekNextChar(i) == '(' || peekNextChar(i) == ')') {
 				buffer[currIndex + 1] = '\0'; // Terminates the string
 				recordToken(buffer, Token::identifyTokenType(buffer));
