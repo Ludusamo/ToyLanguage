@@ -52,6 +52,7 @@ private:
 	int statementIndex;
 	int lineno;
 	int currentDepth;
+	int bufferIndex;
 	std::vector<int> placeholderIndex; // In case I need to update a value to branch/jump to
 	int previousDepth; // Check if we have changed depths
 	Memory mem;

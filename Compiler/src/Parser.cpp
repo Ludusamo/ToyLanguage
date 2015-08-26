@@ -3,43 +3,35 @@
 #include <stdio.h>
 
 bool Parser::parse(std::vector<Statement> &statements) {
+	if (parsingIndex == statements.size() - 1 || currentDepth > statements[parsingIndex + 1].depth) return true;
 	parsingIndex++;
-	if (parsingIndex == statements.size()) return true;
 	currentDepth = statements[parsingIndex].depth;
 
 	mem.popVariableLayers(currentDepth, statements[parsingIndex - 1].depth);
 
 	if (isDeclaration(statements[parsingIndex])) {
+		printf("Is d\n");
 		mem.createVariable(statements[parsingIndex].tokens[1].token, statements[parsingIndex].tokens[0].subtype, currentDepth);
 		statements[parsingIndex].tagType(Statement::DECL);
 	} else if (isAssignment(statements[parsingIndex])) {
-		printf("Is assignment\n");
+		printf("Is assign\n");
 		statements[parsingIndex].tagType(Statement::ASSIGN);
 	} else if (isFunctionDeclaration(statements[parsingIndex])) {
-		int index = parsingIndex;
-		int originalDepth = currentDepth + 1;
+		printf("Is function\n");
 		statements[parsingIndex].tagType(Statement::FUNC);
-		while (statements[parsingIndex + 1].depth >= originalDepth) {
-			parsingIndex++;
-			currentDepth = statements[parsingIndex].depth;;
-			if (isDeclaration(statements[parsingIndex])) {
-				mem.createVariable(statements[parsingIndex].tokens[1].token, statements[parsingIndex].tokens[0].subtype, currentDepth);
-				statements[parsingIndex].tagType(Statement::DECL);
-			} else if (isAssignment(statements[parsingIndex])) {
-				statements[parsingIndex].tagType(Statement::ASSIGN);	
-			} else if (isFunctionCall(statements[parsingIndex])) {
-				statements[parsingIndex].tagType(Statement::FUNC_CALL);
-			} else if (isIfStatement(statements[parsingIndex])) {
-				statements[parsingIndex].tagType(Statement::IF);
-			} else if (isReturnStatement(statements[parsingIndex], statements[index].tokens[0].subtype)) {
-				statements[parsingIndex].tagType(Statement::RET);
-			}
-		}
-		mem.returnVariables(statements[index].tokens[1].token);
+		bufferIndex = parsingIndex;
+		if (parse(statements))
+			mem.returnVariables(statements[bufferIndex].tokens[1].token);
 	} else if (isFunctionCall(statements[parsingIndex])) {
+		printf("Is function call\n");
 		statements[parsingIndex].tagType(Statement::FUNC_CALL);
 	} else if (isIfStatement(statements[parsingIndex])) {
+		printf("Is if\n");
 		statements[parsingIndex].tagType(Statement::IF);
+		parse(statements);
+	} else if (isReturnStatement(statements[parsingIndex], statements[bufferIndex].tokens[0].subtype)) {
+		printf("Is return\n");
+		statements[parsingIndex].tagType(Statement::RET);
 	}
 	if (parse(statements)) return true;
 	return false;
@@ -151,6 +143,7 @@ bool Parser::isReturnStatement(Statement &statement, int returnType) {
 
 bool Parser::isFunctionCall(Statement &statement) {
 	statementIndex = -1;
+	printf("%s\n", statement.statement);
 	if (isTokenType(statement, Token::IDENTIFIER) 
 		&& functionExists(statement.tokens[statementIndex].token)) {
 		if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {

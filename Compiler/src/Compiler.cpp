@@ -3,7 +3,13 @@
 #include <iostream>
 
 std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
-	if (lineno + 1 == statements.size()) return bytecode;
+	if (lineno + 1 == statements.size() || currentDepth > statements[lineno + 1].depth) {
+		if (placeholderIndex.size() > 0) {
+			bytecode[placeholderIndex[placeholderIndex.size() - 1]] = bytecode.size();
+			placeholderIndex.pop_back();
+		}
+		return bytecode;
+	}
 	lineno++;	
 	currentDepth = statements[lineno].depth;
 	
@@ -15,8 +21,7 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 	int index = lineno;
 	if (statements[lineno].depth < statements[lineno - 1].depth &&
 		placeholderIndex.size() > 0) {
-		bytecode[placeholderIndex[placeholderIndex.size() - 1]] = bytecode.size();
-		placeholderIndex.pop_back();
+		
 	}
 
 	int statementType = statements[lineno].type;
@@ -26,32 +31,16 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 		compileAssignment(statements[lineno]);
 	if (statementType == Statement::FUNC) {
 		compileGlobalFunction(statements[lineno]);
-		int originalDepth = currentDepth + 1;
-		while (statements[lineno + 1].depth >= originalDepth) {
-			lineno++;
-			currentDepth = statements[lineno].depth;
-			if (statements[lineno].depth < statements[lineno - 1].depth &&
-				placeholderIndex.size() > 0) {
-				bytecode[placeholderIndex[placeholderIndex.size() - 1]] = bytecode.size();
-				placeholderIndex.pop_back();
-			}
-			if (statements[lineno].type == Statement::DECL)
-				compileDeclaration(statements[lineno]);
-			else if (statements[lineno].type == Statement::ASSIGN)
-				compileAssignment(statements[lineno]);
-			else if (statements[lineno].type == Statement::IF)
-				compileIfStatement(statements[lineno]);
-			else if (statements[lineno].type == Statement::FUNC_CALL)
-				compileFunctionCall(statements[lineno]);
-			else if (statements[lineno].type == Statement::RET)
-				compileReturnStatement(statements[lineno], statements[index].tokens[0].subtype);
-		}
-		mem.returnVariables(statements[index].tokens[1].token);
+		bufferIndex = lineno;
+		compile(statements);
+		mem.returnVariables(statements[bufferIndex].tokens[1].token);
 	}
 	if (statementType == Statement::IF)
 		compileIfStatement(statements[lineno]);
 	if (statementType == Statement::FUNC_CALL)
 		compileFunctionCall(statements[lineno]);
+	if (statementType == Statement::RET) 
+		compileReturnStatement(statements[lineno], statements[bufferIndex].tokens[0].subtype);
 
 	compile(statements);
 	return bytecode;
