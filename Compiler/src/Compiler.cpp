@@ -5,10 +5,6 @@
 std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 	printf("%i %i %i\n", lineno, currentDepth, statements[lineno + 1].depth);
 	if (lineno + 1 == statements.size() || currentDepth > statements[lineno + 1].depth) {
-		if (placeholderIndex.size() > 0) {
-			bytecode[placeholderIndex[placeholderIndex.size() - 1]] = bytecode.size();
-			placeholderIndex.pop_back();
-		}
 		currentDepth = statements[lineno + 1].depth;
 		return bytecode;
 	}
@@ -35,7 +31,18 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 	}
 	if (statementType == Statement::IF) {
 		compileIfStatement(statements[lineno]);
+		int branchPosition = bytecode.size() - 1;
 		compile(statements);
+		bytecode[branchPosition] = bytecode.size();
+	}
+	if (statementType == Statement::WHILE) {
+		int startOfWhile = bytecode.size();
+		compileWhileStatement(statements[lineno]);
+		int branchPosition = bytecode.size() - 1;
+		compile(statements);
+		bytecode.push_back(BR);
+		bytecode.push_back(startOfWhile);
+		bytecode[branchPosition] = bytecode.size();
 	}
 	if (statementType == Statement::FUNC_CALL)
 		compileFunctionCall(statements[lineno]);
@@ -136,7 +143,13 @@ void Compiler::compileIfStatement(Statement &statement) {
 	statementIndex = 0;
 	compileBoolValue(statement);	
 	bytecode.push_back(BRF);
-	placeholderIndex.push_back(bytecode.size());
+	bytecode.push_back(0);
+}
+
+void Compiler::compileWhileStatement(Statement &statement) {
+	statementIndex = 0;
+	compileBoolValue(statement);	
+	bytecode.push_back(BRF);
 	bytecode.push_back(0);
 }
 
