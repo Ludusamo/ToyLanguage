@@ -25,8 +25,9 @@ int main() {
 
 	LexicalAnalyzer lex;
 	for (int i = 0; i < statements.size(); i++) {
-		statements[i].setStatement(reader.getLine());
-		statements[i].tokens = lex.tokenize(statements[i].statement);
+		const char *statement = reader.getLine();
+		statements[i].calculateDepth(statement);
+		statements[i].tokens = lex.tokenize(statement);
 	}
 
 	Parser parser;
