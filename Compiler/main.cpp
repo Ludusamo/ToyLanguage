@@ -5,6 +5,7 @@
 #include "Statement.h"
 #include "Parser.h"
 #include "Compiler.h"
+#include "LexicalAnalyzer/LexicalAnalyzer.h"
 
 #include "ErrorHandler.h"
 
@@ -23,9 +24,11 @@ int main() {
 	statements.push_back(statement);
 	statements.push_back(statement);
 
+	LexicalAnalyzer lex;
 	for (int i = 0; i < statements.size(); i++) {
-		statements[i].setStatement(reader.getLine());
-		statements[i].tokenizeStatement();
+		const char *statement = reader.getLine();
+		statements[i].calculateDepth(statement);
+		statements[i].tokens = lex.tokenize(statement);
 	}
 
 	Parser parser;
