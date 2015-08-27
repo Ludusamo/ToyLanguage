@@ -30,6 +30,7 @@ private:
 	bool isFunctionCall(Statement &statement);
 	bool isReturnStatement(Statement &statement, int returnType);
 	bool isIfStatement(Statement &statement);
+	bool isElseStatement(Statement &statement);
 	bool isWhileStatement(Statement &statement);
 	
 	// Statement component type check

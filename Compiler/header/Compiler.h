@@ -47,6 +47,7 @@ public:
 	void compileReturnStatement(Statement &statement, int returnType);
 	void compileFunctionCall(Statement &statement);
 	void compileIfStatement(Statement &statement);
+	void compileElseStatement(Statement &statement);
 	void compileWhileStatement(Statement &statement);
 private:
 	int statementIndex;

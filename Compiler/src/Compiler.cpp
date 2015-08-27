@@ -34,6 +34,15 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 		int branchPosition = bytecode.size() - 1;
 		compile(statements);
 		bytecode[branchPosition] = bytecode.size();
+		if (statements[lineno + 1].type == Statement::ELSE) {
+			lineno++;
+			currentDepth = statements[lineno].depth;
+			compileElseStatement(statements[lineno]);
+			bytecode[branchPosition] = bytecode.size();
+			branchPosition = bytecode.size() - 1;
+			compile(statements);
+			bytecode[branchPosition] = bytecode.size();
+		}
 	}
 	if (statementType == Statement::WHILE) {
 		int startOfWhile = bytecode.size();
@@ -143,6 +152,11 @@ void Compiler::compileIfStatement(Statement &statement) {
 	statementIndex = 0;
 	compileBoolValue(statement);	
 	bytecode.push_back(BRF);
+	bytecode.push_back(0);
+}
+
+void Compiler::compileElseStatement(Statement &statement) {
+	bytecode.push_back(BR);
 	bytecode.push_back(0);
 }
 

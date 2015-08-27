@@ -27,9 +27,15 @@ bool Parser::parse(std::vector<Statement> &statements) {
 	} else if (isIfStatement(statements[parsingIndex])) {
 		statements[parsingIndex].tagType(Statement::IF);
 		parse(statements);
+		if (isElseStatement(statements[parsingIndex + 1])) {
+			parsingIndex++;
+			currentDepth = statements[parsingIndex].depth;
+			statements[parsingIndex].tagType(Statement::ELSE);
+			parse(statements);
+		}
 	} else if (isWhileStatement(statements[parsingIndex])) {
 		statements[parsingIndex].tagType(Statement::WHILE);	
-		parse(statements);
+		parse(statements);	
 	} else if (isReturnStatement(statements[parsingIndex], statements[bufferIndex].tokens[0].subtype)) {
 		statements[parsingIndex].tagType(Statement::RET);
 	}
@@ -50,6 +56,15 @@ bool Parser::isIfStatement(Statement &statement) {
 				}
 			}
 		}
+	}
+	return false;
+}
+
+bool Parser::isElseStatement(Statement &statement) {
+	statementIndex = -1;
+	if (isTokenType(statement, Token::CONTROL) 
+		&& isSubtype(statement.tokens[statementIndex], Token::ELSE)) {
+		return true;	
 	}
 	return false;
 }
