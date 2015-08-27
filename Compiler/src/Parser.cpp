@@ -140,7 +140,6 @@ bool Parser::isReturnStatement(Statement &statement, int returnType) {
 
 bool Parser::isFunctionCall(Statement &statement) {
 	statementIndex = -1;
-	printf("%s\n", statement.statement);
 	if (isTokenType(statement, Token::IDENTIFIER) 
 		&& functionExists(statement.tokens[statementIndex].token)) {
 		if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {
