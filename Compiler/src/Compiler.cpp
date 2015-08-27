@@ -3,11 +3,13 @@
 #include <iostream>
 
 std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
+	printf("%i %i %i\n", lineno, currentDepth, statements[lineno + 1].depth);
 	if (lineno + 1 == statements.size() || currentDepth > statements[lineno + 1].depth) {
 		if (placeholderIndex.size() > 0) {
 			bytecode[placeholderIndex[placeholderIndex.size() - 1]] = bytecode.size();
 			placeholderIndex.pop_back();
 		}
+		currentDepth = statements[lineno + 1].depth;
 		return bytecode;
 	}
 	lineno++;	
@@ -19,10 +21,6 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 	}
 
 	int index = lineno;
-	if (statements[lineno].depth < statements[lineno - 1].depth &&
-		placeholderIndex.size() > 0) {
-		
-	}
 
 	int statementType = statements[lineno].type;
 	if (statementType == Statement::DECL)
@@ -35,8 +33,10 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 		compile(statements);
 		mem.returnVariables(statements[bufferIndex].tokens[1].token);
 	}
-	if (statementType == Statement::IF)
+	if (statementType == Statement::IF) {
 		compileIfStatement(statements[lineno]);
+		compile(statements);
+	}
 	if (statementType == Statement::FUNC_CALL)
 		compileFunctionCall(statements[lineno]);
 	if (statementType == Statement::RET) 

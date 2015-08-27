@@ -5,6 +5,7 @@ int recurse()
 	x = x + 1
 	recurse()
 recurse()
+int c
 
 bool a = true
 bool b = a
