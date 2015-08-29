@@ -12,7 +12,10 @@ class Parser {
 public:
 	Parser() {
 		parsingIndex = -1;	
-		currentDepth = -1;
+		currentDepth = 0;
+		previousDepth = 0;
+		bufferIndex = 0;
+		statementIndex = 0;
 	};
 	~Parser() {};
 	bool parse(std::vector<Statement> &statements);
@@ -20,7 +23,7 @@ private:
 	Memory mem;
 	int statementIndex;
 	int parsingIndex;
-	int currentDepth;
+	int currentDepth, previousDepth;
 	int bufferIndex;
 
 	// Statement type check

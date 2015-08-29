@@ -29,6 +29,8 @@ int main() {
 		statements[i].tokens = lex.tokenize(statement);
 	}
 
+	printf("==================\n");
+
 	Parser parser;
 	parser.parse(statements);
 

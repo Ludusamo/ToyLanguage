@@ -8,9 +8,10 @@ bool Parser::parse(std::vector<Statement> &statements) {
 		return true;
 	}
 	parsingIndex++;
+	previousDepth = currentDepth;
 	currentDepth = statements[parsingIndex].depth;
 
-	mem.popVariableLayers(currentDepth, statements[parsingIndex - 1].depth);
+	mem.popVariableLayers(currentDepth, previousDepth);
 
 	if (isDeclaration(statements[parsingIndex])) {
 		mem.createVariable(statements[parsingIndex].tokens[1].token, statements[parsingIndex].tokens[0].subtype, currentDepth);

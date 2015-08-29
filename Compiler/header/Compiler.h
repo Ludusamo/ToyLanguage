@@ -17,23 +17,24 @@ typedef enum {
 	MULI, //5
 	DIVI, //6
 	EQ, //7
-	LT, //8
-	GT, //9
-	LTE, //10
-	GTE, //11
-	AND, //12
-	OR, //13
-	GSTORE, // 14
-	GLOAD, //15
-	BR, //16
-	BRT, //17
-	BRF, //18
-	LOAD, //19
-	STORE, //20
-	CALL, //21
-	RET, //22
-	PRINTI, //23
-	PRINTC //24
+	NEQ, //8
+	LT, //9
+	GT, //10
+	LTE, //11
+	GTE, //12
+	AND, //13
+	OR, //14
+	GSTORE, // 15
+	GLOAD, //16
+	BR, //17
+	BRT, //18
+	BRF, //19
+	LOAD, //20
+	STORE, //21
+	CALL, //22
+	RET, //23
+	PRINTI, //24
+	PRINTC //25
 } Opcodes;
 
 class Compiler {

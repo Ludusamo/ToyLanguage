@@ -272,6 +272,9 @@ void Compiler::compileBoolValue(Statement &statement) {
 		case Token::EQ:
 			bytecode.push_back(EQ);
 			break;
+		case Token::NEQ:
+			bytecode.push_back(NEQ);
+			break;
 		case Token::LT:
 			bytecode.push_back(LT);
 			break;
