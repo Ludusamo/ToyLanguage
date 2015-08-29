@@ -4,7 +4,7 @@ int recurse()
 		b = b + 1
 		recurse()
 	return b
-recurse()
+int c = recurse()
 
 bool a = true
 bool b = a

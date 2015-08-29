@@ -24,6 +24,7 @@ bool Parser::parse(std::vector<Statement> &statements) {
 		if (parse(statements))
 			mem.returnVariables(statements[bufferIndex].tokens[1].token);
 	} else if (isFunctionCall(statements[parsingIndex])) {
+		statementIndex = -1;
 		statements[parsingIndex].tagType(Statement::FUNC_CALL);
 	} else if (isIfStatement(statements[parsingIndex])) {
 		statements[parsingIndex].tagType(Statement::IF);
@@ -176,7 +177,6 @@ bool Parser::isReturnStatement(Statement &statement, int returnType) {
 }
 
 bool Parser::isFunctionCall(Statement &statement) {
-	statementIndex = -1;
 	if (isTokenType(statement, Token::IDENTIFIER) 
 		&& functionExists(statement.tokens[statementIndex].token)) {
 		if (isTokenType(statement, Token::PAREN) && isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {
@@ -223,9 +223,9 @@ bool Parser::variableExists(const char *id) {
 }
 
 bool Parser::functionExists(const char *id) {
+	printf("%s\n", id);
 	int functionIndex = mem.getFunction(id); 
 	if (functionIndex == -1) {
-		ErrorHandler::throwError(parsingIndex, ErrorHandler::UndeclaredFunction);
 		return false;
 	}
 	return true;
@@ -236,6 +236,23 @@ bool Parser::isVariableType(const char *id, int type) {
 }
 
 bool Parser::isIntValue(Statement &statement) {
+	int bufferIndex = statementIndex;
+	statementIndex -= 2;
+	if (isFunctionCall(statement)) {
+		statementIndex -= 2;
+		printf("%i\n", statementIndex);
+		if (mem.globalFunctions[mem.getFunction(statement.tokens[statementIndex].token)].returnType == Token::INT) {
+			printf("HURRAY!\n");
+			statementIndex = bufferIndex;
+			if (isTokenType(statement, Token::ARTH_OPERATOR)) {
+				if (isIntValue(statement)) return true;
+				else return false;
+			}
+			return true;
+		}
+	}
+	statementIndex = bufferIndex;
+
 	//VALUE
 	if (isTokenType(statement, Token::NUMBER) ||
 	   	(isTokenType(statement, Token::IDENTIFIER) 
@@ -246,7 +263,7 @@ bool Parser::isIntValue(Statement &statement) {
 			else return false;
 		} 
 		return true;
-	}
+	}	
 
 	//(VALUE)
 	if (isTokenType(statement, Token::PAREN) 
