@@ -39,6 +39,7 @@ bool Parser::parse(std::vector<Statement> &statements) {
 		parse(statements);	
 	} else if (isReturnStatement(statements[parsingIndex], statements[bufferIndex].tokens[0].subtype)) {
 		statements[parsingIndex].tagType(Statement::RET);
+		printf("is return statement\n");
 	}
 	if (parse(statements)) return true;
 	return false;

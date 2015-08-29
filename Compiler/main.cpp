@@ -21,6 +21,7 @@ int main() {
 	statements.push_back(statement);
 	statements.push_back(statement);
 	statements.push_back(statement);
+	statements.push_back(statement);
 
 	LexicalAnalyzer lex;
 	for (int i = 0; i < statements.size(); i++) {
