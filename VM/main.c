@@ -29,21 +29,12 @@ const int program[] = {
 	GSTORE, 0,
 	GLOAD, 0,
 	PUSH, 5,
-	EQ,
-	BRF, 14,
-	GLOAD, 0,
-	RET,
-	GLOAD, 0,
-	PUSH, 1,
-	ADDI,
-	GSTORE, 0,
-	CALL, 4, 0,
-	CALL, 4, 0,
+	NEQ,
 	HALT
 };
 
 int main() {
 	//runProgram(program, 18, 0);
-	runProgram(program, 24, 3);
+	runProgram(program, 0, 3);
 	return 0;
 }
