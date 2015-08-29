@@ -1,11 +1,9 @@
-int x = 0
-int recurse()
-	if (x == 5)
-		return x
-	x = x + 1
-	recurse()
-recurse()
-int c
+int a
+if (1 == 2)
+	a = 1
+	a = 2
+	a = 3
+int b = 0
 
 bool a = true
 bool b = a

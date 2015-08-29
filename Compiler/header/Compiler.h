@@ -38,7 +38,7 @@ typedef enum {
 
 class Compiler {
 public:
-	Compiler() {lineno = -1;};
+	Compiler() {lineno = -1; currentDepth = -1;};
 
 	std::vector<int> compile(std::vector<Statement> &statements);
 	void compileDeclaration(Statement &statement);
@@ -47,13 +47,13 @@ public:
 	void compileReturnStatement(Statement &statement, int returnType);
 	void compileFunctionCall(Statement &statement);
 	void compileIfStatement(Statement &statement);
+	void compileElseStatement(Statement &statement);
 	void compileWhileStatement(Statement &statement);
 private:
 	int statementIndex;
 	int lineno;
 	int currentDepth;
 	int bufferIndex;
-	std::vector<int> placeholderIndex; // In case I need to update a value to branch/jump to
 	int previousDepth; // Check if we have changed depths
 	Memory mem;
 
