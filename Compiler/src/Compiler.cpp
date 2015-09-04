@@ -30,6 +30,7 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 		mem.returnVariables(statements[bufferIndex].tokens[1].token);
 	}
 	if (statementType == Statement::IF) {
+		printf("hi\n");
 		compileIfStatement(statements[lineno]);
 		int branchPosition = bytecode.size() - 1;
 		compile(statements);
@@ -242,7 +243,7 @@ void Compiler::compileBoolValue(Statement &statement) {
 		compileBoolValue(statement);	
 	}
 
-	if (statement.tokens[statementIndex].type == Token::BOOL) {
+	if (statement.tokens[statementIndex].type == Token::BOOL) {	
 		int boolVal = StringUtil::equal(statement.tokens[statementIndex].token, "true") ? 1 : 0;	
 		bytecode.push_back(PUSH);
 		bytecode.push_back(boolVal);
@@ -250,15 +251,22 @@ void Compiler::compileBoolValue(Statement &statement) {
 	}
 
 	if (statement.tokens[statementIndex].type == Token::IDENTIFIER) {
-		bytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
-		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
-		compileIntValue(statement);	
+		printf("statementIndex %i\n", statementIndex);
+		if (statement.tokens[statementIndex + 1].type == Token::PAREN && statement.tokens[statementIndex + 1].subtype == Token::LPAREN) {
+			statementIndex++;
+			compileFunctionCall(statement);
+		} else {
+			bytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
+			bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
+			compileIntValue(statement);	
+		}	
 	}
 
 	if (statement.tokens[statementIndex].type == Token::ARTH_OPERATOR) {
 		int index = statementIndex;
 		compileBoolValue(statement);	
 		switch (statement.tokens[index].subtype) {
+		printf("hi\n");
 		case Token::ADD:
 			bytecode.push_back(ADDI);
 			break;

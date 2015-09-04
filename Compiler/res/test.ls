@@ -1,10 +1,10 @@
-int b = 0
-int recurse()
-	if (b != 5)
-		b = b + 1
+bool b = true
+bool recurse()
+	if (b)
+		b = false
 		recurse()
 	return b
-int c = recurse()
+bool c = recurse()
 
 bool a = true
 bool b = a
