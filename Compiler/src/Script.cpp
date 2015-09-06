@@ -7,9 +7,8 @@ void Script::readScript(const char *path) {
 	FileReader file;
 	file.openFile(path);
 	char *line = file.getLine();
-	Statement statement;
 	while (line != NULL) {
-		scriptStatements.push_back(statement);
+		scriptStatements.push_back(Statement());
 		scriptStatements[scriptStatements.size() - 1].calculateDepth(line);
 		scriptStatements[scriptStatements.size() - 1].tokens = lex.tokenize(line);
 		line = file.getLine();
@@ -19,6 +18,9 @@ void Script::readScript(const char *path) {
 }
 
 void Script::parse() {
+	for (int i = 0; i < scriptStatements.size(); i++) {
+		printf("%i\n", scriptStatements[i].depth);
+	}
 	parser.parse(scriptStatements);
 }
 

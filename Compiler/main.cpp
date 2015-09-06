@@ -14,7 +14,7 @@
 int main() {
 	Script script;
 	script.readScript("res/test.ls");
-
+	printf("===================\n");
 	script.parse();
 	printf("===================\n");
 

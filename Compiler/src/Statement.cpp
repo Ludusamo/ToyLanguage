@@ -7,7 +7,7 @@
 
 Statement::Statement(const Statement &obj) {
 	type = obj.type;
-	int depth = obj.depth;
+	depth = obj.depth;
 	tokens = obj.tokens;
 }
 
