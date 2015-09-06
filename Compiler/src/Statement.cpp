@@ -14,7 +14,7 @@ Statement::Statement(const Statement &obj) {
 void Statement::calculateDepth(const char *statement) {
 	int count = 0;
 	for (int i = 0; i < strlen(statement); i++) {
-		if (!Token::iswhitespace(statement[i])) break;
+		if (statement[i] == '\n' || !Token::iswhitespace(statement[i])) break;
 		count++;		
 	}	
 	depth = count;

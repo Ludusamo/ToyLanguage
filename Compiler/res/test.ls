@@ -1,2 +1,3 @@
-bool a = true
-bool b = a
+int a
+
+int b

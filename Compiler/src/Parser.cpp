@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 bool Parser::parse(std::vector<Statement> &statements) {
+	printf("%i %i\n", currentDepth, statements[parsingIndex + 1].depth);
 	if (parsingIndex == statements.size() - 1 || currentDepth > statements[parsingIndex + 1].depth) {
 		currentDepth = statements[parsingIndex + 1].depth;
 		return true;
@@ -13,7 +14,9 @@ bool Parser::parse(std::vector<Statement> &statements) {
 
 	mem.popVariableLayers(currentDepth, previousDepth);
 
-	if (isDeclaration(statements[parsingIndex])) {
+	if (endOfStatement(statements[parsingIndex])) {
+		statements[parsingIndex].tagType(Statement::NONE);	
+	} else if (isDeclaration(statements[parsingIndex])) {
 		printf("Is declaration\n");
 		mem.createVariable(statements[parsingIndex].tokens[1].token, statements[parsingIndex].tokens[0].subtype, currentDepth);
 		statements[parsingIndex].tagType(Statement::DECL);
@@ -347,6 +350,6 @@ bool Parser::isBoolValue(Statement &statement) {
 }
 
 bool Parser::endOfStatement(Statement &statement) {
-	return (statement.tokens.size() == statementIndex + 1);	
+	return (statement.tokens.size() <= statementIndex + 1);	
 }
 
