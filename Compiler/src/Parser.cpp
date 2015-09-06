@@ -3,7 +3,6 @@
 #include <stdio.h>
 
 bool Parser::parse(std::vector<Statement> &statements) {
-	printf("%i %i\n", currentDepth, statements[parsingIndex + 1].depth);
 	if (parsingIndex == statements.size() - 1 || currentDepth > statements[parsingIndex + 1].depth) {
 		currentDepth = statements[parsingIndex + 1].depth;
 		return true;
@@ -11,6 +10,7 @@ bool Parser::parse(std::vector<Statement> &statements) {
 	parsingIndex++;
 	previousDepth = currentDepth;
 	currentDepth = statements[parsingIndex].depth;
+	statementIndex = -1;
 
 	mem.popVariableLayers(currentDepth, previousDepth);
 
