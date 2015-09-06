@@ -5,10 +5,6 @@
 std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 	printf("%i %i %i\n", lineno, currentDepth, statements[lineno + 1].depth);
 	if (lineno + 1 == statements.size() || currentDepth > statements[lineno + 1].depth) {
-		if (placeholderIndex.size() > 0) {
-			bytecode[placeholderIndex[placeholderIndex.size() - 1]] = bytecode.size();
-			placeholderIndex.pop_back();
-		}
 		currentDepth = statements[lineno + 1].depth;
 		return bytecode;
 	}
@@ -34,11 +30,34 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 		mem.returnVariables(statements[bufferIndex].tokens[1].token);
 	}
 	if (statementType == Statement::IF) {
+		printf("hi\n");
 		compileIfStatement(statements[lineno]);
+		int branchPosition = bytecode.size() - 1;
 		compile(statements);
+		bytecode[branchPosition] = bytecode.size();
+		if (statements[lineno + 1].type == Statement::ELSE) {
+			lineno++;
+			currentDepth = statements[lineno].depth;
+			compileElseStatement(statements[lineno]);
+			bytecode[branchPosition] = bytecode.size();
+			branchPosition = bytecode.size() - 1;
+			compile(statements);
+			bytecode[branchPosition] = bytecode.size();
+		}
 	}
-	if (statementType == Statement::FUNC_CALL)
+	if (statementType == Statement::WHILE) {
+		int startOfWhile = bytecode.size();
+		compileWhileStatement(statements[lineno]);
+		int branchPosition = bytecode.size() - 1;
+		compile(statements);
+		bytecode.push_back(BR);
+		bytecode.push_back(startOfWhile);
+		bytecode[branchPosition] = bytecode.size();
+	}
+	if (statementType == Statement::FUNC_CALL) {
+		statementIndex = 1;
 		compileFunctionCall(statements[lineno]);
+	}
 	if (statementType == Statement::RET) 
 		compileReturnStatement(statements[lineno], statements[bufferIndex].tokens[0].subtype);
 
@@ -96,6 +115,7 @@ void Compiler::compileGlobalFunction(Statement &statement) {
 	Memory::Function f;
 	f.id = statement.tokens[1].token;
 	f.addr = bytecode.size();
+	f.numArgs = 0;
 	mem.addGlobalFunction(f);
 	if (statement.tokens.size() > 4) {
 		for (int i = 3; i < statement.tokens.size(); i+=3) {
@@ -118,8 +138,8 @@ void Compiler::compileReturnStatement(Statement &statement, int returnType) {
 }
 
 void Compiler::compileFunctionCall(Statement &statement) {
-	statementIndex = 1;
-	Memory::Function f = mem.globalFunctions[mem.getFunction(statement.tokens[0].token)];
+	Memory::Function f = mem.globalFunctions[mem.getFunction(statement.tokens[statementIndex - 1].token)];
+	printf("%i\n", f.numArgs);
 	for (int i = 0; i < f.numArgs; i++) {	
 		if (f.argTypes[i] == Token::INT) {
 			compileIntValue(statement);
@@ -127,6 +147,7 @@ void Compiler::compileFunctionCall(Statement &statement) {
 			compileBoolValue(statement);
 		}
 	}
+	printf("%s\n", statement.tokens[0].token);
 	bytecode.push_back(CALL);
 	bytecode.push_back(f.addr);
 	bytecode.push_back(f.numArgs);
@@ -136,7 +157,18 @@ void Compiler::compileIfStatement(Statement &statement) {
 	statementIndex = 0;
 	compileBoolValue(statement);	
 	bytecode.push_back(BRF);
-	placeholderIndex.push_back(bytecode.size());
+	bytecode.push_back(0);
+}
+
+void Compiler::compileElseStatement(Statement &statement) {
+	bytecode.push_back(BR);
+	bytecode.push_back(0);
+}
+
+void Compiler::compileWhileStatement(Statement &statement) {
+	statementIndex = 0;
+	compileBoolValue(statement);	
+	bytecode.push_back(BRF);
 	bytecode.push_back(0);
 }
 
@@ -149,10 +181,15 @@ void Compiler::compileIntValue(Statement &statement) {
 		compileIntValue(statement);	
 	}
 
-	if (statement.tokens[statementIndex].type == Token::IDENTIFIER) {
-		bytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
-		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
-		compileIntValue(statement);		
+	if (statement.tokens[statementIndex].type == Token::IDENTIFIER) {	
+		if (statement.tokens[statementIndex + 1].type == Token::PAREN) {
+			statementIndex++;
+			compileFunctionCall(statement);
+		} else {	
+			bytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
+			bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
+			compileIntValue(statement);		
+		}
 	}
 
 	if (statement.tokens[statementIndex].type == Token::ARTH_OPERATOR) {
@@ -206,7 +243,7 @@ void Compiler::compileBoolValue(Statement &statement) {
 		compileBoolValue(statement);	
 	}
 
-	if (statement.tokens[statementIndex].type == Token::BOOL) {
+	if (statement.tokens[statementIndex].type == Token::BOOL) {	
 		int boolVal = StringUtil::equal(statement.tokens[statementIndex].token, "true") ? 1 : 0;	
 		bytecode.push_back(PUSH);
 		bytecode.push_back(boolVal);
@@ -214,15 +251,22 @@ void Compiler::compileBoolValue(Statement &statement) {
 	}
 
 	if (statement.tokens[statementIndex].type == Token::IDENTIFIER) {
-		bytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
-		bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
-		compileIntValue(statement);	
+		printf("statementIndex %i\n", statementIndex);
+		if (statement.tokens[statementIndex + 1].type == Token::PAREN && statement.tokens[statementIndex + 1].subtype == Token::LPAREN) {
+			statementIndex++;
+			compileFunctionCall(statement);
+		} else {
+			bytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
+			bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
+			compileIntValue(statement);	
+		}	
 	}
 
 	if (statement.tokens[statementIndex].type == Token::ARTH_OPERATOR) {
 		int index = statementIndex;
 		compileBoolValue(statement);	
 		switch (statement.tokens[index].subtype) {
+		printf("hi\n");
 		case Token::ADD:
 			bytecode.push_back(ADDI);
 			break;
@@ -244,6 +288,9 @@ void Compiler::compileBoolValue(Statement &statement) {
 		switch (statement.tokens[index].subtype) {
 		case Token::EQ:
 			bytecode.push_back(EQ);
+			break;
+		case Token::NEQ:
+			bytecode.push_back(NEQ);
 			break;
 		case Token::LT:
 			bytecode.push_back(LT);

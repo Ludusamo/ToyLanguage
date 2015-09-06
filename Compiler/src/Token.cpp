@@ -8,7 +8,7 @@
 const static char *DATATYPE_BUFFER[] = { "void", "int", "bool"};
 const char** Token::DATATYPES = DATATYPE_BUFFER;
 
-const static char *CONTROL_BUFFER[] = { "if", "else" };
+const static char *CONTROL_BUFFER[] = { "if", "else", "while" };
 const char** Token::CONTROLS = CONTROL_BUFFER;
 
 const static char *ARTH_OPERATORS_BUFFER[] = { "=", "+", "-", "*", "/" };

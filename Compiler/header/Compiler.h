@@ -17,28 +17,29 @@ typedef enum {
 	MULI, //5
 	DIVI, //6
 	EQ, //7
-	LT, //8
-	GT, //9
-	LTE, //10
-	GTE, //11
-	AND, //12
-	OR, //13
-	GSTORE, // 14
-	GLOAD, //15
-	BR, //16
-	BRT, //17
-	BRF, //18
-	LOAD, //19
-	STORE, //20
-	CALL, //21
-	RET, //22
-	PRINTI, //23
-	PRINTC //24
+	NEQ, //8
+	LT, //9
+	GT, //10
+	LTE, //11
+	GTE, //12
+	AND, //13
+	OR, //14
+	GSTORE, // 15
+	GLOAD, //16
+	BR, //17
+	BRT, //18
+	BRF, //19
+	LOAD, //20
+	STORE, //21
+	CALL, //22
+	RET, //23
+	PRINTI, //24
+	PRINTC //25
 } Opcodes;
 
 class Compiler {
 public:
-	Compiler() {lineno = -1;};
+	Compiler() {lineno = -1; currentDepth = -1;};
 
 	std::vector<int> compile(std::vector<Statement> &statements);
 	void compileDeclaration(Statement &statement);
@@ -47,13 +48,13 @@ public:
 	void compileReturnStatement(Statement &statement, int returnType);
 	void compileFunctionCall(Statement &statement);
 	void compileIfStatement(Statement &statement);
+	void compileElseStatement(Statement &statement);
 	void compileWhileStatement(Statement &statement);
 private:
 	int statementIndex;
 	int lineno;
 	int currentDepth;
 	int bufferIndex;
-	std::vector<int> placeholderIndex; // In case I need to update a value to branch/jump to
 	int previousDepth; // Check if we have changed depths
 	Memory mem;
 

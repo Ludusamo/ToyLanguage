@@ -16,7 +16,6 @@ int main() {
 	script.readScript("res/test.ls");
 
 	script.parse();
-
 	printf("===================\n");
 
 	std::vector<int> bytecode = script.compile();

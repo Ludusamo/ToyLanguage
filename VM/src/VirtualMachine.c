@@ -53,6 +53,10 @@ void eval(int op) {
 			popIntoRegister(2);
 			push(registers[A] == registers[B]);
 			break;
+		case NEQ:
+			popIntoRegister(2);
+			push(registers[A] != registers[B]);
+			break;
 		case LT: 
 			popIntoRegister(2);
 			push(registers[B] < registers[A]);
