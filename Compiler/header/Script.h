@@ -5,14 +5,21 @@
 
 #include "Statement.h"
 #include "Parser.h"
+#include "Compiler.h"
+#include "Parser.h"
+#include "LexicalAnalyzer/LexicalAnalyzer.h"
 
 class Script {
 public:		
 	void readScript(const char *path);
-	Node compile();
+	void tokenize();
+	void parse();
+	std::vector<int> compile();
 private:
 	std::vector<Statement> scriptStatements;
+	LexicalAnalyzer lex;
 	Parser parser;
+	Compiler compiler;
 };
 
 #endif // SCRIPT_H

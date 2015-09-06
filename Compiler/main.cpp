@@ -9,35 +9,17 @@
 
 #include "ErrorHandler.h"
 
+#include "Script.h"
+
 int main() {
-	FileReader reader;
-	reader.openFile("res/test.ls");
+	Script script;
+	script.readScript("res/test.ls");
 
-	Statement statement;
-	std::vector<Statement> statements;
-	statements.push_back(statement);
-	statements.push_back(statement);
-	statements.push_back(statement);
-	statements.push_back(statement);
-	statements.push_back(statement);
-	statements.push_back(statement);
-	statements.push_back(statement);
-	statements.push_back(statement);
-
-	LexicalAnalyzer lex;
-	for (int i = 0; i < statements.size(); i++) {
-		const char *statement = reader.getLine();
-		statements[i].calculateDepth(statement);
-		statements[i].tokens = lex.tokenize(statement);
-	}
-
-	Parser parser;
-	parser.parse(statements);
+	script.parse();
 
 	printf("===================\n");
 
-	Compiler compiler;
-	std::vector<int> bytecode = compiler.compile(statements);
+	std::vector<int> bytecode = script.compile();
 
 	printf("\nBytecode: \n");
 	for (int i = 0; i < bytecode.size(); i++) {

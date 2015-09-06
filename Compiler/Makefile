@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = src/Compiler.cpp src/Parser.cpp src/StringUtil.cpp src/Statement.cpp src/Token.cpp src/FileReader.cpp src/LexicalAnalyzer/LexicalAnalyzer.cpp main.cpp
+OBJS = src/Compiler.cpp src/Parser.cpp src/StringUtil.cpp src/Statement.cpp src/Token.cpp src/FileReader.cpp src/LexicalAnalyzer/LexicalAnalyzer.cpp src/Script.cpp main.cpp
 
 #CC specifies which compiler we're using
 CC = g++

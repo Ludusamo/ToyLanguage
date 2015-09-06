@@ -13,21 +13,27 @@ bool Parser::parse(std::vector<Statement> &statements) {
 	mem.popVariableLayers(currentDepth, statements[parsingIndex - 1].depth);
 
 	if (isDeclaration(statements[parsingIndex])) {
+		printf("Is declaration\n");
 		mem.createVariable(statements[parsingIndex].tokens[1].token, statements[parsingIndex].tokens[0].subtype, currentDepth);
 		statements[parsingIndex].tagType(Statement::DECL);
 	} else if (isAssignment(statements[parsingIndex])) {
+		printf("Is assignment\n");
 		statements[parsingIndex].tagType(Statement::ASSIGN);
 	} else if (isFunctionDeclaration(statements[parsingIndex])) {
+		printf("Is function\n");
 		statements[parsingIndex].tagType(Statement::FUNC);
 		bufferIndex = parsingIndex;
 		if (parse(statements))
 			mem.returnVariables(statements[bufferIndex].tokens[1].token);
 	} else if (isFunctionCall(statements[parsingIndex])) {
+		printf("Is function call\n");
 		statements[parsingIndex].tagType(Statement::FUNC_CALL);
 	} else if (isIfStatement(statements[parsingIndex])) {
+		printf("Is if\n");
 		statements[parsingIndex].tagType(Statement::IF);
 		parse(statements);
 	} else if (isReturnStatement(statements[parsingIndex], statements[bufferIndex].tokens[0].subtype)) {
+		printf("Is return\n");
 		statements[parsingIndex].tagType(Statement::RET);
 	}
 	if (parse(statements)) return true;

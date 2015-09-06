@@ -6,27 +6,22 @@
 void Script::readScript(const char *path) {
 	FileReader file;
 	file.openFile(path);
-	char *line;
-	line = file.getLine();
+	char *line = file.getLine();
 	Statement statement;
 	while (line != NULL) {
-		statement.setStatement(line);
-		statement.tokenizeStatement();
 		scriptStatements.push_back(statement);
+		scriptStatements[scriptStatements.size() - 1].calculateDepth(line);
+		scriptStatements[scriptStatements.size() - 1].tokens = lex.tokenize(line);
 		line = file.getLine();
 	}
-	puts("Completed Reading Script.");
+	printf("Completed Reading Script.\n");
 	file.closeFile();
 }
 
-Node Script::compile() {
-	Node nodes;
-	if (scriptStatements.size() == 0) {
-		perror("No script was loaded for compilation");
-		return Node();
-	}
-	for (int i = 0; i < scriptStatements.size(); i++) {
+void Script::parse() {
+	parser.parse(scriptStatements);
+}
 
-	}		
-	return nodes;
+std::vector<int> Script::compile() {
+	return compiler.compile(scriptStatements);
 }

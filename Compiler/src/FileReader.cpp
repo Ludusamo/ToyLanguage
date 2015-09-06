@@ -17,8 +17,7 @@ char *FileReader::getLine() {
 	} else {
 		char *line = NULL;
 		line = (char*) malloc(200);
-		fgets(line, 200, source);
-		if (line[0] != '\0') return line;
+		if (fgets(line, 200, source) != NULL) return line;
 	}
 	return NULL;
 }
