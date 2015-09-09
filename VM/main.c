@@ -25,22 +25,23 @@
 };*/
 
 const int program[] = {
-	GLOAD, 0,
-	BRF, 13,
-	PUSH, 0,
-	GSTORE, 0,
-	CALL, 0, 0,
-	GLOAD, 0,
-	RET,
 	PUSH, 1,
 	GSTORE, 0,
-	CALL, 0, 0,
+	GLOAD, 0,
+	PUSH, 1,
+	EQ,
+	BRF, 17,
+	PUSH, 0,
+	PUSH, 0,
+	STORE, 1,
+	POP,
+	PUSH, 0,
 	GSTORE, 1,
 	HALT
 };
 
 int main() {
 	//runProgram(program, 18, 0);
-	runProgram(program, 14, 3);
+	runProgram(program, 0, 3);
 	return 0;
 }
