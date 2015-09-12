@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "FileReader.h"
+#include "FileIO/FileWriter.h"
 #include "Statement.h"
 #include "Parser.h"
 #include "Compiler.h"
@@ -21,7 +22,10 @@ int main() {
 	std::vector<int> bytecode = script.compile();
 
 	printf("\nBytecode: \n");
+	FileWriter writer;
+	writer.openFile("res/bytecode.bytels");
 	for (int i = 0; i < bytecode.size(); i++) {
+		writer.writeInt(bytecode[i]);
 		printf("%i\n", bytecode[i]);	
 	}
 

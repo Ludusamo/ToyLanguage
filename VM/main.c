@@ -1,5 +1,7 @@
 #include "Bytecode.h"
 #include "VirtualMachine.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 /*const int program[23] {
 	// FUNCTION A()
@@ -40,8 +42,23 @@ const int program[] = {
 	HALT
 };
 
+int *program1;
+
 int main() {
 	//runProgram(program, 18, 0);
-	runProgram(program, 0, 3);
+	FILE *bytecode;
+
+	bytecode = fopen("../Compiler/res/bytecode.bytels", "r");
+	program1 = malloc(sizeof(int) * 55000);
+	char stringByte[3];
+	int programIndex = 0;
+	while (fgets(stringByte, 3, bytecode) != NULL) {
+		printf("%i\n", atoi(stringByte));
+		program1[programIndex] = atoi(stringByte);
+		programIndex++;
+	}
+	
+
+	runProgram(program1, 0, 3);
 	return 0;
 }
