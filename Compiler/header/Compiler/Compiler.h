@@ -3,10 +3,10 @@
 
 #include <vector>
 #include <stdio.h>
-#include "Statement.h"
-#include "Memory.h"
-#include "Token.h"
-#include "StringUtil.h"
+#include "Statement/Statement.h"
+#include "Memory/Memory.h"
+#include "Statement/Token.h"
+#include "Util/StringUtil.h"
 
 typedef enum {
 	HALT, //0

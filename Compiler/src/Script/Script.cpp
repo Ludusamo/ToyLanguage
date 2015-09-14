@@ -1,4 +1,4 @@
-#include "Script.h"
+#include "Script/Script.h"
 
 void Script::readScript(const char *path) {
 	FileReader file;

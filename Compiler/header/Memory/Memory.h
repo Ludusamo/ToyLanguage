@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <stdio.h>
-#include "Statement.h"
-#include "StringUtil.h"
+#include "Statement/Statement.h"
+#include "Util/StringUtil.h"
 
 #define MAX_DEPTH 255
 #define MAX_LOCAL_VARS 255

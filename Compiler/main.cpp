@@ -3,14 +3,13 @@
 
 #include "FileIO/FileReader.h"
 #include "FileIO/FileWriter.h"
-#include "Statement.h"
-#include "Parser.h"
-#include "Compiler.h"
+#include "Parser/Parser.h"
+#include "Compiler/Compiler.h"
 #include "LexicalAnalyzer/LexicalAnalyzer.h"
 
-#include "ErrorHandler.h"
+#include "Util/ErrorHandler.h"
 
-#include "Script.h"
+#include "Script/Script.h"
 
 int main() {
 	Script script;

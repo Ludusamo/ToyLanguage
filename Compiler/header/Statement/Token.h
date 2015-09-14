@@ -1,7 +1,7 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
-#include "StringUtil.h"
+#include "Util/StringUtil.h"
 #include <stdio.h>
 
 class Token {

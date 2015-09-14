@@ -3,10 +3,9 @@
 
 #include <vector>
 
-#include "Statement.h"
-#include "Parser.h"
-#include "Compiler.h"
-#include "Parser.h"
+#include "Statement/Statement.h"
+#include "Parser/Parser.h"
+#include "Compiler/Compiler.h"
 #include "LexicalAnalyzer/LexicalAnalyzer.h"
 #include "FileIO/FileReader.h"
 #include "stdio.h"

@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <vector>
-#include "Token.h"
+#include "Statement/Token.h"
 
 #define WHITESPACE 0
 #define STRING 1

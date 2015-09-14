@@ -3,10 +3,10 @@
 
 #include <vector>
 
-#include "Statement.h"
-#include "Token.h"
-#include "Memory.h"
-#include "ErrorHandler.h"
+#include "Statement/Statement.h"
+#include "Statement/Token.h"
+#include "Memory/Memory.h"
+#include "Util/ErrorHandler.h"
 
 class Parser {
 public:
