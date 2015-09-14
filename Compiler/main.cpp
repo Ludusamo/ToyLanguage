@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <vector>
 
-#include "FileReader.h"
+#include "FileIO/FileReader.h"
 #include "FileIO/FileWriter.h"
 #include "Statement.h"
 #include "Parser.h"

@@ -1,4 +1,4 @@
-#include "FileReader.h"
+#include "FileIO/FileReader.h"
 #include <stdlib.h>
 
 void FileReader::openFile(const char *path) {

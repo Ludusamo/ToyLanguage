@@ -8,6 +8,8 @@
 #include "Compiler.h"
 #include "Parser.h"
 #include "LexicalAnalyzer/LexicalAnalyzer.h"
+#include "FileIO/FileReader.h"
+#include "stdio.h"
 
 class Script {
 public:		

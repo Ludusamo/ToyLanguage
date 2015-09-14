@@ -1,8 +1,5 @@
 #include "Script.h"
 
-#include "FileReader.h"
-#include "stdio.h"
-
 void Script::readScript(const char *path) {
 	FileReader file;
 	file.openFile(path);
