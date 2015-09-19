@@ -1,14 +1,10 @@
 #ifndef SCRIPT_H
 #define SCRIPT_H
 
-#include <vector>
-
-#include "Statement/Statement.h"
 #include "Parser/Parser.h"
 #include "Compiler/Compiler.h"
 #include "LexicalAnalyzer/LexicalAnalyzer.h"
 #include "FileIO/FileReader.h"
-#include "stdio.h"
 
 class Script {
 public:		

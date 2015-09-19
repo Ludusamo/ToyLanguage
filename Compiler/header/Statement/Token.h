@@ -3,6 +3,7 @@
 
 #include "Util/StringUtil.h"
 #include <stdio.h>
+#include <ctype.h>
 
 class Token {
 public:

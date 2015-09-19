@@ -1,10 +1,5 @@
 #include "Statement/Statement.h"
 
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
-
 Statement::Statement(const Statement &obj) {
 	type = obj.type;
 	depth = obj.depth;

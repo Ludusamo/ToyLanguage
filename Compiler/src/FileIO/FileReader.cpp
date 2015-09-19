@@ -1,5 +1,4 @@
 #include "FileIO/FileReader.h"
-#include <stdlib.h>
 
 void FileReader::openFile(const char *path) {
 	source = fopen(path, "r");

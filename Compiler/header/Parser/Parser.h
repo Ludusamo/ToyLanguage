@@ -1,10 +1,6 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <vector>
-
-#include "Statement/Statement.h"
-#include "Statement/Token.h"
 #include "Memory/Memory.h"
 #include "Util/ErrorHandler.h"
 

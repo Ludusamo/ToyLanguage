@@ -1,7 +1,5 @@
 #include "Parser/Parser.h"
 
-#include <stdio.h>
-
 bool Parser::parse(std::vector<Statement> &statements) {
 	if (parsingIndex == statements.size() - 1 || currentDepth > statements[parsingIndex + 1].depth) {
 		currentDepth = statements[parsingIndex + 1].depth;

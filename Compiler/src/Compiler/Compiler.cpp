@@ -1,7 +1,5 @@
 #include "Compiler/Compiler.h"
 
-#include <iostream>
-
 std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 	printf("%i %i %i\n", lineno, currentDepth, statements[lineno + 1].depth);
 	if (lineno + 1 == statements.size() || currentDepth > statements[lineno + 1].depth) {

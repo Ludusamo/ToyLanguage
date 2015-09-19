@@ -2,6 +2,7 @@
 #define FILEREADER_H
 
 #include <stdio.h>
+#include <stdlib.h>
 
 class FileReader {
 public:

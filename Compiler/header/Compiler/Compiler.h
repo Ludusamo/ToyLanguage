@@ -1,12 +1,7 @@
 #ifndef COMPILER_H
 #define COMPILER_H
 
-#include <vector>
-#include <stdio.h>
-#include "Statement/Statement.h"
 #include "Memory/Memory.h"
-#include "Statement/Token.h"
-#include "Util/StringUtil.h"
 
 typedef enum {
 	HALT, //0

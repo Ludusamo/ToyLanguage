@@ -1,9 +1,5 @@
 #include "Statement/Token.h"
 
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-
 // DEFINITIONS
 const static char *DATATYPE_BUFFER[] = { "void", "int", "bool"};
 const char** Token::DATATYPES = DATATYPE_BUFFER;
