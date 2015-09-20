@@ -12,6 +12,8 @@ public:
 	void tokenize();
 	void parse();
 	std::vector<int> compile();
+	
+	Memory::Function getMainFunction();
 private:
 	std::vector<Statement> scriptStatements;
 	LexicalAnalyzer lex;

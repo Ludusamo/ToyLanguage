@@ -28,7 +28,6 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 		mem.returnVariables(statements[bufferIndex].tokens[1].token);
 	}
 	if (statementType == Statement::IF) {
-		printf("hi\n");
 		compileIfStatement(statements[lineno]);
 		int branchPosition = bytecode.size() - 1;
 		compile(statements);
@@ -114,6 +113,7 @@ void Compiler::compileGlobalFunction(Statement &statement) {
 	f.id = statement.tokens[1].token;
 	f.addr = bytecode.size();
 	f.numArgs = 0;
+
 	mem.addGlobalFunction(f);
 	if (statement.tokens.size() > 4) {
 		for (int i = 3; i < statement.tokens.size(); i+=3) {
@@ -326,4 +326,13 @@ void Compiler::compileBoolValue(Statement &statement) {
 		}
 		compileBoolValue(statement);
 	}
+}
+
+Memory::Function Compiler::getMainFunction() {
+	int i = mem.getFunction("main");
+	if (i == -1) {
+		printf("Main function not defined\n");
+		exit(1);
+	}
+	return mem.globalFunctions[i];
 }

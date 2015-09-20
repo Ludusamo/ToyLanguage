@@ -22,11 +22,18 @@ int main() {
 
 	printf("\nBytecode: \n");
 	FileWriter writer;
-	writer.openFile("res/bytecode.bytels");
+	writer.openFile("res/bytecode.bytels");	
+	writer.writeInt(bytecode.size());
+
 	for (int i = 0; i < bytecode.size(); i++) {
 		writer.writeInt(bytecode[i]);
 		printf("%i\n", bytecode[i]);	
 	}
+	Memory::Function mainFunc = script.getMainFunction();
+	writer.writeInt(22);
+	writer.writeInt(mainFunc.addr);
+	writer.writeInt(mainFunc.numArgs);
+	writer.writeInt(0);
 
 	return 0;
 }

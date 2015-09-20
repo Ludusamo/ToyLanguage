@@ -24,3 +24,7 @@ void Script::parse() {
 std::vector<int> Script::compile() {
 	return compiler.compile(scriptStatements);
 }
+
+Memory::Function Script::getMainFunction() {
+	return compiler.getMainFunction();
+}

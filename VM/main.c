@@ -50,15 +50,16 @@ int main() {
 
 	bytecode = fopen("../Compiler/res/bytecode.bytels", "r");
 	program1 = malloc(sizeof(int) * 55000);
-	char stringByte[3];
+	int mainMethod;
+	fscanf(bytecode, "%d", &mainMethod);
+
 	int programIndex = 0;
-	while (fgets(stringByte, 3, bytecode) != NULL) {
-		printf("%i\n", atoi(stringByte));
-		program1[programIndex] = atoi(stringByte);
+	int byte;
+	while (fscanf(bytecode, "%d", &byte) != -1) {
+		program1[programIndex] = byte;
 		programIndex++;
 	}
-	
 
-	runProgram(program1, 0, 3);
+	runProgram(program1, mainMethod, 3);
 	return 0;
 }

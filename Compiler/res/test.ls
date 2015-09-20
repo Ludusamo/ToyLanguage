@@ -1,6 +1,4 @@
-int a = 1
-
-if (a == 1)
-	int c
-
-int b
+int a
+int main()
+	a = 1
+	return a

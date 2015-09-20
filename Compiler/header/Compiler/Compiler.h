@@ -45,12 +45,15 @@ public:
 	void compileIfStatement(Statement &statement);
 	void compileElseStatement(Statement &statement);
 	void compileWhileStatement(Statement &statement);
+
+	Memory::Function getMainFunction();
 private:
 	int statementIndex;
 	int lineno;
 	int currentDepth;
 	int bufferIndex;
 	int previousDepth; // Check if we have changed depths
+	int mainIP;
 	Memory mem;
 
 	std::vector<int> bytecode;
