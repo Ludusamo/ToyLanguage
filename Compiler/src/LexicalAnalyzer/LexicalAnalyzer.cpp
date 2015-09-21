@@ -4,15 +4,15 @@ std::vector<Token> LexicalAnalyzer::tokenize(const char *statement) {
 	this->statement = StringUtil::copy(statement);
 	tokens.clear();	
 	char currTokenType = 0;
-	char *buffer = (char*) malloc(sizeof(statement));
+	char *buffer = (char*) malloc(sizeof(this->statement));
 	int i = 0, currIndex = 0;
 
-	while (i != strlen(statement)) {
-		buffer[currIndex] = statement[i];	
+	while (i != strlen(this->statement)) {
+		buffer[currIndex] = this->statement[i];	
 		if (currTokenType == 0) {
-			if (Token::iswhitespace(statement[i])) {
+			if (Token::iswhitespace(this->statement[i])) {
 				currTokenType = WHITESPACE;
-			} else if (isalnum(statement[i])) {
+			} else if (isalnum(this->statement[i])) {
 				currTokenType = STRING;
 			} else {
 				currTokenType = DELIM;

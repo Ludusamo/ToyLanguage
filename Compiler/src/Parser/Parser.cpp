@@ -2,6 +2,7 @@
 
 bool Parser::parse(std::vector<Statement> &statements) {
 	if (parsingIndex == statements.size() - 1 || currentDepth > statements[parsingIndex + 1].depth) {
+		printf("hi\n");
 		currentDepth = statements[parsingIndex + 1].depth;
 		return true;
 	}
@@ -13,6 +14,7 @@ bool Parser::parse(std::vector<Statement> &statements) {
 	mem.popVariableLayers(currentDepth, previousDepth);
 
 	if (endOfStatement(statements[parsingIndex])) {
+		printf("Blank line\n");
 		statements[parsingIndex].tagType(Statement::NONE);	
 	} else if (isDeclaration(statements[parsingIndex])) {
 		printf("Is declaration\n");
@@ -99,7 +101,6 @@ bool Parser::isWhileStatement(Statement &statement) {
 bool Parser::isDeclaration(Statement &statement) {
 	statementIndex = -1;
 	int datatype = statement.tokens[0].subtype;
-	printf("%s %i %i\n", statement.tokens[0].token, datatype, Token::BOOLEAN);
 	if (isTokenType(statement, Token::DATATYPE) && isTokenType(statement, Token::IDENTIFIER)) {
 		if (isTokenType(statement, Token::ARTH_OPERATOR) 
 			&& isSubtype(statement.tokens[statementIndex], (int) Token::ASSIGNMENT)) {
@@ -317,7 +318,6 @@ bool Parser::isBoolValue(Statement &statement) {
 	}
 	statementIndex = bufferIndex;
 
-	printf("HI%i\n", statementIndex);
 	if (isTokenType(statement, Token::BOOL) ||
 	   	(isTokenType(statement, Token::IDENTIFIER) 
 		&& variableExists(statement.tokens[statementIndex].token)
@@ -337,6 +337,51 @@ bool Parser::isBoolValue(Statement &statement) {
 				&& isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) {
 				if (isTokenType(statement, Token::BOOL_OPERATOR)) {
 					if (isBoolValue(statement)) return true;
+					else return false;
+				}
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool Parser::isCharValue(Statement &statement) {
+	statementIndex -= 2;
+	if (isFunctionCall(statement)) {
+		statementIndex -= 2;
+		if (mem.globalFunctions[mem.getFunction(statement.tokens[statementIndex].token)].returnType == Token::CHAR) {
+			statementIndex = bufferIndex;
+			if (isTokenType(statement, Token::ARTH_OPERATOR)) {
+				if (isCharValue(statement)) return true;
+				else return false;
+			}
+			return true;
+		}
+	}
+	statementIndex = bufferIndex;
+
+	//VALUE
+	if (isTokenType(statement, Token::NUMBER) ||
+	   	(isTokenType(statement, Token::IDENTIFIER) 
+		&& variableExists(statement.tokens[statementIndex].token)
+		&& isVariableType(statement.tokens[statementIndex].token, Token::INT))) {
+		if (isTokenType(statement, Token::ARTH_OPERATOR)) {
+			if (isIntValue(statement)) return true;
+			else return false;
+		} 
+		return true;
+	}	
+
+	//(VALUE)
+	if (isTokenType(statement, Token::PAREN) 
+		&& isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {
+		if (isIntValue(statement)) {
+			if (isTokenType(statement, Token::PAREN)
+				&& isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) {
+				if (isTokenType(statement, Token::ARTH_OPERATOR)) {
+					if (isIntValue(statement)) return true;
 					else return false;
 				}
 				return true;

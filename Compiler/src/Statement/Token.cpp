@@ -1,7 +1,7 @@
 #include "Statement/Token.h"
 
 // DEFINITIONS
-const static char *DATATYPE_BUFFER[] = { "void", "int", "bool"};
+const static char *DATATYPE_BUFFER[] = { "void", "int", "bool", "char"};
 const char** Token::DATATYPES = DATATYPE_BUFFER;
 
 const static char *CONTROL_BUFFER[] = { "if", "else", "while" };
@@ -70,6 +70,8 @@ void Token::determineSubtype() {
 
 Token::TOKEN_TYPE Token::identifyTokenType(const char *token) {
 	if (iscomma(token[0])) return COMMA;
+	if (issquote(token[0])) return S_QUOTE;
+	if (isdquote(token[0])) return D_QUOTE;
 	if (iswhitespace(token[0])) return WHITESPACE;
 	if (isdatatype(token)) return DATATYPE;
 	if (iscontrol(token)) return CONTROL;
@@ -84,6 +86,14 @@ Token::TOKEN_TYPE Token::identifyTokenType(const char *token) {
 
 bool Token::iscomma(char c) {
 	return (c == ',');
+}
+
+bool Token::issquote(char c) {
+	return (c == '\'');
+}
+
+bool Token::isdquote(char c) {
+	return (c == '\"');
 }
 
 bool Token::iswhitespace(char c) {

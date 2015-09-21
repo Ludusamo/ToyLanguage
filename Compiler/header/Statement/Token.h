@@ -8,8 +8,8 @@
 class Token {
 public:
 	// Token type declaration
-	enum TOKEN_TYPE { WHITESPACE, DATATYPE, CONTROL, IDENTIFIER, NUMBER, BOOL, ARTH_OPERATOR, BOOL_OPERATOR, PAREN, COMMA, RETURN };
-	enum SUB_DATATYPE { VOID, INT, BOOLEAN, NUM_DATATYPES};
+	enum TOKEN_TYPE { WHITESPACE, DATATYPE, CONTROL, IDENTIFIER, NUMBER, BOOL, ARTH_OPERATOR, BOOL_OPERATOR, PAREN, COMMA, S_QUOTE, D_QUOTE, RETURN };
+	enum SUB_DATATYPE { VOID, INT, BOOLEAN, CHAR, NUM_DATATYPES};
 	enum SUB_CONTROL { IF, ELSE, WHILE, NUM_CONTROLS};
 	enum SUB_ARTH_OPERATOR { ASSIGNMENT, ADD, SUB, MUL, DIV, NUM_ARTH_OPERATORS };
 	enum SUB_BOOL_OPERATOR { EQ, NEQ, LT, GT, LTEQ, GTEQ, NUM_BOOL_OPERATORS };
@@ -43,6 +43,8 @@ public:
 	static TOKEN_TYPE identifyTokenType(const char *token);
 	
 	static bool iscomma(char c);
+	static bool issquote(char c);
+	static bool isdquote(char c);
 	static bool isdatatype(const char *token);
 	static bool iswhitespace(char c);
 	static bool iscontrol(const char *token);

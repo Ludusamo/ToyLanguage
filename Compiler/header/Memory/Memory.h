@@ -47,6 +47,8 @@ public:
 	}
 
 	void returnVariables(const char *id) {
+		printf("RETURNING\n");
+		printf("hi\n");
 		variables = globalFunctions[getFunction(id)].bufferVariables;
 	}
 	

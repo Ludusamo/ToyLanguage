@@ -35,6 +35,7 @@ private:
 	// Statement component type check
 	bool isIntValue(Statement &statement);
 	bool isBoolValue(Statement &statement);
+	bool isCharValue(Statement &statement);
 
 	// Statement token type check
 	bool isTokenType(Statement &statement, Token::TOKEN_TYPE type);	
