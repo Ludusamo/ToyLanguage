@@ -18,6 +18,10 @@ char *Token::getType() {
 	switch (type) { 
 	case WHITESPACE:
 		return (char*) "WHITESPACE";
+	case S_QUOTE:
+		return (char*) "SINGLE_QUOTE";
+	case D_QUOTE:
+		return (char*) "DOUBLE_QUOTE";
 	case DATATYPE:
 		return (char*) "DATATYPE";
 	case CONTROL:

@@ -1,10 +1,4 @@
-int a
-int x(int b, int c)
-	int d
-	return 0
-int c
-int y()
-	return 0
+bool a = true
 int main()
-	a = 1
+	a = false
 	return a

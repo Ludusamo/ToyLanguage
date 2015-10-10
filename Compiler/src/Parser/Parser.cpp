@@ -109,8 +109,10 @@ bool Parser::isDeclaration(Statement &statement) {
 				if (isIntValue(statement)) return true;
 				break;
 			case Token::BOOLEAN:
-				printf("BEFORE %i\n", statementIndex);
 				if (isBoolValue(statement)) return true;
+				break;
+			case Token::CHAR:
+				if (isCharValue(statement)) return true;
 				break;
 			}
 		} else if (endOfStatement(statement)) {
@@ -362,32 +364,18 @@ bool Parser::isCharValue(Statement &statement) {
 	}
 	statementIndex = bufferIndex;
 
-	//VALUE
-	if (isTokenType(statement, Token::NUMBER) ||
-	   	(isTokenType(statement, Token::IDENTIFIER) 
-		&& variableExists(statement.tokens[statementIndex].token)
-		&& isVariableType(statement.tokens[statementIndex].token, Token::INT))) {
-		if (isTokenType(statement, Token::ARTH_OPERATOR)) {
-			if (isIntValue(statement)) return true;
-			else return false;
-		} 
-		return true;
-	}	
-
-	//(VALUE)
-	if (isTokenType(statement, Token::PAREN) 
-		&& isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {
-		if (isIntValue(statement)) {
-			if (isTokenType(statement, Token::PAREN)
-				&& isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) {
-				if (isTokenType(statement, Token::ARTH_OPERATOR)) {
-					if (isIntValue(statement)) return true;
-					else return false;
-				}
+	if (isTokenType(statement, Token::S_QUOTE) 
+		&& isTokenType(statement, Token::IDENTIFIER)) {
+		printf("hi\n");
+		if (strlen(statement.tokens[statementIndex].token) == 1) {
+			if (isTokenType(statement, Token::S_QUOTE)) {
 				return true;
 			}
-		}
+		}	
+		return false;
 	}
+
+	if (isIntValue(statement)) return true;
 
 	return false;
 }
