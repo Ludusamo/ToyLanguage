@@ -11,7 +11,7 @@ public:
 	void readScript(const char *path);
 	void tokenize();
 	void parse();
-	std::vector<int> compile();
+	std::vector< std::vector<int> > compile();
 	
 	Memory::Function getMainFunction();
 private:

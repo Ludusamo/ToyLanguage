@@ -1,10 +1,10 @@
 #include "Compiler/Compiler.h"
 
-std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
+std::vector< std::vector<int> > Compiler::compile(std::vector<Statement> &statements) {
 	printf("%i %i %i\n", lineno, currentDepth, statements[lineno + 1].depth);
 	if (lineno + 1 == statements.size() || currentDepth > statements[lineno + 1].depth) {
 		currentDepth = statements[lineno + 1].depth;
-		return bytecode;
+		return std::vector< std::vector<int> >();
 	}
 	lineno++;	
 	currentDepth = statements[lineno].depth;
@@ -59,15 +59,23 @@ std::vector<int> Compiler::compile(std::vector<Statement> &statements) {
 		compileReturnStatement(statements[lineno], statements[bufferIndex].tokens[0].subtype);
 
 	compile(statements);
-	return bytecode;
+	std::vector< std::vector<int> > bytecodes = std::vector< std::vector<int> >();
+	bytecodes.push_back(bytecode);
+	bytecodes.push_back(globalBytecode);
+	return bytecodes;
 }
 
 void Compiler::compileDeclaration(Statement &statement) {
 	int memAddr = mem.createVariable(statement.tokens[1].token, statement.tokens[0].subtype, currentDepth);
 
 	if (currentDepth != 0) {
-		bytecode.push_back(PUSH);
-		bytecode.push_back(0);
+		if (currentDepth == 0) {
+			globalBytecode.push_back(PUSH);
+			globalBytecode.push_back(0);
+		} else {
+			bytecode.push_back(PUSH);
+			bytecode.push_back(0);
+		}
 	}
 	
 	if (statement.tokens.size() > 2) {
@@ -85,9 +93,14 @@ void Compiler::compileDeclaration(Statement &statement) {
 		bytecode.push_back(0);
 	}
 
-	if (currentDepth == 0) bytecode.push_back(GSTORE);
-	else bytecode.push_back(STORE);
-	bytecode.push_back(memAddr);
+	if (currentDepth == 0) {
+		printf("I am a global declaration\n");
+		globalBytecode.push_back(GSTORE);
+		globalBytecode.push_back(memAddr);
+	} else {
+		bytecode.push_back(STORE);
+		bytecode.push_back(memAddr);
+	}
 }
 
 void Compiler::compileAssignment(Statement &statement) {
@@ -101,11 +114,23 @@ void Compiler::compileAssignment(Statement &statement) {
 		compileBoolValue(statement);
 		break;
 	}
-	if (mem.isLocalVariable(statement.tokens[0].token, currentDepth)) 
-		bytecode.push_back(STORE);
-	else 
-		bytecode.push_back(GSTORE);
-	bytecode.push_back(memAddr);
+	if (mem.isLocalVariable(statement.tokens[0].token, currentDepth)) {
+		if (currentDepth == 0) {
+			globalBytecode.push_back(STORE);
+			globalBytecode.push_back(memAddr);
+		} else {
+			bytecode.push_back(STORE);
+			bytecode.push_back(memAddr);
+		}
+	} else {
+		if (currentDepth == 0) {
+			globalBytecode.push_back(GSTORE);
+			globalBytecode.push_back(memAddr);
+		} else {
+			bytecode.push_back(GSTORE);
+			bytecode.push_back(memAddr);
+		}
+	}
 }
 
 void Compiler::compileGlobalFunction(Statement &statement) {
@@ -174,8 +199,14 @@ void Compiler::compileIntValue(Statement &statement) {
 	if (statementIndex == statement.tokens.size() - 1) return;
 	statementIndex++;
 	if (statement.tokens[statementIndex].type == Token::NUMBER) {	
-		bytecode.push_back(PUSH);
-		bytecode.push_back(StringUtil::atoi(statement.tokens[statementIndex].token));
+		if (currentDepth == 0) {
+			globalBytecode.push_back(PUSH);
+			globalBytecode.push_back(StringUtil::atoi(statement.tokens[statementIndex].token));
+		} else {
+			bytecode.push_back(PUSH);
+			bytecode.push_back(StringUtil::atoi(statement.tokens[statementIndex].token));
+
+		}
 		compileIntValue(statement);	
 	}
 
@@ -184,8 +215,13 @@ void Compiler::compileIntValue(Statement &statement) {
 			statementIndex++;
 			compileFunctionCall(statement);
 		} else {	
-			bytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
-			bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
+			if (currentDepth == 0) {
+				globalBytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
+				globalBytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
+			} else {
+				bytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
+				bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
+			}
 			compileIntValue(statement);		
 		}
 	}
@@ -195,16 +231,20 @@ void Compiler::compileIntValue(Statement &statement) {
 		compileIntValue(statement);	
 		switch (statement.tokens[index].subtype) {
 		case Token::ADD:
-			bytecode.push_back(ADDI);
+			if (currentDepth == 0) globalBytecode.push_back(ADDI);
+			else bytecode.push_back(ADDI);
 			break;
 		case Token::SUB:
-			bytecode.push_back(SUBI);
+			if (currentDepth == 0) globalBytecode.push_back(SUBI);
+			else bytecode.push_back(SUBI);
 			break;
 		case Token::MUL:
-			bytecode.push_back(MULI);
+			if (currentDepth == 0) globalBytecode.push_back(MULI);
+			else bytecode.push_back(MULI);
 			break;
 		case Token::DIV:
-			bytecode.push_back(DIVI);
+			if (currentDepth == 0) globalBytecode.push_back(DIVI);
+			else bytecode.push_back(DIVI);
 			break;
 		}
 	}
@@ -236,15 +276,25 @@ void Compiler::compileBoolValue(Statement &statement) {
 	if (statementIndex == statement.tokens.size() - 1) return;
 	statementIndex++;
 	if (statement.tokens[statementIndex].type == Token::NUMBER) {	
-		bytecode.push_back(PUSH);
-		bytecode.push_back(StringUtil::atoi(statement.tokens[statementIndex].token));
+		if (currentDepth == 0) {
+			globalBytecode.push_back(PUSH);
+			globalBytecode.push_back(StringUtil::atoi(statement.tokens[statementIndex].token));
+		} else {
+			bytecode.push_back(PUSH);
+			bytecode.push_back(StringUtil::atoi(statement.tokens[statementIndex].token));
+		}
 		compileBoolValue(statement);	
 	}
 
 	if (statement.tokens[statementIndex].type == Token::BOOL) {	
 		int boolVal = StringUtil::equal(statement.tokens[statementIndex].token, "true") ? 1 : 0;	
-		bytecode.push_back(PUSH);
-		bytecode.push_back(boolVal);
+		if (currentDepth == 0) {
+			globalBytecode.push_back(PUSH);
+			globalBytecode.push_back(boolVal);
+		} else {
+			bytecode.push_back(PUSH);
+			bytecode.push_back(boolVal);
+		}
 		compileBoolValue(statement);
 	}
 
@@ -254,8 +304,13 @@ void Compiler::compileBoolValue(Statement &statement) {
 			statementIndex++;
 			compileFunctionCall(statement);
 		} else {
-			bytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
-			bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
+			if (currentDepth == 0) {
+				globalBytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
+				globalBytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
+			} else {
+				bytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
+				bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
+			}
 			compileIntValue(statement);	
 		}	
 	}
@@ -264,18 +319,21 @@ void Compiler::compileBoolValue(Statement &statement) {
 		int index = statementIndex;
 		compileBoolValue(statement);	
 		switch (statement.tokens[index].subtype) {
-		printf("hi\n");
 		case Token::ADD:
-			bytecode.push_back(ADDI);
+			if (currentDepth == 0) globalBytecode.push_back(ADDI);
+			else bytecode.push_back(ADDI);
 			break;
 		case Token::SUB:
-			bytecode.push_back(SUBI);
+			if (currentDepth == 0) globalBytecode.push_back(SUBI);
+			else bytecode.push_back(SUBI);
 			break;
 		case Token::MUL:
-			bytecode.push_back(MULI);
+			if (currentDepth == 0) globalBytecode.push_back(MULI);
+			else bytecode.push_back(MULI);
 			break;
 		case Token::DIV:
-			bytecode.push_back(DIVI);
+			if (currentDepth == 0) globalBytecode.push_back(DIVI);
+			else bytecode.push_back(DIVI);
 			break;
 		}
 	}
@@ -285,22 +343,28 @@ void Compiler::compileBoolValue(Statement &statement) {
 		compileBoolValue(statement);	
 		switch (statement.tokens[index].subtype) {
 		case Token::EQ:
-			bytecode.push_back(EQ);
+			if (currentDepth == 0) globalBytecode.push_back(EQ);
+			else bytecode.push_back(EQ);
 			break;
 		case Token::NEQ:
-			bytecode.push_back(NEQ);
+			if (currentDepth == 0) globalBytecode.push_back(NEQ);
+			else bytecode.push_back(NEQ);
 			break;
 		case Token::LT:
+			if (currentDepth == 0) globalBytecode.push_back(LT);
 			bytecode.push_back(LT);
 			break;
 		case Token::GT:
-			bytecode.push_back(GT);
+			if (currentDepth == 0) globalBytecode.push_back(GT);
+			else bytecode.push_back(GT);
 			break;
 		case Token::LTEQ:
-			bytecode.push_back(LTE);
+			if (currentDepth == 0) globalBytecode.push_back(LTE);
+			else bytecode.push_back(LTE);
 			break;
 		case Token::GTEQ:
-			bytecode.push_back(GTE);
+			if (currentDepth == 0) globalBytecode.push_back(GTE);
+			else bytecode.push_back(GTE);
 			break;
 		}
 	}

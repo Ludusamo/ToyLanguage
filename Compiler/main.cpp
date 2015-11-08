@@ -18,16 +18,20 @@ int main() {
 	script.parse();
 	printf("===================\n");
 
-	std::vector<int> bytecode = script.compile();
+	std::vector< std::vector<int> > bytecode = script.compile();
 
 	printf("\nBytecode: \n");
 	FileWriter writer;
 	writer.openFile("res/bytecode.bytels");	
-	writer.writeInt(bytecode.size());
+	writer.writeInt(bytecode[0].size());
 
-	for (int i = 0; i < bytecode.size(); i++) {
-		writer.writeInt(bytecode[i]);
-		printf("%i\n", bytecode[i]);	
+	for (int i = 0; i < bytecode[0].size(); i++) {
+		writer.writeInt(bytecode[0][i]);
+		printf("%i\n", bytecode[0][i]);	
+	}
+	for (int i = 0; i < bytecode[1].size(); i++) {
+		writer.writeInt(bytecode[1][i]);
+		printf("%i\n", bytecode[1][i]);	
 	}
 	Memory::Function mainFunc = script.getMainFunction();
 	writer.writeInt(22);

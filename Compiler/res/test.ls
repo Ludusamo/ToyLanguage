@@ -1,4 +1,4 @@
 bool a = true
-int main()
+bool main()
 	a = false
 	return a

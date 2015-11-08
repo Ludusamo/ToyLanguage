@@ -21,7 +21,7 @@ void Script::parse() {
 	parser.parse(scriptStatements);
 }
 
-std::vector<int> Script::compile() {
+std::vector< std::vector<int> > Script::compile() {
 	return compiler.compile(scriptStatements);
 }
 

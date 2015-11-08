@@ -36,7 +36,7 @@ class Compiler {
 public:
 	Compiler() {lineno = -1; currentDepth = -1;};
 
-	std::vector<int> compile(std::vector<Statement> &statements);
+	std::vector< std::vector<int> > compile(std::vector<Statement> &statements);
 	void compileDeclaration(Statement &statement);
 	void compileAssignment(Statement &statement);
 	void compileGlobalFunction(Statement &statement);
@@ -57,6 +57,7 @@ private:
 	Memory mem;
 
 	std::vector<int> bytecode;
+	std::vector<int> globalBytecode;
 
 	void compileIntValue(Statement &statement);
 	void compileBoolValue(Statement &statement);
