@@ -112,7 +112,11 @@ bool Parser::isDeclaration(Statement &statement) {
 				if (isBoolValue(statement)) return true;
 				break;
 			case Token::CHAR:
-				if (isCharValue(statement)) return true;
+				printf("Checking if it is a char\n");
+				if (isCharValue(statement)) {
+					printf("Is char value\n");
+				       	return true;
+				}
 				break;
 			}
 		} else if (endOfStatement(statement)) {
@@ -350,10 +354,12 @@ bool Parser::isBoolValue(Statement &statement) {
 }
 
 bool Parser::isCharValue(Statement &statement) {
+	int bufferIndex = statementIndex;
 	statementIndex -= 2;
 	if (isFunctionCall(statement)) {
 		statementIndex -= 2;
-		if (mem.globalFunctions[mem.getFunction(statement.tokens[statementIndex].token)].returnType == Token::CHAR) {
+		if (mem.globalFunctions[mem.getFunction(statement.tokens[statementIndex].token)].returnType == Token::CHAR || 
+			mem.globalFunctions[mem.getFunction(statement.tokens[statementIndex].token)].returnType == Token::INT) {
 			statementIndex = bufferIndex;
 			if (isTokenType(statement, Token::ARTH_OPERATOR)) {
 				if (isCharValue(statement)) return true;
@@ -366,7 +372,7 @@ bool Parser::isCharValue(Statement &statement) {
 
 	if (isTokenType(statement, Token::S_QUOTE) 
 		&& isTokenType(statement, Token::IDENTIFIER)) {
-		printf("hi\n");
+		printf("Potentially a char\n");
 		if (strlen(statement.tokens[statementIndex].token) == 1) {
 			if (isTokenType(statement, Token::S_QUOTE)) {
 				return true;
@@ -374,8 +380,43 @@ bool Parser::isCharValue(Statement &statement) {
 		}	
 		return false;
 	}
+	statementIndex = bufferIndex;
 
-	if (isIntValue(statement)) return true;
+	//VALUE
+	if (isTokenType(statement, Token::NUMBER)) {
+		if (isTokenType(statement, Token::ARTH_OPERATOR)) {
+			printf("Arth op\n");
+			if (isCharValue(statement)) return true;
+			return false;
+		}
+		return true;
+	}
+	statementIndex = bufferIndex;
+
+	if ((isTokenType(statement, Token::IDENTIFIER) 
+		&& variableExists(statement.tokens[statementIndex].token)
+		&& (isVariableType(statement.tokens[statementIndex].token, Token::CHAR) || isVariableType(statement.tokens[statementIndex].token, Token::INT)))) {
+		if (isTokenType(statement, Token::ARTH_OPERATOR)) {
+			if (isCharValue(statement)) return true;
+			else return false;
+		} 
+		return true;
+	}
+
+	//(VALUE)
+	if (isTokenType(statement, Token::PAREN) 
+		&& isSubtype(statement.tokens[statementIndex], (int) Token::LPAREN)) {
+		if (isCharValue(statement)) {
+			if (isTokenType(statement, Token::PAREN)
+				&& isSubtype(statement.tokens[statementIndex], (int) Token::RPAREN)) {
+				if (isTokenType(statement, Token::ARTH_OPERATOR)) {
+					if (isCharValue(statement)) return true;
+					else return false;
+				}
+				return true;
+			}
+		}
+	}
 
 	return false;
 }

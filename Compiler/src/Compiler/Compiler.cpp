@@ -87,6 +87,9 @@ void Compiler::compileDeclaration(Statement &statement) {
 		case Token::BOOLEAN:
 			compileBoolValue(statement);
 			break;
+		case Token::CHAR:
+			compileCharValue(statement);
+			break;
 		}
 	} else {
 		bytecode.push_back(PUSH);
@@ -389,6 +392,97 @@ void Compiler::compileBoolValue(Statement &statement) {
 			}
 		}
 		compileBoolValue(statement);
+	}
+}
+
+void Compiler::compileCharValue(Statement &statement) {
+	if (statementIndex == statement.tokens.size() - 1) return;
+	statementIndex++;
+	if (statement.tokens[statementIndex].type == Token::NUMBER) {	
+		if (currentDepth == 0) {
+			globalBytecode.push_back(PUSH);
+			globalBytecode.push_back(StringUtil::atoi(statement.tokens[statementIndex].token));
+		} else {
+			bytecode.push_back(PUSH);
+			bytecode.push_back(StringUtil::atoi(statement.tokens[statementIndex].token));
+		}
+		compileCharValue(statement);	
+	}
+
+	if (statement.tokens[statementIndex].type == Token::S_QUOTE) {	
+		int charVal = (int) statement.tokens[statementIndex + 1].token[0];
+		if (currentDepth == 0) {
+			globalBytecode.push_back(PUSH);
+			globalBytecode.push_back(charVal);
+		} else {
+			bytecode.push_back(PUSH);
+			bytecode.push_back(charVal);
+		}
+		printf("StatementIndex: %i\n", statementIndex);
+		statementIndex += 3;
+		compileCharValue(statement);
+	}
+
+	if (statement.tokens[statementIndex].type == Token::IDENTIFIER) {
+		printf("statementIndex %i\n", statementIndex);
+		if (statement.tokens[statementIndex + 1].type == Token::PAREN && statement.tokens[statementIndex + 1].subtype == Token::LPAREN) {
+			statementIndex++;
+			compileFunctionCall(statement);
+		} else {
+			if (currentDepth == 0) {
+				globalBytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
+				globalBytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
+			} else {
+				bytecode.push_back(mem.isLocalVariable(statement.tokens[statementIndex].token, currentDepth) ? LOAD : GLOAD);
+				bytecode.push_back(mem.getVariable(statement.tokens[statementIndex].token, currentDepth));
+			}
+			compileCharValue(statement);	
+		}	
+	}
+
+	if (statement.tokens[statementIndex].type == Token::ARTH_OPERATOR) {
+		int index = statementIndex;
+		compileCharValue(statement);	
+		switch (statement.tokens[index].subtype) {
+		case Token::ADD:
+			if (currentDepth == 0) globalBytecode.push_back(ADDI);
+			else bytecode.push_back(ADDI);
+			break;
+		case Token::SUB:
+			if (currentDepth == 0) globalBytecode.push_back(SUBI);
+			else bytecode.push_back(SUBI);
+			break;
+		case Token::MUL:
+			if (currentDepth == 0) globalBytecode.push_back(MULI);
+			else bytecode.push_back(MULI);
+			break;
+		case Token::DIV:
+			if (currentDepth == 0) globalBytecode.push_back(DIVI);
+			else bytecode.push_back(DIVI);
+			break;
+		}
+	}
+
+	if (statement.tokens[statementIndex].type == Token::PAREN
+		&& statement.tokens[statementIndex].subtype == Token::LPAREN) {
+		compileCharValue(statement);
+		int parenCount = 1;
+		for (int i = statementIndex + 1; i < statement.tokens.size(); i++) {
+			if (statement.tokens[statementIndex].type == Token::PAREN) {
+				if (statement.tokens[i].subtype == Token::LPAREN) {
+					parenCount++;
+				}
+				if (statement.tokens[i].subtype == Token::RPAREN) {	
+					parenCount--;
+					if (parenCount == 0) {
+						int bufferIndex = statementIndex;
+						statementIndex = i;
+						statementIndex = bufferIndex;
+					}
+				}
+			}
+		}
+		compileCharValue(statement);
 	}
 }
 

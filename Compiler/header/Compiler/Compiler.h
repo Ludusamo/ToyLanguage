@@ -61,6 +61,7 @@ private:
 
 	void compileIntValue(Statement &statement);
 	void compileBoolValue(Statement &statement);
+	void compileCharValue(Statement &statement);
 };
 
 #endif // COMPILER_H
