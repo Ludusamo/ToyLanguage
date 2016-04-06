@@ -9,6 +9,7 @@ void create_test(const char *name, int (*test_func)()) {
 void run_tests() {
 	for (int i = 0; i < num_tests; i++) {
 		run_test(tests[i]);
+		printf("\n");
 	}
 }
 
@@ -18,4 +19,9 @@ int test_str_equal() {
 	int test_c = str_equal("blah blah \nblah", "blah blah \nblah");
 	if (test_a && !test_b && test_c) return SUCCESS;
 	else return FAILURE;
+}
+
+int test_create_map() {
+	Map m = create_map();
+	return SUCCESS;
 }

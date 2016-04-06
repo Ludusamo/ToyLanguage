@@ -3,6 +3,7 @@
 
 #include "unit_test.h"
 #include "string_util.h"
+#include "map.h"
 
 #define MAX_TESTS 1000
 
@@ -14,5 +15,6 @@ void create_test(const char *name, int (*test_func)());
 void run_tests();
 
 int test_str_equal();
+int test_create_map();
 
 #endif // TESTS_H
