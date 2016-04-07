@@ -25,7 +25,8 @@ int atoi(const char *str) {
 }
 
 char *itoa(int x) {
-	char *str = "";
+	char *str = malloc(15 * sizeof(char));
+	sprintf(str, "%d", x);
 	return str;
 }
 
