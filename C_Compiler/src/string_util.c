@@ -31,7 +31,9 @@ char *itoa(int x) {
 }
 
 char *str_copy(const char *origin) {
-	return "";
+	char *str = malloc(strlen(origin) * sizeof(char));
+	sprintf(str, "%s", origin);
+	return str;
 }
 
 int str_lt(const char *str1, const char *str2) {
