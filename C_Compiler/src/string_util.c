@@ -19,7 +19,9 @@ char *str_add(const char *str1, const char *str2) {
 }
 
 int atoi(const char *str) {
-	return 0;
+	int i;
+	sscanf(str, "%d\n", &i);
+	return i;
 }
 
 char *itoa(int x) {
