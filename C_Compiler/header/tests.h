@@ -14,5 +14,10 @@ void create_test(const char *name, int (*test_func)());
 void run_tests();
 
 int test_str_equal();
+int test_str_add();
+int test_atoi();
+int test_itoa();
+int test_str_copy();
+int test_str_lt();
 
 #endif // TESTS_H

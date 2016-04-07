@@ -7,3 +7,30 @@ int str_equal(const char *str1, const char *str2) {
 	}
 	return 0;
 }
+
+char *str_add(const char *str1, const char *str2) {
+	int str1len = strlen(str1);
+	int str2len = strlen(str2);
+	int len = str1len + str2len;
+	char *concat = malloc(len * sizeof(char));
+	for (int i = 0; i < str1len; i++) concat[i] = str1[i];
+	for (int i = 0; i < str2len; i++) concat[i + str1len] = str2[i];
+	return concat;
+}
+
+int atoi(const char *str) {
+	return 0;
+}
+
+char *itoa(int x) {
+	char *str = "";
+	return str;
+}
+
+char *str_copy(const char *origin) {
+	return "";
+}
+
+int str_lt(const char *str1, const char *str2) {
+	return 0;
+}
