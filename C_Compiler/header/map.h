@@ -4,18 +4,14 @@
 typedef struct Map_Item Map_Item;
 
 struct Map_Item {
-	Map_Item *prev;
-	Map_Item *next;
-	
+	int red;
 	const char *key;
-	int val;
+	int data;
+	struct Map_Item *link[2];
 };
 
 typedef struct {
-	Map_Item *head;
-	void (*add_item)(const char *key, int val);
-	void (*rem_item)(const char *key);
-	Map_Item *(*find)(const char *key);
+	Map_Item *root;
 } Map;
 
 void add_item(const char *key, int val);
@@ -24,5 +20,10 @@ Map_Item *find(const char *key);
 
 Map create_map();
 void destroy_map(Map map);
+
+int is_red(Map_Item *item);
+Map_Item *rbt_single(Map_Item *item, int dir);
+Map_Item *rbt_double(Map_Item *item, int dir);
+Map_Item *make_item(const char *key, int val);
 
 #endif // MAP_H
