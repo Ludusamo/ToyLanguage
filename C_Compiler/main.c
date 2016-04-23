@@ -11,6 +11,11 @@ int main() {
 	initialize();
 	create_test("String Equality", &test_str_equal);
 	create_test("Create Map", &test_create_map);
+	create_test("String Add", &test_str_add);
+	create_test("ATOI", &test_atoi);
+	create_test("ITOA", &test_itoa);
+	create_test("String Copy", &test_str_copy);
+	create_test("String Less Than", &test_str_lt);
 	run_tests();
 	return 0;
 }
