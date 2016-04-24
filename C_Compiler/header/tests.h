@@ -23,5 +23,6 @@ int test_str_lt();
 int test_create_map();
 int test_map_add();
 int test_map_rem();
+int test_map_find();
 
 #endif // TESTS_H

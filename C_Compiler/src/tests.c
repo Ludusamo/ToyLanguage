@@ -81,3 +81,17 @@ int test_map_rem() {
 	rbt_remove(m, "a");
 	return SUCCESS;
 }
+
+int test_map_find() {
+	Map *m = create_map();
+	rbt_insert(m, "d", 1);
+	rbt_insert(m, "c", 2);
+	rbt_insert(m, "a", 3);
+	rbt_insert(m, "b", 4);
+	rbt_insert(m, "l", 5);
+	Map_Item *i = rbt_find(m, "b");	
+	if (i != m->root->link[0]->link[1]) return FAILURE;
+	i = rbt_find(m, "k");
+	if (i) return FAILURE;
+	return SUCCESS;
+}

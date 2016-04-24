@@ -27,5 +27,6 @@ Map_Item *make_item(const char *key, int data);
 Map_Item *rbt_insert_r(Map_Item *root, const char *key, int data);
 int rbt_insert(Map *tree, const char *key, int data);
 int rbt_remove(Map *tree, const char *key);
+Map_Item *rbt_find(Map *tree, const char *key);
 
 #endif // MAP_H

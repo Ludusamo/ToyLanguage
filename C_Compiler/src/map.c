@@ -145,3 +145,13 @@ int rbt_remove(Map *tree, const char* key) {
 	}
 	return 1;
 }
+
+Map_Item *rbt_find(Map *tree, const char *key) {
+	Map_Item *cur = tree->root;
+	while (cur) {
+		if (str_equal(cur->key, key)) return cur;
+		int dir = str_lt(cur->key, key);
+		cur = cur->link[dir];
+	}
+	return 0;
+}
