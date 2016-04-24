@@ -51,6 +51,33 @@ int test_str_lt() {
 }
 
 int test_create_map() {
-	Map m = create_map();
+	Map *m = create_map();
+	return SUCCESS;
+}
+
+int test_map_add() {
+	Map *m = create_map();
+	rbt_insert(m, "c", 4);
+	rbt_insert(m, "b", 3);
+	rbt_insert(m, "a", 2);
+	if (!str_equal(m->root->key, "b")) return FAILURE;
+	rbt_insert(m, "d", 5);
+	if (!str_equal(m->root->link[1]->link[1]->key, "d")) return FAILURE;
+	rbt_insert(m, "b", 6);
+	if (m->root->data == 6) return FAILURE;
+	return SUCCESS;
+}
+
+int test_map_rem() {
+	Map *m = create_map();
+	rbt_insert(m, "d", 5);
+	rbt_insert(m, "c", 4);
+	rbt_insert(m, "b", 3);
+	rbt_insert(m, "a", 2);
+	rbt_remove(m, "b");
+	if (!str_equal(m->root->key, "c")) return FAILURE;
+	rbt_remove(m, "a");
+	if (m->root->link[0]) return FAILURE;
+	rbt_remove(m, "a");
 	return SUCCESS;
 }

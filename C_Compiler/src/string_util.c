@@ -15,6 +15,7 @@ char *str_add(const char *str1, const char *str2) {
 	char *concat = malloc(len * sizeof(char));
 	for (int i = 0; i < str1len; i++) concat[i] = str1[i];
 	for (int i = 0; i < str2len; i++) concat[i + str1len] = str2[i];
+	concat[len] = '\0';
 	return concat;
 }
 
