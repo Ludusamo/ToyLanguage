@@ -19,6 +19,7 @@ int main() {
 	create_test("Map Insert", &test_map_add);
 	create_test("Map Remove", &test_map_rem);
 	create_test("Map Find", &test_map_find);
+	create_test("Destroy Map", &test_destroy_map);
 	run_tests();
 
 	return 0;

@@ -17,7 +17,9 @@ typedef struct {
 } Map;
 
 Map *create_map();
-void destroy_map(Map map);
+
+void rbt_destroy(Map_Item *root);
+void destroy_map(Map *map);
 
 int is_red(Map_Item *item);
 Map_Item *rbt_single(Map_Item *item, int dir);

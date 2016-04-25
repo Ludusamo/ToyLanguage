@@ -5,6 +5,22 @@ Map *create_map() {
 	return m;
 }
 
+void rbt_destroy(Map_Item *root) {
+	if (!root) return;
+	if (root->link[0]) rbt_destroy(root->link[0]);
+	if (root->link[1]) rbt_destroy(root->link[1]);
+	free(root);
+	root = 0;
+}
+
+void destroy_map(Map *map) {
+	if (map) {
+		if (map->root) rbt_destroy(map->root);
+		free(map);
+		map = 0;
+	}
+}
+
 int is_red(Map_Item *item) {
 	return item && item->red;
 }

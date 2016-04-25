@@ -24,5 +24,6 @@ int test_create_map();
 int test_map_add();
 int test_map_rem();
 int test_map_find();
+int test_destroy_map();
 
 #endif // TESTS_H

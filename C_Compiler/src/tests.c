@@ -95,3 +95,14 @@ int test_map_find() {
 	if (i) return FAILURE;
 	return SUCCESS;
 }
+
+int test_destroy_map() {
+	Map *m = create_map();
+	rbt_insert(m, "d", 1);
+	rbt_insert(m, "c", 2);
+	rbt_insert(m, "a", 3);
+	rbt_insert(m, "b", 4);
+	rbt_insert(m, "l", 5);
+	destroy_map(m);
+	return SUCCESS;
+}
