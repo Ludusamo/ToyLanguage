@@ -5,10 +5,6 @@
 
 void initialize() {
 	num_tests = 0;
-}
-
-int main() {
-	initialize();
 	create_test("String Equality", &test_str_equal);
 	create_test("String Add", &test_str_add);
 	create_test("ATOI", &test_atoi);
@@ -20,7 +16,13 @@ int main() {
 	create_test("Map Remove", &test_map_rem);
 	create_test("Map Find", &test_map_find);
 	create_test("Destroy Map", &test_destroy_map);
-	run_tests();
+	create_test("File Input", &test_fileio_read);
+	create_test("File Output", &test_fileio_write);	
+}
 
+int main() {
+	initialize();
+	
+	run_tests();
 	return 0;
 }

@@ -106,3 +106,29 @@ int test_destroy_map() {
 	destroy_map(m);
 	return SUCCESS;
 }
+
+int test_fileio_read() {
+	FILE *in = fopen("res/test.in", "r");
+	char *line1 = read_line(in);
+	char *line2 = read_line(in);
+	char *line3 = read_line(in);
+	if (!str_equal(line1, "Hello I am a test.\n") || !str_equal("I am the second line", line2) || line3) {
+		fclose(in);	
+		return FAILURE;
+	}
+	fclose(in);	
+	return SUCCESS;
+}
+
+int test_fileio_write() {
+	FILE *out = fopen("res/test.out", "w");
+	write_line(out, "Hello World!");
+	fclose(out);	
+	out = fopen("res/test.out", "r");
+	char *line = read_line(out);
+	if (!str_equal(line, "Hello World!\n")) {
+		fclose(out);
+		return FAILURE;
+	}
+	return SUCCESS;
+}

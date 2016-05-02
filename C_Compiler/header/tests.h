@@ -4,6 +4,7 @@
 #include "unit_test.h"
 #include "string_util.h"
 #include "map.h"
+#include "file_io.h"
 
 #define MAX_TESTS 1000
 
@@ -20,10 +21,14 @@ int test_atoi();
 int test_itoa();
 int test_str_copy();
 int test_str_lt();
+
 int test_create_map();
 int test_map_add();
 int test_map_rem();
 int test_map_find();
 int test_destroy_map();
+
+int test_fileio_read();
+int test_fileio_write();
 
 #endif // TESTS_H
