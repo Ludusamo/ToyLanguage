@@ -1,0 +1,10 @@
+SRC_FILES = main.c src/map.c src/string_util.c src/tests.c src/unit_test.c
+
+CC = gcc
+COMPILER_FLAGS = -std=c99
+LINKER_FLAGS = -Iheader
+
+OBJ_NAME = COMPILER
+
+all : 
+	$(CC) $(SRC_FILES) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
