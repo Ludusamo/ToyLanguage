@@ -20,6 +20,8 @@ void initialize() {
 	create_test("File Input", &test_fileio_read);
 	create_test("File Output", &test_fileio_write);	
 	create_test("Identify Token", &test_identify_token);
+	create_test("Create Statement", &test_create_statement);
+	create_test("Tokenize Statement", &test_tokenize_statement);
 }
 
 int main() {

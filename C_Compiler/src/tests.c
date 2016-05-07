@@ -143,3 +143,18 @@ int test_identify_token() {
 	if (token->type != DATATYPE || token->subtype != 0) return FAILURE;
 	return SUCCESS;
 }
+
+int test_create_statement() {
+	Statement *statement = create_statement("int a");	
+	return SUCCESS;
+}
+
+int test_tokenize_statement() {
+	Statement *statement = create_statement("int a");
+	tokenize_statement(statement);
+	if (statement->num_tokens < 3) return FAILURE;
+	if (statement->tokens[0].type != DATATYPE) return FAILURE;
+	if (statement->tokens[1].type != WHITESPACE) return FAILURE;
+	if (statement->tokens[2].type != IDENTIFIER) return FAILURE;
+	return SUCCESS;
+}

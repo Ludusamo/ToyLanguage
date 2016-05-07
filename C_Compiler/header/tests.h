@@ -6,6 +6,7 @@
 #include "map.h"
 #include "file_io.h"
 #include "token.h"
+#include "statement.h"
 
 #define MAX_TESTS 1000
 
@@ -33,5 +34,8 @@ int test_fileio_read();
 int test_fileio_write();
 
 int test_identify_token();
+
+int test_create_statement();
+int test_tokenize_statement();
 
 #endif // TESTS_H
