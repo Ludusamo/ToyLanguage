@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string_util.h>
+#include <stdlib.h>
 
 #define NUM_DATATYPE 3
 #define NUM_ARITHOP 4
@@ -33,6 +34,9 @@ const char* const arithop_sub[NUM_ARITHOP];
 const char* const boolop_sub[NUM_BOOLOP];
 const char* const paren_sub[NUM_BOOLOP];
 const char* const quote_sub[NUM_BOOLOP];
+
+Token *create_token(const char *str);
+void destroy_token(Token *token);
 
 void identify_token_type(Token *token);
 

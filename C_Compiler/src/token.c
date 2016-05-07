@@ -6,6 +6,12 @@ const char * const boolop_sub[] = { "==", "<=", ">=", "<", ">", "!=" };
 const char * const paren_sub[] = { "(", ")" };
 const char * const quote_sub[] = { "\'", "\"" };
 
+Token *create_token(const char *str) {
+	Token *t = malloc(sizeof(Token));
+	t->token_str = str_copy(str);
+	return t;
+}
+
 void identify_token_type(Token *token) {
 	const char *s = token->token_str;
 	if (s[0] <= 32) {
