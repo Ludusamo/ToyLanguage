@@ -3,7 +3,7 @@
 Statement *create_statement(const char *str) {
 	Statement *statement = malloc(sizeof(Statement));
 	statement->tokens = malloc(sizeof(Token) * MAX_TOKENS);
-	statement->statement_str = str;
+	statement->statement_str = str_copy(str);
 	statement->num_tokens = 0;
 
 	return statement;
