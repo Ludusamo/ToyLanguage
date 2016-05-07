@@ -35,7 +35,6 @@ const char* const boolop_sub[NUM_BOOLOP];
 const char* const paren_sub[NUM_BOOLOP];
 const char* const quote_sub[NUM_BOOLOP];
 
-Token *create_token();
 Token *create_token(const char *str);
 void destroy_token(Token *token);
 

@@ -8,7 +8,7 @@ const char * const quote_sub[] = { "\'", "\"" };
 
 Token *create_token(const char *str) {
 	Token *t = malloc(sizeof(Token));
-	t->token_str = str;
+	t->token_str = str_copy(str);
 	return t;
 }
 
