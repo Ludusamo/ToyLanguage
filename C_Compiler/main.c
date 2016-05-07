@@ -2,6 +2,7 @@
 #include "unit_test.h"
 #include "string_util.h"
 #include "map.h"
+#include "token.h"
 
 void initialize() {
 	num_tests = 0;
@@ -18,6 +19,7 @@ void initialize() {
 	create_test("Destroy Map", &test_destroy_map);
 	create_test("File Input", &test_fileio_read);
 	create_test("File Output", &test_fileio_write);	
+	create_test("Identify Token", &test_identify_token);
 }
 
 int main() {

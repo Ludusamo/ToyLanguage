@@ -132,3 +132,14 @@ int test_fileio_write() {
 	}
 	return SUCCESS;
 }
+
+int test_identify_token() {
+	Token *token = malloc(sizeof(Token));
+	token->token_str = " ";
+	identify_token_type(token);
+	if (token->type != 0) return FAILURE;
+	token->token_str = "int";
+	identify_token_type(token);
+	if (token->type != DATATYPE || token->subtype != 0) return FAILURE;
+	return SUCCESS;
+}

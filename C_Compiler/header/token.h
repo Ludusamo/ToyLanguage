@@ -1,0 +1,39 @@
+#ifndef TOKEN_H 
+#define TOKEN_H
+
+#include <stdio.h>
+#include <string_util.h>
+
+#define NUM_DATATYPE 3
+#define NUM_ARITHOP 4
+#define NUM_BOOLOP 6
+#define NUM_PAREN 2
+#define NUM_QUOTE 2
+
+typedef enum {
+	WHITESPACE,
+	ASSIGNMENT,
+	DATATYPE,
+	ARITHOP,
+	BOOLOP,
+	PAREN,
+	QUOTE,
+	NUM,
+	IDENTIFIER
+} TYPE;
+
+typedef struct {
+	const char *token_str;	
+	TYPE type;
+	int subtype;
+} Token;
+
+const char* const data_sub[NUM_DATATYPE];
+const char* const arithop_sub[NUM_ARITHOP];
+const char* const boolop_sub[NUM_BOOLOP];
+const char* const paren_sub[NUM_BOOLOP];
+const char* const quote_sub[NUM_BOOLOP];
+
+void identify_token_type(Token *token);
+
+#endif // TOKEN_H
