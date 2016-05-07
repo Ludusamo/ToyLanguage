@@ -133,6 +133,12 @@ int test_fileio_write() {
 	return SUCCESS;
 }
 
+int test_create_token() {
+	Token *token = create_token("test");
+	if (!str_equal(token->token_str, "test")) return FAILURE;
+	return SUCCESS;
+}
+
 int test_identify_token() {
 	Token *token = malloc(sizeof(Token));
 	token->token_str = " ";

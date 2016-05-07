@@ -32,6 +32,7 @@ int test_destroy_map();
 int test_fileio_read();
 int test_fileio_write();
 
+int test_create_token();
 int test_identify_token();
 
 #endif // TESTS_H

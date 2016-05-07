@@ -19,6 +19,7 @@ void initialize() {
 	create_test("Destroy Map", &test_destroy_map);
 	create_test("File Input", &test_fileio_read);
 	create_test("File Output", &test_fileio_write);	
+	create_test("Create Token", &test_create_token);
 	create_test("Identify Token", &test_identify_token);
 }
 
