@@ -1,6 +1,6 @@
 #include <token.h>
 
-const char * const data_sub[] = { "int", "bool", "char" };
+const char * const data_sub[] = { "void", "int", "bool", "char" };
 const char * const arithop_sub[] = { "+", "-", "*", "/" };
 const char * const boolop_sub[] = { "==", "<=", ">=", "<", ">", "!=" };
 const char * const paren_sub[] = { "(", ")" };

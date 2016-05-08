@@ -5,7 +5,7 @@
 #include <string_util.h>
 #include <stdlib.h>
 
-#define NUM_DATATYPE 3
+#define NUM_DATATYPE 4
 #define NUM_ARITHOP 4
 #define NUM_BOOLOP 6
 #define NUM_PAREN 2
@@ -22,6 +22,12 @@ typedef enum {
 	NUM,
 	IDENTIFIER
 } TYPE;
+
+enum DATASUB { VOID, INT, BOOL, CHAR };
+enum ARITHOPSUB { PLUS, MINUS, MULTIPLY, DIVIDE };
+enum BOOLOPSUB { EQ, LTE, GTE, LT, GT, NEQ };
+enum PARENSUB { LPAREN, RPAREN };
+enum QUOTESUB { SINGLE_QUOTE, DOUBLE_QUOTE };
 
 typedef struct {
 	const char *token_str;	

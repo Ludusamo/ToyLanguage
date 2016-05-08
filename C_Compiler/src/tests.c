@@ -146,7 +146,7 @@ int test_identify_token() {
 	if (token->type != 0) return FAILURE;
 	token->token_str = "int";
 	identify_token_type(token);
-	if (token->type != DATATYPE || token->subtype != 0) return FAILURE;
+	if (token->type != DATATYPE || token->subtype != INT) return FAILURE;
 	return SUCCESS;
 }
 
@@ -175,7 +175,7 @@ int test_lex() {
 	Statement s4 = statements[3];
 	if (s1.tokens[0].type != DATATYPE || s1.tokens[1].type != WHITESPACE || s1.tokens[2].type != IDENTIFIER)
 		return FAILURE;
-	if (s3.tokens[0].subtype != 1) return FAILURE;
+	if (s3.tokens[0].subtype != BOOL) return FAILURE;
 	if (s4.tokens[2].type != ARITHOP) return FAILURE;
 
 	return SUCCESS;
