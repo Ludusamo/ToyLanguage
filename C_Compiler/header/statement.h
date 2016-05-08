@@ -2,6 +2,7 @@
 #define STATEMENT_H
 
 #include <token.h>
+#include <ctype.h>
 
 #define MAX_TOKENS 50
 

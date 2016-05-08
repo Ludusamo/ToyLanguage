@@ -19,22 +19,29 @@ void add_token(Statement *statement, const char *str) {
 void tokenize_statement(Statement *statement) {
 	const char *s = statement->statement_str;
 	int bi = 0;
-	int reading_whitespace = 0;
+	int mode = 1;
 	char *buffer = malloc(sizeof(char) * strlen(s) + 1);
 	for (int i = 0; i < strlen(s) + 1; i++) {
-		if (reading_whitespace) {
+		if (mode == 0) { // Reading whitespace
 			if (!is_whitespace(s[i])) {
 				buffer[bi++] = '\0';
 				bi = 0;
 				add_token(statement, buffer);
-				reading_whitespace = 0;
+				mode = isalnum(s[i]) ? 1 : 2;
 			}
-		} else {
-			if (is_whitespace(s[i])) {
+		} else if (mode == 1) { // Reading alnum
+			if (!isalnum(s[i])) {
 				buffer[bi++] = '\0';
 				bi = 0;
 				add_token(statement, buffer);
-				reading_whitespace = 1;
+				mode = is_whitespace(s[i]) ? 0 : 2;
+			}
+		} else if (mode == 2) { // Other
+			if (isalnum(s[i]) || is_whitespace(s[i])) {
+				buffer[bi++] = '\0';
+				bi = 0;
+				add_token(statement, buffer);
+				mode = is_whitespace(s[i]) ? 0 : 1;
 			}
 		}
 		buffer[bi++] = s[i];
