@@ -10,6 +10,7 @@ typedef struct {
 	const char *statement_str;
 	int num_tokens;
 	Token *tokens;
+	int depth;
 } Statement;
 
 Statement *create_statement(const char *str);

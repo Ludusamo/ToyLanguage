@@ -3,8 +3,20 @@
 Statement *create_statement(const char *str) {
 	Statement *statement = malloc(sizeof(Statement));
 	statement->tokens = malloc(sizeof(Token) * MAX_TOKENS);
-	statement->statement_str = str_copy(str);
-	statement->num_tokens = 0;
+
+	statement->depth = 0;
+	int i = 0;
+	while (is_whitespace(str[i])) {
+		statement->depth++;
+		i++;
+	}
+	char *buffer = malloc(sizeof(char) * strlen(str) - i + 1);	
+	int si = 0;
+	while (i < strlen(str)) buffer[si++] = str[i++];
+	buffer[si++] = '\0';
+	statement->statement_str = str_copy(buffer);
+
+	statement->num_tokens = 0;	
 
 	return statement;
 }
