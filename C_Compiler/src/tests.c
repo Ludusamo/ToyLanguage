@@ -164,3 +164,19 @@ int test_tokenize_statement() {
 	if (statement->tokens[2].type != IDENTIFIER) return FAILURE;
 	return SUCCESS;
 }
+
+int test_lex() {
+	FILE *file = fopen("res/lex_test.in", "r");	
+	Statement *statements = lex(file);
+	fclose(file);
+	if (!statements) return FAILURE;
+	Statement s1 = statements[0];
+	Statement s3 = statements[2];
+	Statement s4 = statements[3];
+	if (s1.tokens[0].type != DATATYPE || s1.tokens[1].type != WHITESPACE || s1.tokens[2].type != IDENTIFIER)
+		return FAILURE;
+	if (s3.tokens[0].subtype != 1) return FAILURE;
+	if (s4.tokens[2].type != ARITHOP) return FAILURE;
+
+	return SUCCESS;
+}

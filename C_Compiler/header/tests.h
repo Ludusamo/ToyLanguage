@@ -7,6 +7,7 @@
 #include "file_io.h"
 #include "token.h"
 #include "statement.h"
+#include "lex.h"
 
 #define MAX_TESTS 1000
 
@@ -38,5 +39,7 @@ int test_identify_token();
 
 int test_create_statement();
 int test_tokenize_statement();
+
+int test_lex();
 
 #endif // TESTS_H
