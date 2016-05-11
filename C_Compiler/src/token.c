@@ -65,3 +65,11 @@ void identify_token_type(Token *token) {
 
 	token->type = IDENTIFIER;
 }
+
+int is_type(Token token, int type) {
+	return token.type == type;
+}
+
+int is_subtype(Token token, int subtype) {
+	return token.subtype == subtype;
+}

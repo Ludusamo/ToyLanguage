@@ -143,10 +143,10 @@ int test_identify_token() {
 	Token *token = malloc(sizeof(Token));
 	token->token_str = " ";
 	identify_token_type(token);
-	if (token->type != 0) return FAILURE;
+	if (!is_type(*token, WHITESPACE)) return FAILURE;
 	token->token_str = "int";
 	identify_token_type(token);
-	if (token->type != DATATYPE || token->subtype != INT) return FAILURE;
+	if (!is_type(*token, DATATYPE) || !is_subtype(*token, INT)) return FAILURE;
 	return SUCCESS;
 }
 
@@ -159,9 +159,9 @@ int test_tokenize_statement() {
 	Statement *statement = create_statement("int a");
 	tokenize_statement(statement);
 	if (statement->num_tokens < 3) return FAILURE;
-	if (statement->tokens[0].type != DATATYPE) return FAILURE;
-	if (statement->tokens[1].type != WHITESPACE) return FAILURE;
-	if (statement->tokens[2].type != IDENTIFIER) return FAILURE;
+	if (!is_type(statement->tokens[0], DATATYPE)) return FAILURE;
+	if (!is_type(statement->tokens[1], WHITESPACE)) return FAILURE;
+	if (!is_type(statement->tokens[2], IDENTIFIER)) return FAILURE;
 	return SUCCESS;
 }
 
@@ -173,10 +173,10 @@ int test_lex() {
 	Statement s1 = statements[0];
 	Statement s3 = statements[2];
 	Statement s4 = statements[3];
-	if (s1.tokens[0].type != DATATYPE || s1.tokens[1].type != WHITESPACE || s1.tokens[2].type != IDENTIFIER)
+	if (!is_type(s1.tokens[0], DATATYPE) || !is_type(s1.tokens[1], WHITESPACE) || !is_type(s1.tokens[2], IDENTIFIER))
 		return FAILURE;
-	if (s3.tokens[0].subtype != BOOL) return FAILURE;
-	if (s4.tokens[2].type != ARITHOP) return FAILURE;
+	if (!is_subtype(s3.tokens[0], BOOL)) return FAILURE;
+	if (!is_type(s4.tokens[2], ARITHOP)) return FAILURE;
 
 	return SUCCESS;
 }

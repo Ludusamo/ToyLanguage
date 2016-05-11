@@ -46,4 +46,7 @@ void destroy_token(Token *token);
 
 void identify_token_type(Token *token);
 
+int is_type(Token token, int type);
+int is_subtype(Token token, int subtype);
+
 #endif // TOKEN_H
