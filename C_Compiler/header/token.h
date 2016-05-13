@@ -10,6 +10,7 @@
 #define NUM_BOOLOP 6
 #define NUM_PAREN 2
 #define NUM_QUOTE 2
+#define NUM_BOOLVAL 2
 
 typedef enum {
 	WHITESPACE,
@@ -19,7 +20,10 @@ typedef enum {
 	BOOLOP,
 	PAREN,
 	QUOTE,
+	COMMA,
 	NUM,
+	BOOLVAL,
+	RETURN,
 	IDENTIFIER
 } TYPE;
 
@@ -28,6 +32,7 @@ enum ARITHOPSUB { PLUS, MINUS, MULTIPLY, DIVIDE };
 enum BOOLOPSUB { EQ, LTE, GTE, LT, GT, NEQ };
 enum PARENSUB { LPAREN, RPAREN };
 enum QUOTESUB { SINGLE_QUOTE, DOUBLE_QUOTE };
+enum BOOLVAL { FALSE, TRUE };
 
 typedef struct {
 	const char *token_str;	
@@ -40,6 +45,7 @@ const char* const arithop_sub[NUM_ARITHOP];
 const char* const boolop_sub[NUM_BOOLOP];
 const char* const paren_sub[NUM_BOOLOP];
 const char* const quote_sub[NUM_BOOLOP];
+const char* const boolval_sub[NUM_BOOLOP];
 
 Token *create_token(const char *str);
 void destroy_token(Token *token);

@@ -5,6 +5,7 @@ const char * const arithop_sub[] = { "+", "-", "*", "/" };
 const char * const boolop_sub[] = { "==", "<=", ">=", "<", ">", "!=" };
 const char * const paren_sub[] = { "(", ")" };
 const char * const quote_sub[] = { "\'", "\"" };
+const char * const boolval_sub[] = { "false", "true" };
 
 Token *create_token(const char *str) {
 	Token *t = malloc(sizeof(Token));
@@ -56,6 +57,22 @@ void identify_token_type(Token *token) {
 			token->subtype = i;
 			return;
 		}
+	}
+	if (str_equal(",", s)) {
+		token->type = COMMA;
+		return;
+	}
+
+	for (int i = 0; i < NUM_BOOLVAL; i++) {
+		if (str_equal(boolval_sub[i], s)) {
+			token->type = BOOLVAL;
+			token->subtype = i;
+			return;
+		}
+	}
+	if (str_equal("return", s)) {
+		token->type = RETURN;
+		return;
 	}
 	for (int i = 0; i < strlen(s); i++) {
 		if (s[i] > 57 || s[i] < 48) break;
