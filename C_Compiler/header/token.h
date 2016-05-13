@@ -50,6 +50,7 @@ const char* const boolval_sub[NUM_BOOLOP];
 Token *create_token(const char *str);
 void destroy_token(Token *token);
 
+int is_in_list(const char* const *strings, int num_in_list, const char *s);
 void identify_token_type(Token *token);
 
 int is_type(Token token, int type);

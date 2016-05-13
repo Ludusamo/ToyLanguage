@@ -158,10 +158,9 @@ int test_create_statement() {
 int test_tokenize_statement() {
 	Statement *statement = create_statement("int a");
 	tokenize_statement(statement);
-	if (statement->num_tokens < 3) return FAILURE;
+	if (statement->num_tokens < 2) return FAILURE;
 	if (!is_type(statement->tokens[0], DATATYPE)) return FAILURE;
-	if (!is_type(statement->tokens[1], WHITESPACE)) return FAILURE;
-	if (!is_type(statement->tokens[2], IDENTIFIER)) return FAILURE;
+	if (!is_type(statement->tokens[1], IDENTIFIER)) return FAILURE;
 	return SUCCESS;
 }
 

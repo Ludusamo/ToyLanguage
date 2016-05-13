@@ -13,64 +13,51 @@ Token *create_token(const char *str) {
 	return t;
 }
 
+int is_in_list(const char* const *strings, int num_in_list, const char *s) {
+	for (int i = 0; i < num_in_list; i++) {
+		if (str_equal(strings[i], s)) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 void identify_token_type(Token *token) {
+	int list_index = -1;
 	const char *s = token->token_str;
 	if (s[0] <= 32) {
 		token->type = WHITESPACE;
 		return;
-	}
-	if (s[0] == '=') {
+	} else if (s[0] == '=') {
 		token->type = ASSIGNMENT;
 		return;
-	}	
-	for (int i = 0; i < NUM_DATATYPE; i++) {
-		if (str_equal(data_sub[i], s)) {
-			token->type = DATATYPE;
-			token->subtype = i;
-			return;
-		}
-	}	
-	for (int i = 0; i < NUM_ARITHOP; i++) {
-		if (str_equal(arithop_sub[i], s)) {
-			token->type = ARITHOP;
-			token->subtype = i;
-			return;
-		}
-	}
-	for (int i = 0; i < NUM_BOOLOP; i++) {
-		if (str_equal(boolop_sub[i], s)) {
-			token->type = BOOLOP;
-			token->subtype = i;
-			return;
-		}
-	}
-	for (int i = 0; i < NUM_PAREN; i++) {
-		if (str_equal(paren_sub[i], s)) {
-			token->type = PAREN;
-			token->subtype = i;
-			return;
-		}
-	}
-	for (int i = 0; i < NUM_QUOTE; i++) {
-		if (str_equal(quote_sub[i], s)) {
-			token->type = QUOTE;
-			token->subtype = i;
-			return;
-		}
-	}
-	if (str_equal(",", s)) {
+	} else if ((list_index = is_in_list(data_sub, NUM_DATATYPE, s)) != -1) {
+		token->type = DATATYPE;
+		token->subtype = list_index;
+		return;
+	} else if ((list_index = is_in_list(arithop_sub, NUM_ARITHOP, s)) != -1) {
+		token->type = ARITHOP;
+		token->subtype = list_index;
+		return;
+	} else if ((list_index = is_in_list(boolop_sub, NUM_BOOLOP, s)) != -1) {
+		token->type = BOOLOP;
+		token->subtype = list_index;
+		return;
+	} else if ((list_index = is_in_list(paren_sub, NUM_PAREN, s)) != -1) {
+		token->type = PAREN;
+		token->subtype = list_index;
+		return;
+	} else if ((list_index = is_in_list(quote_sub, NUM_QUOTE, s)) != -1) {
+		token->type = QUOTE;
+		token->subtype = list_index;
+	} else if (str_equal(",", s)) {
 		token->type = COMMA;
 		return;
-	}
-
-	for (int i = 0; i < NUM_BOOLVAL; i++) {
-		if (str_equal(boolval_sub[i], s)) {
-			token->type = BOOLVAL;
-			token->subtype = i;
-			return;
-		}
-	}
-	if (str_equal("return", s)) {
+	} else if ((list_index = is_in_list(boolval_sub, NUM_BOOLVAL, s)) != -1) {
+		token->type = BOOLVAL;
+		token->subtype = list_index;
+		return;
+	} else if (str_equal("return", s)) {
 		token->type = RETURN;
 		return;
 	}
