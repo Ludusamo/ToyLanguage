@@ -38,7 +38,7 @@ void tokenize_statement(Statement *statement) {
 			if (!is_whitespace(s[i])) {
 				buffer[bi++] = '\0';
 				bi = 0;
-				add_token(statement, buffer);
+				//add_token(statement, buffer);
 				mode = isalnum(s[i]) ? 1 : 2;
 			}
 		} else if (mode == 1) { // Reading alnum

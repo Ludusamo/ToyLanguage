@@ -6,11 +6,16 @@
 
 #define MAX_TOKENS 50
 
+typedef enum {
+	DECL
+} Statement_Type;
+
 typedef struct {
 	const char *statement_str;
 	int num_tokens;
 	Token *tokens;
 	int depth;
+	Statement_Type type;
 } Statement;
 
 Statement *create_statement(const char *str);

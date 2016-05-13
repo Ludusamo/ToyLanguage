@@ -1,4 +1,4 @@
-SRC_FILES = main.c src/map.c src/string_util.c src/tests.c src/unit_test.c src/file_io.c src/token.c src/statement.c src/lex.c
+SRC_FILES = main.c src/map.c src/string_util.c src/tests.c src/unit_test.c src/file_io.c src/token.c src/statement.c src/lex.c src/parser.c
 
 CC = gcc
 COMPILER_FLAGS = -std=c99

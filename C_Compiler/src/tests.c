@@ -173,10 +173,19 @@ int test_lex() {
 	Statement s1 = statements[0];
 	Statement s3 = statements[2];
 	Statement s4 = statements[3];
-	if (!is_type(s1.tokens[0], DATATYPE) || !is_type(s1.tokens[1], WHITESPACE) || !is_type(s1.tokens[2], IDENTIFIER))
+	if (!is_type(s1.tokens[0], DATATYPE) || !is_type(s1.tokens[1], IDENTIFIER))
 		return FAILURE;
 	if (!is_subtype(s3.tokens[0], BOOL)) return FAILURE;
-	if (!is_type(s4.tokens[2], ARITHOP)) return FAILURE;
+	if (!is_type(s4.tokens[1], ARITHOP)) return FAILURE;
 
+	return SUCCESS;
+}
+
+int test_parse() {
+	FILE *file = fopen("res/parse_test.in", "r");	
+	Statement *statements = lex(file);
+	fclose(file);
+	parse(statements);
+	if (statements[0].type != DECL || statements[1].type != DECL) return FAILURE;
 	return SUCCESS;
 }
