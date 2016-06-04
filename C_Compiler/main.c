@@ -25,6 +25,7 @@ void initialize() {
 	create_test("Tokenize Statement", &test_tokenize_statement);
 	create_test("Lexical Analyzer", &test_lex);
 	create_test("Parser", &test_parse);
+	create_test("AST", &test_ast);
 }
 
 int main() {

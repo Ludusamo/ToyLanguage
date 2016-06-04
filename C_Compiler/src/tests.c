@@ -188,3 +188,13 @@ int test_parse() {
 	if (statements[0].type != DECL || statements[1].type != DECL) return FAILURE;
 	return SUCCESS;
 }
+
+int test_ast() {
+	int a = 1;
+	int b = 20;
+	ASTNode *node = create_decl_ast(&a, "test", &b);
+	if (node->sub_nodes[0]->type != DATATYPE_NODE) return FAILURE;
+	if (!str_equal((const char*)(node->sub_nodes[1]->data), "test")) return FAILURE;
+	if (*(int*)(node->sub_nodes[2]->data) != 20) return FAILURE;
+	return SUCCESS;
+}

@@ -9,6 +9,7 @@
 #include "statement.h"
 #include "lex.h"
 #include "parser.h"
+#include "ast.h"
 #include "shared_values.h"
 
 #define MAX_TESTS 1000
@@ -45,5 +46,7 @@ int test_tokenize_statement();
 int test_lex();
 
 int test_parse();
+
+int test_ast();
 
 #endif // TESTS_H
