@@ -1,20 +1,23 @@
 #include <parser.h>
 
-int parse(Statement *statements) {
+ASTNode *parse(Statement *statements) {
+	ASTNode *program = create_program_ast(num_lines);
 	for (int i = 0; i < num_lines; i++) {
-		int successful = parse_line(&statements[i]);
-		if (successful) {
+		ASTNode *node = parse_line(&statements[i]);
+		if (node) {
 			// TODO: Successful Code
+			program->sub_nodes[i] = node;
 		} else {
 			// TODO: Failure Code
 		}
 	}
+	return program;
 }
 
-int parse_line(Statement *statement) {
+ASTNode *parse_line(Statement *statement) {
 	if (is_declaration(statement)) {
 		statement->type = DECL;
-		return 1;
+		return create_decl_ast(&GET_DATATYPE(statement), GET_DECL_ID(statement), 0);
 	}
 	return 0;
 }

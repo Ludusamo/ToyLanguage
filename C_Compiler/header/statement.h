@@ -6,6 +6,9 @@
 
 #define MAX_TOKENS 50
 
+#define GET_DATATYPE(statement) statement->tokens[0].subtype
+#define GET_DECL_ID(statement) statement->tokens[1].token_str
+
 typedef enum {
 	DECL
 } Statement_Type;

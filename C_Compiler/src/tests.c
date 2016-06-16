@@ -184,8 +184,10 @@ int test_parse() {
 	FILE *file = fopen("res/parse_test.in", "r");	
 	Statement *statements = lex(file);
 	fclose(file);
-	parse(statements);
+	ASTNode *prog = parse(statements);
 	if (statements[0].type != DECL || statements[1].type != DECL) return FAILURE;
+	if (prog->type != 0) return FAILURE;
+	if (prog->sub_nodes[0]->type != 1) return FAILURE;
 	return SUCCESS;
 }
 
