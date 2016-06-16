@@ -1,5 +1,12 @@
 #include "ast.h"
 
+ASTNode *create_program_ast(int num_lines) {
+	ASTNode *node = malloc(sizeof(ASTNode));
+	node->type = PROG_NODE;
+	node->sub_nodes = malloc(sizeof(ASTNode*) * num_lines);
+	return node;
+}
+
 ASTNode *create_datatype_ast(int *datatype) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = DATATYPE_NODE;

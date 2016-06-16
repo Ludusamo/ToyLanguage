@@ -7,6 +7,7 @@
 typedef struct ASTNode ASTNode;
 
 typedef enum {
+	PROG_NODE,
 	DECL_NODE,
 	CONST_NODE,
 	ID_NODE,
@@ -19,6 +20,7 @@ struct ASTNode {
 	ASTNode **sub_nodes;
 };
 
+ASTNode *create_program_ast(int num_lines);
 ASTNode *create_datatype_ast(int *datatype);
 ASTNode *create_const_ast(void *data);
 ASTNode *create_id_ast(const char *id);
