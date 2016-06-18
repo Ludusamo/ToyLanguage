@@ -63,8 +63,10 @@ void identify_token_type(Token *token) {
 	}
 	for (int i = 0; i < strlen(s); i++) {
 		if (s[i] > 57 || s[i] < 48) break;
-		if (i == strlen(s) - 1) token->type = NUM;
-		return;
+		if (i == strlen(s) - 1) {
+			token->type = NUM;
+			return;
+		}
 	}
 
 	token->type = IDENTIFIER;
