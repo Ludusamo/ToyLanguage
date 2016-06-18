@@ -28,12 +28,28 @@ ASTNode *create_id_ast(const char *id) {
 	return node;
 }
 
-ASTNode *create_decl_ast(int *datatype, const char *id, void *data) {
+ASTNode *create_decl_ast(int *datatype, const char *id, ASTNode *rhs) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = DECL_NODE;
 	node->sub_nodes = malloc(sizeof(ASTNode*) * 3);
 	node->sub_nodes[0] = create_datatype_ast(datatype);
 	node->sub_nodes[1] = create_id_ast(id);
-	node->sub_nodes[2] = create_const_ast(data);
+	node->sub_nodes[2] = rhs;
+	return node;
+}
+
+ASTNode *create_arithop_ast(int *operation) {
+	ASTNode *node = malloc(sizeof(ASTNode));
+	node->type = ARITHOP_NODE;
+	node->data = (void*) operation;
+	node->sub_nodes = malloc(sizeof(ASTNode*) * 2);
+	return node;
+}
+
+ASTNode *create_boolop_ast(int *operation) {
+	ASTNode *node = malloc(sizeof(ASTNode));
+	node->type = BOOLOP_NODE;
+	node->data = (void*) operation;
+	node->sub_nodes = malloc(sizeof(ASTNode*) * 2);
 	return node;
 }
