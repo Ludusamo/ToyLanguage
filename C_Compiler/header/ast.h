@@ -20,6 +20,7 @@ struct ASTNode {
 	AST_TYPE type;
 	void *data;
 	ASTNode **sub_nodes;
+	int num_sub;
 };
 
 ASTNode *create_program_ast(int num_lines);

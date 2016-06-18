@@ -6,6 +6,8 @@
 #include "ast.h"
 #include "shared_values.h"
 
+int statement_index;
+
 ASTNode *parse(Statement *statements);
 ASTNode *parse_line(Statement *statement);
 ASTNode *parse_declaration(Statement *statement);

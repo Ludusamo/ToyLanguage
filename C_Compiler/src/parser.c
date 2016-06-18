@@ -33,6 +33,7 @@ ASTNode *parse_declaration(Statement *statement) {
 }
 
 ASTNode *parse_rhs(Statement *statement, int rhs_index) {
+	statement_index = rhs_index;
 	ASTNode *node;
 	Token *tokens = statement->tokens;
 	printf("Current Token: %s\n", tokens[rhs_index].token_str);
@@ -48,6 +49,22 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 		ASTNode *op = create_arithop_ast(&tokens[rhs_index].subtype);
 		op->sub_nodes[1] = parse_rhs(statement, rhs_index + 1);
 		if (op->sub_nodes[1]) return op;
+	} else if (is_type(tokens[rhs_index], PAREN)) {
+		if (is_subtype(tokens[rhs_index], LPAREN)) {
+
+			ASTNode *lhs = parse_rhs(statement, rhs_index + 1);	
+
+			if (is_type(tokens[statement_index], PAREN) &&
+				is_subtype(tokens[statement_index], RPAREN)) {
+				ASTNode *op = parse_rhs(statement, statement_index + 1);
+
+				if (op) {
+					op->sub_nodes[0] = lhs;
+					return op;
+				}
+				return lhs;
+			}
+		}
 	}
 	return 0;
 }
