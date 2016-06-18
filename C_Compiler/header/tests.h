@@ -46,6 +46,7 @@ int test_tokenize_statement();
 int test_lex();
 
 int test_parse();
+int test_rhs();
 
 int test_ast();
 

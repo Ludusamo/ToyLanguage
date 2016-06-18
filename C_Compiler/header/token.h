@@ -56,4 +56,6 @@ void identify_token_type(Token *token);
 int is_type(Token token, int type);
 int is_subtype(Token token, int subtype);
 
+void *create_data_packet(Token token);
+
 #endif // TOKEN_H

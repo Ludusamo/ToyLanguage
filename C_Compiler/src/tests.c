@@ -191,10 +191,23 @@ int test_parse() {
 	return SUCCESS;
 }
 
+int test_rhs() {
+	Statement *statement = create_statement("int a = 1 + 3");
+	tokenize_statement(statement);
+	
+	ASTNode *rhs = parse_rhs(statement, 3);
+	if (!rhs) return FAILURE;
+	printf("rhs created\n");
+	if (rhs->type != ARITHOP_NODE) return FAILURE;
+	if (*(int*)(rhs->sub_nodes[0]->data) != 1) return FAILURE;
+	return SUCCESS;
+}
+
 int test_ast() {
 	int a = 1;
 	int b = 20;
-	ASTNode *node = create_decl_ast(&a, "test", &b);
+	ASTNode *rhs = create_const_ast(&b);
+	ASTNode *node = create_decl_ast(&a, "test", rhs);
 	if (node->sub_nodes[0]->type != DATATYPE_NODE) return FAILURE;
 	if (!str_equal((const char*)(node->sub_nodes[1]->data), "test")) return FAILURE;
 	if (*(int*)(node->sub_nodes[2]->data) != 20) return FAILURE;

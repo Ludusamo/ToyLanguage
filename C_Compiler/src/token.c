@@ -77,3 +77,16 @@ int is_type(Token token, int type) {
 int is_subtype(Token token, int subtype) {
 	return token.subtype == subtype;
 }
+
+void *create_data_packet(Token token) {
+	if (is_type(token, NUM)) {
+		int *num = malloc(sizeof(int));
+		*num = atoi(token.token_str);
+		return (void*) num;
+	} else if (is_type(token, BOOLVAL)) {
+		int *bool_val = malloc(sizeof(int));
+		*bool_val = token.subtype;
+		return (void*) bool_val;
+	}
+	return 0;
+}
