@@ -34,21 +34,31 @@ ASTNode *parse_declaration(Statement *statement) {
 
 ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 	statement_index = rhs_index;
-	ASTNode *node;
 	Token *tokens = statement->tokens;
-	printf("Current Token: %s\n", tokens[rhs_index].token_str);
+	printf("Current Token: %s %i\n", tokens[rhs_index].token_str, tokens[rhs_index].type);
 	if (is_const(tokens[rhs_index])) {
 		ASTNode *lhs = create_const_ast(create_data_packet(tokens[rhs_index]));
 		ASTNode *op = parse_rhs(statement, rhs_index + 1);
 		if (op) {
-			op->sub_nodes[0] = lhs;
+			if (!op->sub_nodes[0]) op->sub_nodes[0] = lhs;
+			else {
+				ASTNode *leftmost = op;
+				while (leftmost->sub_nodes[0]) leftmost = leftmost->sub_nodes[0];
+				leftmost->sub_nodes[0] = lhs;
+			}
 			return op;
 		}
 		return lhs;
 	} else if (is_type(tokens[rhs_index], ARITHOP)) {
 		ASTNode *op = create_arithop_ast(&tokens[rhs_index].subtype);
 		op->sub_nodes[1] = parse_rhs(statement, rhs_index + 1);
-		if (op->sub_nodes[1]) return op;
+		if (op->sub_nodes[1]) {
+			if (!is_type(tokens[rhs_index + 1], PAREN) && op->sub_nodes[1]->type == ARITHOP_NODE && *(int*)op->sub_nodes[1]->data < *(int*)op->data) {
+				ASTNode *rhs = shift_op(op);
+				return rhs;
+			}
+			return op;
+		}
 	} else if (is_type(tokens[rhs_index], PAREN)) {
 		if (is_subtype(tokens[rhs_index], LPAREN)) {
 
@@ -67,6 +77,14 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 		}
 	}
 	return 0;
+}
+
+ASTNode *shift_op(ASTNode *rhs) {
+	ASTNode *p = rhs;
+	ASTNode *r = rhs->sub_nodes[1];
+	p->sub_nodes[1] = r->sub_nodes[0];
+	r->sub_nodes[0] = p;
+	return r;
 }
 
 int is_const(Token token) {

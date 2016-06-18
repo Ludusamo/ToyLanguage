@@ -192,17 +192,22 @@ int test_parse() {
 }
 
 int test_rhs() {
-	Statement *statement = create_statement("int a = (1 + 3) * 2");
+	Statement *statement = create_statement("int a = 100 * (300 + 200)");
 	tokenize_statement(statement);
 	
 	ASTNode *rhs = parse_rhs(statement, 3);
 	if (!rhs) return FAILURE;
 	printf("rhs created\n");
 	if (rhs->type != ARITHOP_NODE || *(int*) rhs->data != MULTIPLY) return FAILURE;
-	if (rhs->sub_nodes[0]->type != ARITHOP_NODE || *(int*) rhs->sub_nodes[0]->data != PLUS) return FAILURE;
-	if (*(int*)(rhs->sub_nodes[0]->sub_nodes[0]->data) != 1) return FAILURE;
-	if (*(int*)(rhs->sub_nodes[0]->sub_nodes[1]->data) != 3) return FAILURE;
-	if (*(int*)(rhs->sub_nodes[1]->data) != 2) return FAILURE;
+	printf("First node is arithop mult\n");
+	if (rhs->sub_nodes[1]->type != ARITHOP_NODE || *(int*) rhs->sub_nodes[1]->data != PLUS) return FAILURE;
+	printf("right of rhs is arithop plus\n");
+	if (*(int*)(rhs->sub_nodes[0]->data) != 100) return FAILURE;
+	printf("left of rhs is 100\n");
+	if (*(int*)(rhs->sub_nodes[1]->sub_nodes[0]->data) != 300) return FAILURE;
+	printf("right left of rhs is 300\n");
+	if (*(int*)(rhs->sub_nodes[1]->sub_nodes[1]->data) != 200) return FAILURE;
+	printf("right right of rhs is 200\n");
 	return SUCCESS;
 }
 
