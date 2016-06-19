@@ -22,8 +22,39 @@ int analyze_decl(ASTNode *decl, int depth) {
 			printf("ERROR: VARIABLE \"%s\" EXISTS\n", id);
 		} else {
 			int status = create_global_variable(id, NUM_GLOBAL);
+			ASTNode *rhs = SUB_NODE(decl, 2);
+			status = status && analyze_rhs(rhs, GET_AST_DATATYPE(decl));
 			if (status) return 1;
 		}
 	}
 	return 0;
+}
+
+int analyze_rhs(ASTNode *rhs, int datatype) {
+	int sp = 0;
+	ASTNode **stack = malloc(sizeof(rhs) * 255);
+	stack[sp++] = rhs;
+	
+	ASTNode *cur_node;
+	while (sp > 0) {
+		cur_node = stack[--sp];
+		switch (NODE_TYPE(cur_node)) {
+		case CONST_NODE:
+			sp--;
+			break;
+		case ARITHOP_NODE:
+			stack[sp++] = SUB_NODE(cur_node, 1);
+			stack[sp++] = SUB_NODE(cur_node, 0);
+			break;
+		case BOOLOP_NODE:
+			stack[sp++] = SUB_NODE(cur_node, 1);
+			stack[sp++] = SUB_NODE(cur_node, 0);
+			break;
+		case VAR_NODE:
+			if (GET_AST_DATATYPE(cur_node) == datatype) sp--;
+			else return 0;
+			break;
+		}
+	}
+	return 1;	
 }

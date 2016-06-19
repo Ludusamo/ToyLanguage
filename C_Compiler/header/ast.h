@@ -9,6 +9,7 @@
 #define GET_CONST_INT(op_ast) *(int*)op_ast->data
 #define GET_AST_DECL_ID(ast) (char*) ast->sub_nodes[1]->data
 #define NODE_TYPE(ast) ast->type
+#define GET_AST_DATATYPE(ast) *(int*) ast->sub_nodes[0]->data
 
 typedef struct ASTNode ASTNode;
 
