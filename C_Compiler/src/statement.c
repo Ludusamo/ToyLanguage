@@ -49,7 +49,7 @@ void tokenize_statement(Statement *statement) {
 				mode = is_whitespace(s[i]) ? 0 : 2;
 			}
 		} else if (mode == 2) { // Other
-			if (isalnum(s[i]) || is_whitespace(s[i])) {
+			if (isalnum(s[i]) || is_whitespace(s[i]) || is_paren(s[i])) {
 				buffer[bi++] = '\0';
 				bi = 0;
 				add_token(statement, buffer);
@@ -62,4 +62,8 @@ void tokenize_statement(Statement *statement) {
 
 int is_whitespace(char c) {
 	return c <= 32;
+}
+
+int is_paren(char c) {
+	return c == '(' || c == ')';
 }
