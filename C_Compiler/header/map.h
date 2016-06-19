@@ -14,6 +14,7 @@ struct Map_Item {
 
 typedef struct {
 	Map_Item *root;
+	int num_values;
 } Map;
 
 Map *create_map();

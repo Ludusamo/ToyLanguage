@@ -2,6 +2,7 @@
 
 Map *create_map() {
 	Map *m = malloc(sizeof(Map));
+	m->num_values = 0;
 	return m;
 }
 
@@ -76,14 +77,14 @@ Map_Item *rbt_insert_r(Map_Item *root, const char *key, int data) {
 			}
 		}
 	}
-
+	
 	return root;
 }
 
 int rbt_insert(Map *tree, const char *key, int data) {
 	tree->root = rbt_insert_r(tree->root, key, data);
 	tree->root->red = 0;
-
+	tree->num_values++;
 	return 1;
 }
 
@@ -159,6 +160,7 @@ int rbt_remove(Map *tree, const char* key) {
 			tree->root->red = 0;
 		}
 	}
+	tree->num_values--;
 	return 1;
 }
 
