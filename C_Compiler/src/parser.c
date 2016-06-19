@@ -16,10 +16,10 @@ ASTNode *parse(Statement *statements) {
 
 ASTNode *parse_line(Statement *statement) {
 	ASTNode *node = malloc(sizeof(ASTNode));
-	printf("%s\n", statement->statement_str);
+	printf("%s", statement->statement_str);
 	node = parse_declaration(statement);
 	if (node) {
-		printf("Identified as a declaration.\n".
+		printf("Identified as a declaration.\n");
 		statement->type = DECL;
 		return node;
 	}
