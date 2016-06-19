@@ -27,7 +27,7 @@ int create_function(const char *key, int addr) {
 int get_global_addr(const char *key) {
 	Map_Item *v = rbt_find(global_memory, key);
 	if (v) return v->data;
-	else return -1;
+	return -1;
 }
 
 int get_local_offset(const char *key) {

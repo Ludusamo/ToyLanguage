@@ -5,6 +5,8 @@
 #include "stdlib.h"
 #include "map.h"
 
+#define NUM_GLOBAL global_memory->num_values
+
 Map *global_memory, *local_memory, *function_addresses;
 
 void init_mem();

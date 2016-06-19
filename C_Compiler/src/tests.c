@@ -222,14 +222,15 @@ int test_semantic_analysis() {
 	num_lines = 2;
 
 	Statement *statements = malloc(sizeof(Statement) * 2);
-	Statement *statement1 = create_statement("int a = 100 * (300 + 200)");
-	Statement *statement2 = create_statement("int b = 200");
+	Statement *statement1 = create_statement("int a = 100 * (300 + 200)\n");
+	Statement *statement2 = create_statement("int b = 200\n");
 	tokenize_statement(statement1);
 	tokenize_statement(statement2);
 	statements[0] = *statement1;
 	statements[1] = *statement2;
 
 	ASTNode *prog = parse(statements);
-	semantic_analysis(prog);
-	return FAILURE;
+	int status = semantic_analysis(prog);
+	if (!status) return FAILURE;	
+	return SUCCESS;
 }
