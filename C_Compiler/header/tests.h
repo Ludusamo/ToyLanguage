@@ -11,6 +11,7 @@
 #include "parser.h"
 #include "ast.h"
 #include "shared_values.h"
+#include "semantic.h"
 
 #define MAX_TESTS 1000
 
@@ -49,5 +50,7 @@ int test_parse();
 int test_rhs();
 
 int test_ast();
+
+int test_semantic_analysis();
 
 #endif // TESTS_H

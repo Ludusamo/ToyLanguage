@@ -27,6 +27,7 @@ void initialize() {
 	create_test("Parser", &test_parse);
 	create_test("RHS", &test_rhs);
 	create_test("AST", &test_ast);
+	create_test("Semantic Analysis", &test_semantic_analysis);
 }
 
 int main() {
