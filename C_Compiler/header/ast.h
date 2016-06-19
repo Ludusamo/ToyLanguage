@@ -4,6 +4,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define SUB_NODE(ast, num) ast->sub_nodes[num]
+#define GET_OP_TYPE(op_ast) *(int*)op_ast->data
+#define GET_CONST_INT(op_ast) *(int*)op_ast->data
+#define GET_AST_DECL_ID(ast) (char*) ast->sub_nodes[1]->data
+#define NODE_TYPE(ast) ast->type
+
 typedef struct ASTNode ASTNode;
 
 typedef enum {
@@ -13,7 +19,8 @@ typedef enum {
 	ID_NODE,
 	DATATYPE_NODE,
 	ARITHOP_NODE,
-	BOOLOP_NODE
+	BOOLOP_NODE,
+	VAR_NODE
 } AST_TYPE;
 
 struct ASTNode {
@@ -35,5 +42,7 @@ ASTNode *create_decl_ast(int *datatype, const char *id, ASTNode *rhs);
 
 ASTNode *create_arithop_ast(int *operation);
 ASTNode *create_boolop_ast(int *operation);
+
+ASTNode *create_var_ast(int *datatype, const char *id);
 
 #endif // AST_H

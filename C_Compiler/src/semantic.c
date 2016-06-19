@@ -2,12 +2,12 @@
 
 int semantic_analysis(ASTNode *prog) {
 	init_mem();
-	if (prog->type != PROG_NODE) return 0;
+	if (NODE_TYPE(prog) != PROG_NODE) return 0;
 	int status = 1;
 	for (int i = 0; i < num_lines; i++) {
-		switch (prog->sub_nodes[i]->type) {
+		switch (NODE_TYPE(SUB_NODE(prog, i))) {
 		case DECL_NODE:
-			status = status && analyze_decl(prog->sub_nodes[i], 0);
+			status = status && analyze_decl(SUB_NODE(prog, i), 0);
 			break;
 		}
 	}
@@ -15,7 +15,7 @@ int semantic_analysis(ASTNode *prog) {
 }
 
 int analyze_decl(ASTNode *decl, int depth) {
-	char *id = (char*) decl->sub_nodes[1]->data;
+	char *id = GET_AST_DECL_ID(decl);
 	if (depth == 0) {
 		if (get_global_addr(id) != -1) {
 			// TODO: Error Checking

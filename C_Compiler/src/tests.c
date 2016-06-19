@@ -188,8 +188,8 @@ int test_parse() {
 	fclose(file);
 	ASTNode *prog = parse(statements);
 	if (statements[0].type != DECL || statements[1].type != DECL) return FAILURE;
-	if (prog->type != 0) return FAILURE;
-	if (prog->sub_nodes[0]->type != 1) return FAILURE;
+	if (NODE_TYPE(prog) != 0) return FAILURE;
+	if (NODE_TYPE(SUB_NODE(prog, 0)) != 1) return FAILURE;
 	return SUCCESS;
 }
 
@@ -199,11 +199,11 @@ int test_rhs() {
 	
 	ASTNode *rhs = parse_rhs(statement, 3);
 	if (!rhs) return FAILURE;
-	if (rhs->type != ARITHOP_NODE || *(int*) rhs->data != MULTIPLY) return FAILURE;
-	if (rhs->sub_nodes[1]->type != ARITHOP_NODE || *(int*) rhs->sub_nodes[1]->data != PLUS) return FAILURE;
-	if (*(int*)(rhs->sub_nodes[0]->data) != 100) return FAILURE;
-	if (*(int*)(rhs->sub_nodes[1]->sub_nodes[0]->data) != 300) return FAILURE;
-	if (*(int*)(rhs->sub_nodes[1]->sub_nodes[1]->data) != 200) return FAILURE;
+	if (NODE_TYPE(rhs) != ARITHOP_NODE || GET_OP_TYPE(rhs) != MULTIPLY) return FAILURE;
+	if (NODE_TYPE(SUB_NODE(rhs, 1)) != ARITHOP_NODE || GET_OP_TYPE(SUB_NODE(rhs, 1)) != PLUS) return FAILURE;
+	if (GET_CONST_INT(SUB_NODE(rhs, 0)) != 100) return FAILURE;
+	if (GET_CONST_INT(SUB_NODE(SUB_NODE(rhs, 1), 0)) != 300) return FAILURE;
+	if (GET_CONST_INT(SUB_NODE(SUB_NODE(rhs, 1), 1)) != 200) return FAILURE;
 	return SUCCESS;
 }
 
@@ -212,9 +212,9 @@ int test_ast() {
 	int b = 20;
 	ASTNode *rhs = create_const_ast(&b);
 	ASTNode *node = create_decl_ast(&a, "test", rhs);
-	if (node->sub_nodes[0]->type != DATATYPE_NODE) return FAILURE;
-	if (!str_equal((const char*)(node->sub_nodes[1]->data), "test")) return FAILURE;
-	if (*(int*)(node->sub_nodes[2]->data) != 20) return FAILURE;
+	if (NODE_TYPE(SUB_NODE(node, 0)) != DATATYPE_NODE) return FAILURE;
+	if (!str_equal(GET_AST_DECL_ID(node), "test")) return FAILURE;
+	if (GET_CONST_INT(SUB_NODE(node, 2)) != 20) return FAILURE;
 	return SUCCESS;
 }
 

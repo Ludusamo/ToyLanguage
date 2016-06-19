@@ -36,9 +36,9 @@ ASTNode *create_decl_ast(int *datatype, const char *id, ASTNode *rhs) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = DECL_NODE;
 	node->sub_nodes = malloc(sizeof(ASTNode) * 3);
-	node->sub_nodes[0] = create_datatype_ast(datatype);
-	node->sub_nodes[1] = create_id_ast(id);
-	node->sub_nodes[2] = rhs;
+	SUB_NODE(node, 0) = create_datatype_ast(datatype);
+	SUB_NODE(node, 1) = create_id_ast(id);
+	SUB_NODE(node, 2) = rhs;
 	node->num_sub = 3;
 	return node;
 }
@@ -57,6 +57,16 @@ ASTNode *create_boolop_ast(int *operation) {
 	node->type = BOOLOP_NODE;
 	node->data = (void*) operation;
 	node->sub_nodes = malloc(sizeof(ASTNode) * 2);
+	node->num_sub = 2;
+	return node;
+}
+
+ASTNode *create_var_ast(int *datatype, const char *id) {
+	ASTNode *node = malloc(sizeof(ASTNode));
+	node->type = VAR_NODE;
+	node->sub_nodes = malloc(sizeof(ASTNode) * 2);
+	SUB_NODE(node, 0) = create_datatype_ast(datatype);
+	SUB_NODE(node, 1) = create_id_ast(id);
 	node->num_sub = 2;
 	return node;
 }

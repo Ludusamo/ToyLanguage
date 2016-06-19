@@ -6,7 +6,7 @@ ASTNode *parse(Statement *statements) {
 		ASTNode *node = parse_line(&statements[i]);
 		if (node) {
 			// TODO: Successful Code
-			program->sub_nodes[i] = node;
+			SUB_NODE(program, i) = node;
 		} else {
 			// TODO: Failure Code
 		}
@@ -43,20 +43,20 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 		ASTNode *lhs = create_const_ast(create_data_packet(tokens[rhs_index]));
 		ASTNode *op = parse_rhs(statement, rhs_index + 1);
 		if (op) {
-			if (!op->sub_nodes[0]) op->sub_nodes[0] = lhs;
+			if (!SUB_NODE(op, 0)) SUB_NODE(op, 0) = lhs;
 			else {
 				ASTNode *leftmost = op;
-				while (leftmost->sub_nodes[0]) leftmost = leftmost->sub_nodes[0];
-				leftmost->sub_nodes[0] = lhs;
+				while (SUB_NODE(leftmost, 0)) leftmost = SUB_NODE(leftmost, 0);
+				SUB_NODE(leftmost, 0) = lhs;
 			}
 			return op;
 		}
 		return lhs;
 	} else if (is_type(tokens[rhs_index], ARITHOP)) {
 		ASTNode *op = create_arithop_ast(&tokens[rhs_index].subtype);
-		op->sub_nodes[1] = parse_rhs(statement, rhs_index + 1);
-		if (op->sub_nodes[1]) {
-			if (!is_type(tokens[rhs_index + 1], PAREN) && op->sub_nodes[1]->type == ARITHOP_NODE && *(int*)op->sub_nodes[1]->data < *(int*)op->data) {
+		SUB_NODE(op, 1) = parse_rhs(statement, rhs_index + 1);
+		if (SUB_NODE(op, 1)) {
+			if (!is_type(tokens[rhs_index + 1], PAREN) && NODE_TYPE(SUB_NODE(op, 1)) == ARITHOP_NODE && GET_OP_TYPE(SUB_NODE(op, 1)) < GET_OP_TYPE(op)) {
 				ASTNode *rhs = shift_op(op);
 				return rhs;
 			}
@@ -72,7 +72,7 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 				ASTNode *op = parse_rhs(statement, statement_index + 1);
 
 				if (op) {
-					op->sub_nodes[0] = lhs;
+					SUB_NODE(op, 0) = lhs;
 					return op;
 				}
 				return lhs;
@@ -84,9 +84,9 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 
 ASTNode *shift_op(ASTNode *rhs) {
 	ASTNode *p = rhs;
-	ASTNode *r = rhs->sub_nodes[1];
-	p->sub_nodes[1] = r->sub_nodes[0];
-	r->sub_nodes[0] = p;
+	ASTNode *r = SUB_NODE(rhs, 1);
+	SUB_NODE(p, 1) = SUB_NODE(r, 0);
+	SUB_NODE(r, 0) = p;
 	return r;
 }
 
