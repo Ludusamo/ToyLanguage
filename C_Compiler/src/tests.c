@@ -197,17 +197,11 @@ int test_rhs() {
 	
 	ASTNode *rhs = parse_rhs(statement, 3);
 	if (!rhs) return FAILURE;
-	printf("rhs created\n");
 	if (rhs->type != ARITHOP_NODE || *(int*) rhs->data != MULTIPLY) return FAILURE;
-	printf("First node is arithop mult\n");
 	if (rhs->sub_nodes[1]->type != ARITHOP_NODE || *(int*) rhs->sub_nodes[1]->data != PLUS) return FAILURE;
-	printf("right of rhs is arithop plus\n");
 	if (*(int*)(rhs->sub_nodes[0]->data) != 100) return FAILURE;
-	printf("left of rhs is 100\n");
 	if (*(int*)(rhs->sub_nodes[1]->sub_nodes[0]->data) != 300) return FAILURE;
-	printf("right left of rhs is 300\n");
 	if (*(int*)(rhs->sub_nodes[1]->sub_nodes[1]->data) != 200) return FAILURE;
-	printf("right right of rhs is 200\n");
 	return SUCCESS;
 }
 

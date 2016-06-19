@@ -35,7 +35,6 @@ ASTNode *parse_declaration(Statement *statement) {
 ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 	statement_index = rhs_index;
 	Token *tokens = statement->tokens;
-	printf("Current Token: %s %i\n", tokens[rhs_index].token_str, tokens[rhs_index].type);
 	if (is_const(tokens[rhs_index])) {
 		ASTNode *lhs = create_const_ast(create_data_packet(tokens[rhs_index]));
 		ASTNode *op = parse_rhs(statement, rhs_index + 1);
