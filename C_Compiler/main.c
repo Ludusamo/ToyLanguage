@@ -32,6 +32,7 @@ void initialize() {
 	create_test("RHS", &test_rhs);
 	create_test("AST", &test_ast);
 	create_test("Semantic Analysis", &test_semantic_analysis);
+	create_test("Compile", &test_compile);
 }
 
 int main() {

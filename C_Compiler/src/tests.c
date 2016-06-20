@@ -285,7 +285,14 @@ int test_compile() {
 	int status = semantic_analysis(prog);
 	if (!status) return FAILURE;
 
-	//int *instructions = compile(prog);
+	Linked_List *instructions = compile(prog);
+
+	Link *head = instructions->head;
+	printf("\nInstructions\n");
+	while (head) {
+		printf("%i\n", head->val);
+		head = head->next;
+	}
 
 	return SUCCESS;
 }
