@@ -12,6 +12,8 @@
 #include "ast.h"
 #include "shared_values.h"
 #include "semantic.h"
+#include "linked_list.h"
+#include "compiler.h"
 
 #define MAX_TESTS 1000
 
@@ -35,6 +37,11 @@ int test_map_rem();
 int test_map_find();
 int test_destroy_map();
 
+int test_create_linked_list();
+int test_add_link();
+int test_remove_link();
+int test_destroy_linked_list();
+
 int test_fileio_read();
 int test_fileio_write();
 
@@ -52,5 +59,7 @@ int test_rhs();
 int test_ast();
 
 int test_semantic_analysis();
+
+int test_compile();
 
 #endif // TESTS_H

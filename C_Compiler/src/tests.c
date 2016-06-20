@@ -109,6 +109,42 @@ int test_destroy_map() {
 	return SUCCESS;
 }
 
+int test_create_linked_list() {
+	Linked_List *list = create_linked_list();
+	if (!list) return FAILURE;
+	return SUCCESS;
+}
+
+int test_add_link() {
+	Linked_List *list = create_linked_list();
+	if (!add_link(list, 10)) return FAILURE;
+	if (!add_link(list, 20)) return FAILURE;
+	if (list->head->val != 10) return FAILURE;
+	if (list->head->next->val != 20) return FAILURE;
+	if (list->tail->val != 20) return FAILURE;
+	return SUCCESS;
+}
+
+int test_remove_link() {
+	Linked_List *list = create_linked_list();
+	if (!add_link(list, 10)) return FAILURE;
+	if (!add_link(list, 20)) return FAILURE;
+	if (list->tail->val != 20) return FAILURE;
+	if (!remove_link(list, 20)) return FAILURE;
+	if (list->tail->val != 10) return FAILURE;
+	return SUCCESS;
+}
+
+int test_destroy_linked_list() {
+	Linked_List *list = create_linked_list();
+	Link *head = list->head;
+	if (!add_link(list, 10)) return FAILURE;
+	if (!add_link(list, 20)) return FAILURE;
+	destroy_linked_list(list);
+	if (head) return FAILURE;
+	return SUCCESS;
+}
+
 int test_fileio_read() {
 	FILE *in = fopen("res/test.in", "r");
 	char *line1 = read_line(in);
@@ -232,5 +268,24 @@ int test_semantic_analysis() {
 	ASTNode *prog = parse(statements);
 	int status = semantic_analysis(prog);
 	if (!status) return FAILURE;	
+	return SUCCESS;
+}
+
+int test_compile() {
+	num_lines = 2;
+	Statement *statements = malloc(sizeof(Statement) * 2);
+	Statement *statement1 = create_statement("int a = 100 * (300 + 200)\n");
+	Statement *statement2 = create_statement("int b = 200\n");
+	tokenize_statement(statement1);
+	tokenize_statement(statement2);
+	statements[0] = *statement1;
+	statements[1] = *statement2;
+
+	ASTNode *prog = parse(statements);
+	int status = semantic_analysis(prog);
+	if (!status) return FAILURE;
+
+	//int *instructions = compile(prog);
+
 	return SUCCESS;
 }

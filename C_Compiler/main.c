@@ -17,6 +17,10 @@ void initialize() {
 	create_test("Map Remove", &test_map_rem);
 	create_test("Map Find", &test_map_find);
 	create_test("Destroy Map", &test_destroy_map);
+	create_test("Create Linked List", &test_create_linked_list);
+	create_test("Add Link", &test_add_link);
+	create_test("Remove Link", &test_remove_link);
+	create_test("Destroy Linked List", &test_destroy_linked_list);
 	create_test("File Input", &test_fileio_read);
 	create_test("File Output", &test_fileio_write);	
 	create_test("Create Token", &test_create_token);
