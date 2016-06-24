@@ -13,14 +13,14 @@ Linked_List *compile(ASTNode *program) {
 }
 
 void compile_decl(Linked_List *instructions, ASTNode *decl, int depth) {
-	int addr;
+	Memory_Address *addr;
 	if (depth == 0) addr = get_global_addr(GET_AST_DECL_ID(decl));
-	else addr = get_local_offset(GET_AST_DECL_ID(decl));
+	else addr = get_local_addr(GET_AST_DECL_ID(decl));
 	compile_rhs(instructions, SUB_NODE(decl, 2));
 
 	if (depth == 0) add_link(instructions, GSTORE_OP);
 	else add_link(instructions, STORE_OP);
-	add_link(instructions, addr);
+	add_link(instructions, addr->addr);
 }
 
 void compile_rhs(Linked_List *instructions, ASTNode *rhs) {

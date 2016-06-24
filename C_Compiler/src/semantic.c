@@ -17,12 +17,11 @@ int semantic_analysis(ASTNode *prog) {
 int analyze_decl(ASTNode *decl, int depth) {
 	char *id = GET_AST_DECL_ID(decl);
 	if (depth == 0) {
-		if (get_global_addr(id) != -1) {
+		if (get_global_addr(id)) {
 			// TODO: Error Checking
 			printf("ERROR: VARIABLE \"%s\" EXISTS\n", id);
 		} else {
-			int *addr = malloc(sizeof(int));
-			*addr = NUM_GLOBAL;
+			Memory_Address *addr = create_mem_addr(1, NUM_GLOBAL, GET_AST_DATATYPE(decl));
 			int status = create_global_variable(id, addr);
 			ASTNode *rhs = SUB_NODE(decl, 2);
 			status = status && analyze_rhs(rhs, GET_AST_DATATYPE(decl));

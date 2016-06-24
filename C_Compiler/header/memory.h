@@ -9,15 +9,24 @@
 
 Map *global_memory, *local_memory, *function_addresses;
 
+typedef struct {
+	int size; // Units of 16 bits
+	int addr;
+	int type;
+} Memory_Address;
+
 void init_mem();
 void deinit_mem();
 
-int create_global_variable(const char *key, int *addr);
-int create_local_variable(const char *key, int *offset);
-int create_function(const char *key, int *addr);
+Memory_Address *create_mem_addr(int size, int addr, int type);
+void destroy_mem_addr(Memory_Address *mem_addr);
 
-int get_global_addr(const char *key);
-int get_local_offset(const char *key);
-int get_function_addr(const char *key);
+int create_global_variable(const char *key, Memory_Address *addr);
+int create_local_variable(const char *key, Memory_Address *addr);
+int create_function(const char *key, Memory_Address *addr);
+
+Memory_Address *get_global_addr(const char *key);
+Memory_Address *get_local_addr(const char *key);
+Memory_Address *get_function_addr(const char *key);
 
 #endif // MEMORY_H
