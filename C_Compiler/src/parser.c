@@ -80,6 +80,19 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 				return lhs;
 			}
 		}
+	} else if (is_type(tokens[rhs_index], IDENTIFIER)) {
+		ASTNode *lhs = create_var_ast(0, tokens[rhs_index].token_str);
+		ASTNode *op = parse_rhs(statement, rhs_index+1);
+		if (op) {
+			if (!SUB_NODE(op, 0)) SUB_NODE(op, 0) = lhs;
+			else {
+				ASTNode *leftmost = op;
+				while (SUB_NODE(leftmost, 0)) leftmost = SUB_NODE(leftmost, 0);
+				SUB_NODE(leftmost, 0) = lhs;
+			}
+			return op;
+		}
+		return lhs;
 	}
 	return 0;
 }
