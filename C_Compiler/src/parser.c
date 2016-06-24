@@ -30,7 +30,9 @@ ASTNode *parse_declaration(Statement *statement) {
 	Token *tokens = statement->tokens;
 	if (is_type(tokens[0], DATATYPE) && is_type(tokens[1], IDENTIFIER)) {
 		ASTNode *rhs = 0;
+		int zero = 0;
 		if (is_type(tokens[2], ASSIGNMENT)) rhs = parse_rhs(statement, 3);
+		else rhs = create_const_ast((void*) &zero);
 		return create_decl_ast(&GET_DATATYPE(statement), GET_DECL_ID(statement), rhs);
 	}
 	return 0;
