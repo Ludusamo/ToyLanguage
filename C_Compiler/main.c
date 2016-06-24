@@ -5,6 +5,7 @@
 #include "token.h"
 
 void initialize() {
+	init_mem();
 	num_tests = 0;
 	create_test("String Equality", &test_str_equal);
 	create_test("String Add", &test_str_add);
@@ -39,5 +40,6 @@ int main() {
 	initialize();
 	
 	run_tests();
+	deinit_mem();
 	return 0;
 }

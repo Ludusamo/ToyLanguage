@@ -12,6 +12,18 @@ void deinit_mem() {
 	destroy_map(function_addresses);
 }
 
+void clear_mem() {
+	rbt_destroy(global_memory->root);
+	global_memory->root = 0;
+	global_memory->num_values = 0;
+	rbt_destroy(local_memory->root);
+	local_memory->root = 0;
+	local_memory->num_values = 0;
+	rbt_destroy(function_addresses->root);
+	function_addresses->root = 0;
+	function_addresses->num_values = 0;
+}
+
 Memory_Address *create_mem_addr(int size, int addr, int type) {
 	Memory_Address *mem_addr = malloc(sizeof(Memory_Address));
 	mem_addr->size = size;
@@ -53,5 +65,11 @@ Memory_Address *get_local_addr(const char *key) {
 Memory_Address *get_function_addr(const char *key) {
 	Map_Item *f = rbt_find(function_addresses, key);
 	if (f) return (Memory_Address*) f->data;
+	else return 0;
+}
+
+int *get_datatype_by_key(const char *key) {
+	Map_Item *d = rbt_find(datatypes, key);
+	if (d) return (int*) d->data;
 	else return 0;
 }

@@ -8,6 +8,7 @@
 #define GET_OP_TYPE(op_ast) *(int*)op_ast->data
 #define GET_CONST_INT(op_ast) *(int*)op_ast->data
 #define GET_AST_DECL_ID(ast) (char*) ast->sub_nodes[1]->data
+#define GET_AST_STR_DATA(ast) (char*) ast->data
 #define NODE_TYPE(ast) ast->type
 #define GET_AST_DATATYPE(ast) *(int*) ast->sub_nodes[0]->data
 
@@ -44,6 +45,6 @@ ASTNode *create_decl_ast(int *datatype, const char *id, ASTNode *rhs);
 ASTNode *create_arithop_ast(int *operation);
 ASTNode *create_boolop_ast(int *operation);
 
-ASTNode *create_var_ast(int *datatype, const char *id);
+ASTNode *create_var_ast(const char *id);
 
 #endif // AST_H

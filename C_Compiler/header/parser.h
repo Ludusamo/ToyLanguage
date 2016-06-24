@@ -4,6 +4,7 @@
 #include "token.h"
 #include "statement.h"
 #include "ast.h"
+#include "memory.h"
 #include "shared_values.h"
 
 int statement_index;

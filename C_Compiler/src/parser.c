@@ -75,8 +75,8 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 			}
 		}
 	} else if (is_type(tokens[rhs_index], IDENTIFIER)) {
-		ASTNode *lhs = create_var_ast(0, tokens[rhs_index].token_str);
-		ASTNode *op = parse_rhs(statement, rhs_index+1);
+		ASTNode *lhs = create_var_ast(tokens[rhs_index].token_str);
+		ASTNode *op = parse_rhs(statement, rhs_index + 1);
 		if (op) {
 			return append_to_leftmost(lhs, op);
 		}

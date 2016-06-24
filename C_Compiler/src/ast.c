@@ -61,12 +61,11 @@ ASTNode *create_boolop_ast(int *operation) {
 	return node;
 }
 
-ASTNode *create_var_ast(int *datatype, const char *id) {
+ASTNode *create_var_ast(const char *id) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = VAR_NODE;
-	node->sub_nodes = malloc(sizeof(ASTNode) * 2);
-	SUB_NODE(node, 0) = create_datatype_ast(datatype);
-	SUB_NODE(node, 1) = create_id_ast(id);
-	node->num_sub = 2;
+	node->sub_nodes = malloc(sizeof(ASTNode) * 1);
+	SUB_NODE(node, 0) = create_id_ast(id);
+	node->num_sub = 1;
 	return node;
 }

@@ -1,7 +1,6 @@
 #include "semantic.h"
 
 int semantic_analysis(ASTNode *prog) {
-	init_mem();
 	if (NODE_TYPE(prog) != PROG_NODE) return 0;
 	int status = 1;
 	for (int i = 0; i < num_lines; i++) {
@@ -51,10 +50,16 @@ int analyze_rhs(ASTNode *rhs, int datatype) {
 			stack[sp++] = SUB_NODE(cur_node, 1);
 			stack[sp++] = SUB_NODE(cur_node, 0);
 			break;
-		case VAR_NODE:	
-			if (GET_AST_DATATYPE(cur_node) == datatype) sp--;
+		case VAR_NODE: {
+			Memory_Address *var = get_global_addr(GET_AST_STR_DATA(SUB_NODE(cur_node, 0)));
+			if (!var) {
+				printf("Variable \"%s\" has not been declared.\n", GET_AST_STR_DATA(SUB_NODE(cur_node, 0)));
+				return 0;
+			}
+			if (var->type == datatype) sp--;
 			else return 0;
 			break;
+		}
 		}
 	}
 	return 1;	
