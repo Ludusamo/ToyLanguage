@@ -45,13 +45,7 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 		ASTNode *lhs = create_const_ast(create_data_packet(tokens[rhs_index]));
 		ASTNode *op = parse_rhs(statement, rhs_index + 1);
 		if (op) {
-			if (!SUB_NODE(op, 0)) SUB_NODE(op, 0) = lhs;
-			else {
-				ASTNode *leftmost = op;
-				while (SUB_NODE(leftmost, 0)) leftmost = SUB_NODE(leftmost, 0);
-				SUB_NODE(leftmost, 0) = lhs;
-			}
-			return op;
+			return append_to_leftmost(lhs, op);
 		}
 		return lhs;
 	} else if (is_type(tokens[rhs_index], ARITHOP)) {
@@ -84,13 +78,7 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 		ASTNode *lhs = create_var_ast(0, tokens[rhs_index].token_str);
 		ASTNode *op = parse_rhs(statement, rhs_index+1);
 		if (op) {
-			if (!SUB_NODE(op, 0)) SUB_NODE(op, 0) = lhs;
-			else {
-				ASTNode *leftmost = op;
-				while (SUB_NODE(leftmost, 0)) leftmost = SUB_NODE(leftmost, 0);
-				SUB_NODE(leftmost, 0) = lhs;
-			}
-			return op;
+			return append_to_leftmost(lhs, op);
 		}
 		return lhs;
 	}
@@ -107,4 +95,11 @@ ASTNode *shift_op(ASTNode *rhs) {
 
 int is_const(Token token) {
 	return is_type(token, NUM) || is_type(token, BOOLVAL);
+}
+
+ASTNode *append_to_leftmost(ASTNode *lhs, ASTNode *rhs) {
+	ASTNode *leftmost = rhs;
+	while (SUB_NODE(leftmost, 0)) leftmost = SUB_NODE(leftmost, 0);
+	SUB_NODE(leftmost, 0) = lhs;
+	return rhs;
 }
