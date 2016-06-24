@@ -57,24 +57,26 @@ int test_create_map() {
 
 int test_map_add() {
 	Map *m = create_map();
-	rbt_insert(m, "c", 4);
-	rbt_insert(m, "b", 3);
-	rbt_insert(m, "a", 2);
+	int c = 1, b = 3, a = 2, d = 5, b2 = 6;
+	rbt_insert(m, "c", (void*) &c);
+	rbt_insert(m, "b", (void*) &b);
+	rbt_insert(m, "a", (void*) &a);
 	if (!str_equal(m->root->key, "b")) return FAILURE;
-	rbt_insert(m, "d", 5);
+	rbt_insert(m, "d", (void*) &d);
 	if (!str_equal(m->root->link[1]->link[1]->key, "d")) return FAILURE;
-	rbt_insert(m, "b", 6);
-	if (m->root->data == 6) return FAILURE;
+	rbt_insert(m, "b", (void*) &b2);
+	if (*(int*)m->root->data == 6) return FAILURE;
 	if (m->num_values != 5) return FAILURE;
 	return SUCCESS;
 }
 
 int test_map_rem() {
 	Map *m = create_map();
-	rbt_insert(m, "d", 5);
-	rbt_insert(m, "c", 4);
-	rbt_insert(m, "b", 3);
-	rbt_insert(m, "a", 2);
+	int d = 5, c = 4, b = 3, a = 2;
+	rbt_insert(m, "d", (void*) &d);
+	rbt_insert(m, "c", (void*) &c);
+	rbt_insert(m, "b", (void*) &b);
+	rbt_insert(m, "a", (void*) &a);
 	rbt_remove(m, "b");
 	if (m->num_values != 3) return FAILURE;
 	if (!str_equal(m->root->key, "c")) return FAILURE;
@@ -86,11 +88,12 @@ int test_map_rem() {
 
 int test_map_find() {
 	Map *m = create_map();
-	rbt_insert(m, "d", 1);
-	rbt_insert(m, "c", 2);
-	rbt_insert(m, "a", 3);
-	rbt_insert(m, "b", 4);
-	rbt_insert(m, "l", 5);
+	int d = 1, c = 2, a = 3, b = 4, l = 5;
+	rbt_insert(m, "d", (void*) &d);
+	rbt_insert(m, "c", (void*) &c);
+	rbt_insert(m, "a", (void*) &a);
+	rbt_insert(m, "b", (void*) &b);
+	rbt_insert(m, "l", (void*) &l);
 	Map_Item *i = rbt_find(m, "b");	
 	if (i != m->root->link[0]->link[1]) return FAILURE;
 	i = rbt_find(m, "k");
@@ -100,11 +103,12 @@ int test_map_find() {
 
 int test_destroy_map() {
 	Map *m = create_map();
-	rbt_insert(m, "d", 1);
-	rbt_insert(m, "c", 2);
-	rbt_insert(m, "a", 3);
-	rbt_insert(m, "b", 4);
-	rbt_insert(m, "l", 5);
+	int d = 1, c = 2, a = 3, b = 4, l = 5;
+	rbt_insert(m, "d", (void*) &d);
+	rbt_insert(m, "c", (void*) &c);
+	rbt_insert(m, "a", (void*) &a);
+	rbt_insert(m, "b", (void*) &b);
+	rbt_insert(m, "l", (void*) &l);
 	destroy_map(m);
 	return SUCCESS;
 }

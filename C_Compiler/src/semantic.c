@@ -21,7 +21,9 @@ int analyze_decl(ASTNode *decl, int depth) {
 			// TODO: Error Checking
 			printf("ERROR: VARIABLE \"%s\" EXISTS\n", id);
 		} else {
-			int status = create_global_variable(id, NUM_GLOBAL);
+			int *addr = malloc(sizeof(int));
+			*addr = NUM_GLOBAL;
+			int status = create_global_variable(id, addr);
 			ASTNode *rhs = SUB_NODE(decl, 2);
 			status = status && analyze_rhs(rhs, GET_AST_DATATYPE(decl));
 			if (status) return 1;
@@ -50,7 +52,7 @@ int analyze_rhs(ASTNode *rhs, int datatype) {
 			stack[sp++] = SUB_NODE(cur_node, 1);
 			stack[sp++] = SUB_NODE(cur_node, 0);
 			break;
-		case VAR_NODE:
+		case VAR_NODE:	
 			if (GET_AST_DATATYPE(cur_node) == datatype) sp--;
 			else return 0;
 			break;

@@ -43,7 +43,7 @@ Map_Item *rbt_double(Map_Item *item, int dir) {
 	return rbt_single(item, dir);
 }
 
-Map_Item *make_item(const char *key, int data) {
+Map_Item *make_item(const char *key, void *data) {
 	Map_Item *item = malloc(sizeof(Map_Item));
 	item->red = 1;
 	item->key = key;
@@ -53,7 +53,7 @@ Map_Item *make_item(const char *key, int data) {
 	return item;
 }
 
-Map_Item *rbt_insert_r(Map_Item *root, const char *key, int data) {
+Map_Item *rbt_insert_r(Map_Item *root, const char *key, void *data) {
 	if (!root) {
 		root = make_item(key, data);
 	} else if (data != root->data) {
@@ -81,7 +81,7 @@ Map_Item *rbt_insert_r(Map_Item *root, const char *key, int data) {
 	return root;
 }
 
-int rbt_insert(Map *tree, const char *key, int data) {
+int rbt_insert(Map *tree, const char *key, void *data) {
 	tree->root = rbt_insert_r(tree->root, key, data);
 	tree->root->red = 0;
 	tree->num_values++;
