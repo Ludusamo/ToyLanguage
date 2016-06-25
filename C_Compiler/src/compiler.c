@@ -9,7 +9,7 @@ Linked_List *compile(ASTNode *program) {
 			break;
 		}
 	}
-	add_link(instructions, 0);
+	add_link(instructions, HALT_OP);
 	return instructions;
 }
 
@@ -17,30 +17,33 @@ void compile_decl(Linked_List *instructions, ASTNode *decl, int depth) {
 	Memory_Address *addr;
 	if (depth == 0) addr = get_global_addr(GET_AST_DECL_ID(decl));
 	else addr = get_local_addr(GET_AST_DECL_ID(decl));
-	compile_rhs(instructions, SUB_NODE(decl, 2));
+	compile_rhs(instructions, SUB_NODE(decl, 2), depth);
 
 	if (depth == 0) add_link(instructions, GSTORE_OP);
 	else add_link(instructions, STORE_OP);
 	add_link(instructions, addr->addr);
 }
 
-void compile_rhs(Linked_List *instructions, ASTNode *rhs) {
+void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth) {
 	switch (NODE_TYPE(rhs)) {
 	case CONST_NODE:
 		compile_const(instructions, rhs);
 		break;
 	case ARITHOP_NODE:
-		compile_rhs(instructions, SUB_NODE(rhs, 0));
-		compile_rhs(instructions, SUB_NODE(rhs, 1));
+		compile_rhs(instructions, SUB_NODE(rhs, 0), depth);
+		compile_rhs(instructions, SUB_NODE(rhs, 1), depth);
 		compile_arithop(instructions, rhs);
 		break;
 	case BOOLOP_NODE:
-		compile_rhs(instructions, SUB_NODE(rhs, 0));
-		compile_rhs(instructions, SUB_NODE(rhs, 1));
+		compile_rhs(instructions, SUB_NODE(rhs, 0), depth);
+		compile_rhs(instructions, SUB_NODE(rhs, 1), depth);
 		compile_boolop(instructions, rhs);
 		break;
 	case VAR_NODE:
-		compile_global_var(instructions, rhs);
+		if (depth == 0) compile_global_var(instructions, rhs);
+		else {
+			// TODO
+		}
 		break;
 	}
 }
