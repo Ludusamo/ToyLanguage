@@ -228,8 +228,9 @@ int test_parse() {
 	fclose(file);
 	ASTNode *prog = parse(statements);
 	if (statements[0].type != DECL || statements[1].type != DECL) return FAILURE;
-	if (NODE_TYPE(prog) != 0) return FAILURE;
-	if (NODE_TYPE(SUB_NODE(prog, 0)) != 1) return FAILURE;
+	if (NODE_TYPE(prog) != PROG_NODE) return FAILURE;
+	if (NODE_TYPE(SUB_NODE(prog, 0)) != DECL_NODE) return FAILURE;
+	if (NODE_TYPE(SUB_NODE(prog, 2)) != ASSIGN_NODE) return FAILURE;
 	return SUCCESS;
 }
 

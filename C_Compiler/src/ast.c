@@ -43,6 +43,16 @@ ASTNode *create_decl_ast(int *datatype, const char *id, ASTNode *rhs) {
 	return node;
 }
 
+ASTNode *create_assignment_ast(const char *id, ASTNode *rhs) {
+	ASTNode *node = malloc(sizeof(ASTNode));
+	node->type = ASSIGN_NODE;
+	node->sub_nodes = malloc(sizeof(ASTNode) * 2);
+	SUB_NODE(node, 0) = create_id_ast(id);
+	SUB_NODE(node, 1) = rhs;
+	node->num_sub = 2;
+	return node;
+}
+
 ASTNode *create_arithop_ast(int *operation) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = ARITHOP_NODE;

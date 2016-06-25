@@ -18,10 +18,13 @@ ASTNode *parse_line(Statement *statement) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	printf("%s", statement->statement_str);
 	node = parse_declaration(statement);
-	if (node) {
+	if (node = parse_declaration(statement)) {
 		printf("Identified as a declaration.\n");
-		statement->type = DECL;
 		return node;
+	} else if (node = parse_assignment(statement)) {
+		printf("Identified as a assignment.\n");
+		return node;
+
 	}
 	return 0;
 }
@@ -34,6 +37,16 @@ ASTNode *parse_declaration(Statement *statement) {
 		if (is_type(tokens[2], ASSIGNMENT)) rhs = parse_rhs(statement, 3);
 		else rhs = create_const_ast((void*) &zero);
 		return create_decl_ast(&GET_DATATYPE(statement), GET_DECL_ID(statement), rhs);
+	}
+	return 0;
+}
+
+ASTNode *parse_assignment(Statement *statement) {
+	Token *tokens = statement->tokens;
+	if (is_type(tokens[0], IDENTIFIER) && is_type(tokens[1], ASSIGNMENT)) {
+		ASTNode *rhs = parse_rhs(statement, 2);
+		if (rhs)
+			return create_assignment_ast(tokens[0].token_str, rhs);	
 	}
 	return 0;
 }
