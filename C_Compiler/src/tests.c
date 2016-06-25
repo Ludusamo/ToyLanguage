@@ -235,16 +235,17 @@ int test_parse() {
 }
 
 int test_rhs() {
-	Statement *statement = create_statement("int a = b * (300 + 200)");
+	Statement *statement = create_statement("int a = b * 300 == 200");
 	tokenize_statement(statement);
 	
 	ASTNode *rhs = parse_rhs(statement, 3);
 	if (!rhs) return FAILURE;
-	if (NODE_TYPE(rhs) != ARITHOP_NODE || GET_OP_TYPE(rhs) != MULTIPLY) return FAILURE;
-	if (NODE_TYPE(SUB_NODE(rhs, 1)) != ARITHOP_NODE || GET_OP_TYPE(SUB_NODE(rhs, 1)) != PLUS) return FAILURE;
-	if (NODE_TYPE(SUB_NODE(rhs, 0)) != VAR_NODE) return FAILURE;
-	if (GET_CONST_INT(SUB_NODE(SUB_NODE(rhs, 1), 0)) != 300) return FAILURE;
-	if (GET_CONST_INT(SUB_NODE(SUB_NODE(rhs, 1), 1)) != 200) return FAILURE;
+	printf("%d\n", NODE_TYPE(rhs));
+	if (NODE_TYPE(rhs) != BOOLOP_NODE || GET_OP_TYPE(rhs) != EQ) return FAILURE;
+	if (NODE_TYPE(SUB_NODE(rhs, 0)) != ARITHOP_NODE || GET_OP_TYPE(SUB_NODE(rhs, 0)) != MULTIPLY) return FAILURE;
+	if (NODE_TYPE(SUB_NODE(SUB_NODE(rhs, 0), 0)) != VAR_NODE) return FAILURE;
+	if (GET_CONST_INT(SUB_NODE(SUB_NODE(rhs, 0), 1)) != 300) return FAILURE;
+	if (GET_CONST_INT(SUB_NODE(rhs, 1)) != 200) return FAILURE;
 	return SUCCESS;
 }
 
