@@ -8,6 +8,8 @@ int semantic_analysis(ASTNode *prog) {
 		case DECL_NODE:
 			status = status && analyze_decl(SUB_NODE(prog, i), 0);
 			break;
+		case ASSIGN_NODE:
+			status = status && analyze_assignment(SUB_NODE(prog, i), 0);
 		}
 	}
 	return status;
@@ -24,6 +26,22 @@ int analyze_decl(ASTNode *decl, int depth) {
 			int status = create_global_variable(id, addr);
 			ASTNode *rhs = SUB_NODE(decl, 2);
 			status = status && analyze_rhs(rhs, GET_AST_DATATYPE(decl));
+			if (status) return 1;
+		}
+	}
+	return 0;
+}
+
+int analyze_assignment(ASTNode *assign, int depth) {
+	char *id = GET_AST_STR_DATA(SUB_NODE(assign, 0));
+	if (depth == 0) {
+		if (!get_global_addr(id)) {
+			// TODO: Error Checking
+			printf("ERROR: VARIABLE \"%s\" DOES NOT EXISTS\n", id);
+		} else {
+			ASTNode *rhs = SUB_NODE(assign, 1);
+			int status = 0;
+			if (rhs) status = analyze_rhs(SUB_NODE(assign, 1), get_global_addr(id)->type);
 			if (status) return 1;
 		}
 	}

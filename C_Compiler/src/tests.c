@@ -260,15 +260,18 @@ int test_ast() {
 }
 
 int test_semantic_analysis() {
-	num_lines = 2;
+	num_lines = 3;
 
-	Statement *statements = malloc(sizeof(Statement) * 2);
+	Statement *statements = malloc(sizeof(Statement) * 3);
 	Statement *statement1 = create_statement("int a = 100 * (300 + 200)\n");
 	Statement *statement2 = create_statement("int b = a\n");
+	Statement *statement3 = create_statement("a = 1\n");
 	tokenize_statement(statement1);
 	tokenize_statement(statement2);
+	tokenize_statement(statement3);
 	statements[0] = *statement1;
 	statements[1] = *statement2;
+	statements[2] = *statement3;
 
 	ASTNode *prog = parse(statements);
 	int status = semantic_analysis(prog);
