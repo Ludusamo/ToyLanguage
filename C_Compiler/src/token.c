@@ -27,10 +27,7 @@ void identify_token_type(Token *token) {
 	const char *s = token->token_str;
 	if (s[0] <= 32) {
 		token->type = WHITESPACE;
-		return;
-	} else if (s[0] == '=') {
-		token->type = ASSIGNMENT;
-		return;
+		return;	
 	} else if ((list_index = is_in_list(data_sub, NUM_DATATYPE, s)) != -1) {
 		token->type = DATATYPE;
 		token->subtype = list_index;
@@ -42,6 +39,9 @@ void identify_token_type(Token *token) {
 	} else if ((list_index = is_in_list(boolop_sub, NUM_BOOLOP, s)) != -1) {
 		token->type = BOOLOP;
 		token->subtype = list_index;
+		return;
+	} else if (s[0] == '=') {
+		token->type = ASSIGNMENT;
 		return;
 	} else if ((list_index = is_in_list(paren_sub, NUM_PAREN, s)) != -1) {
 		token->type = PAREN;
