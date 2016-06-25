@@ -280,7 +280,7 @@ int test_compile() {
 	num_lines = 2;
 	Statement *statements = malloc(sizeof(Statement) * 2);
 	Statement *statement1 = create_statement("int a = 100 * (300 + 200)\n");
-	Statement *statement2 = create_statement("int b\n");
+	Statement *statement2 = create_statement("int b = a\n");
 	tokenize_statement(statement1);
 	tokenize_statement(statement2);
 	statements[0] = *statement1;

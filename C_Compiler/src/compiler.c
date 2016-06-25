@@ -9,6 +9,7 @@ Linked_List *compile(ASTNode *program) {
 			break;
 		}
 	}
+	add_link(instructions, 0);
 	return instructions;
 }
 
@@ -39,6 +40,7 @@ void compile_rhs(Linked_List *instructions, ASTNode *rhs) {
 		compile_boolop(instructions, rhs);
 		break;
 	case VAR_NODE:
+		compile_global_var(instructions, rhs);
 		break;
 	}
 }
@@ -60,4 +62,9 @@ void compile_boolop(Linked_List *instructions, ASTNode *arithop) {
 void compile_const(Linked_List *instructions, ASTNode *const_node) {
 	add_link(instructions, PUSH_OP);
 	add_link(instructions, GET_CONST_INT(const_node));
+}
+
+void compile_global_var(Linked_List *instructions, ASTNode *var_node) {
+	add_link(instructions, GLOAD_OP);	
+	add_link(instructions, get_global_addr(GET_AST_STR_DATA(SUB_NODE(var_node, 0)))->addr);
 }

@@ -44,5 +44,6 @@ void compile_rhs(Linked_List *instructions, ASTNode *rhs);
 void compile_arithop(Linked_List *instructions, ASTNode *arithop);
 void compile_boolop(Linked_List *instructions, ASTNode *boolop);
 void compile_const(Linked_List *instructions, ASTNode *const_node);
+void compile_global_var(Linked_List *instructions, ASTNode *var_node);
 
 #endif // COMPILER_H

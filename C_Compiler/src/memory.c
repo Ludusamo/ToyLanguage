@@ -59,7 +59,6 @@ Memory_Address *get_local_addr(const char *key) {
 	Map_Item *v = rbt_find(local_memory, key);
 	if (v) return (Memory_Address*) v->data;
 	else return 0;
-
 }
 
 Memory_Address *get_function_addr(const char *key) {
