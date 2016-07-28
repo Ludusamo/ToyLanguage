@@ -58,8 +58,16 @@ void compile_arithop(Linked_List *instructions, ASTNode *arithop) {
 	add_link(instructions, op);
 }
 
-void compile_boolop(Linked_List *instructions, ASTNode *arithop) {
-
+void compile_boolop(Linked_List *instructions, ASTNode *boolop) {
+	int type = GET_OP_TYPE(boolop);
+	int op;
+	if (type == EQ) op = EQ_OP;
+	if (type == NEQ) op = NEQ_OP;
+	if (type == LT) op = LT_OP;
+	if (type == GT) op = GT_OP;
+	if (type == LTE) op = LTE_OP;
+	if (type == GTE) op = GTE_OP;
+	add_link(instructions, op);
 }
 
 void compile_const(Linked_List *instructions, ASTNode *const_node) {

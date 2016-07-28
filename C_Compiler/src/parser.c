@@ -65,7 +65,7 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 		ASTNode *op = create_arithop_ast(&tokens[rhs_index].subtype);
 		SUB_NODE(op, 1) = parse_rhs(statement, rhs_index + 1);
 		if (SUB_NODE(op, 1)) {
-			if ((!is_type(tokens[rhs_index + 1], PAREN) && NODE_TYPE(SUB_NODE(op, 1)) == ARITHOP_NODE && GET_OP_TYPE(SUB_NODE(op, 1)) < GET_OP_TYPE(op)) || NODE_TYPE(SUB_NODE(op, 1)) == BOOLOP_NODE) {
+			if (!is_type(tokens[rhs_index + 1], PAREN) && ((NODE_TYPE(SUB_NODE(op, 1)) == ARITHOP_NODE && GET_OP_TYPE(SUB_NODE(op, 1)) < GET_OP_TYPE(op)) || NODE_TYPE(SUB_NODE(op, 1)) == BOOLOP_NODE)) {
 				ASTNode *rhs = shift_op(op);
 				return rhs;
 			}
@@ -75,7 +75,7 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 		ASTNode *op = create_boolop_ast(&tokens[rhs_index].subtype);
 		SUB_NODE(op, 1) = parse_rhs(statement, rhs_index + 1);
 		if (SUB_NODE(op, 1)) {
-			if ((!is_type(tokens[rhs_index + 1], PAREN) && NODE_TYPE(SUB_NODE(op, 1)) == ARITHOP_NODE && GET_OP_TYPE(SUB_NODE(op, 1)) < GET_OP_TYPE(op)) || NODE_TYPE(SUB_NODE(op, 1)) == BOOLOP_NODE) {
+			if (!is_type(tokens[rhs_index + 1], PAREN) && ((NODE_TYPE(SUB_NODE(op, 1)) == ARITHOP_NODE && GET_OP_TYPE(SUB_NODE(op, 1)) < GET_OP_TYPE(op)) || NODE_TYPE(SUB_NODE(op, 1)) == BOOLOP_NODE)) {
 				ASTNode *rhs = shift_op(op);
 				return rhs;
 			}
