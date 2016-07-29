@@ -21,8 +21,7 @@ typedef enum {
 	CONST_NODE,
 	ID_NODE,
 	DATATYPE_NODE,
-	ARITHOP_NODE,
-	BOOLOP_NODE,
+	OPERATOR_NODE,
 	VAR_NODE
 } AST_TYPE;
 
@@ -44,8 +43,7 @@ ASTNode *create_id_ast(const char *id);
 ASTNode *create_decl_ast(int *datatype, const char *id, ASTNode *rhs);
 ASTNode *create_assignment_ast(const char *id, ASTNode *rhs);
 
-ASTNode *create_arithop_ast(int *operation);
-ASTNode *create_boolop_ast(int *operation);
+ASTNode *create_operator_ast(int *operation);
 
 ASTNode *create_var_ast(const char *id);
 

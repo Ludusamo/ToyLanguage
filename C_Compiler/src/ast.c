@@ -53,18 +53,9 @@ ASTNode *create_assignment_ast(const char *id, ASTNode *rhs) {
 	return node;
 }
 
-ASTNode *create_arithop_ast(int *operation) {
+ASTNode *create_operator_ast(int *operation) {
 	ASTNode *node = malloc(sizeof(ASTNode));
-	node->type = ARITHOP_NODE;
-	node->data = (void*) operation;
-	node->sub_nodes = malloc(sizeof(ASTNode) * 2);
-	node->num_sub = 2;
-	return node;
-}
-
-ASTNode *create_boolop_ast(int *operation) {
-	ASTNode *node = malloc(sizeof(ASTNode));
-	node->type = BOOLOP_NODE;
+	node->type = OPERATOR_NODE;
 	node->data = (void*) operation;
 	node->sub_nodes = malloc(sizeof(ASTNode) * 2);
 	node->num_sub = 2;

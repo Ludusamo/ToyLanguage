@@ -6,8 +6,7 @@
 #include <stdlib.h>
 
 #define NUM_DATATYPE 4
-#define NUM_ARITHOP 5
-#define NUM_BOOLOP 6
+#define NUM_OP 13
 #define NUM_PAREN 2
 #define NUM_QUOTE 2
 #define NUM_BOOLVAL 2
@@ -16,8 +15,7 @@ typedef enum {
 	WHITESPACE,
 	ASSIGNMENT,
 	DATATYPE,
-	ARITHOP,
-	BOOLOP,
+	OPERATOR,
 	PAREN,
 	QUOTE,
 	COMMA,
@@ -28,8 +26,7 @@ typedef enum {
 } TYPE;
 
 enum DATASUB { VOID, INT, BOOL, CHAR };
-enum ARITHOPSUB { PLUS, MINUS, MULTIPLY, DIVIDE, MODULO };
-enum BOOLOPSUB { EQ, LTE, GTE, LT, GT, NEQ };
+enum OPSUB { AND, OR, EQ, NEQ, LTE, GTE, LT, GT, PLUS, MINUS, MULTIPLY, DIVIDE, MODULO };
 enum PARENSUB { LPAREN, RPAREN };
 enum QUOTESUB { SINGLE_QUOTE, DOUBLE_QUOTE };
 enum BOOLVAL { FALSE, TRUE };
@@ -41,11 +38,10 @@ typedef struct {
 } Token;
 
 const char* const data_sub[NUM_DATATYPE];
-const char* const arithop_sub[NUM_ARITHOP];
-const char* const boolop_sub[NUM_BOOLOP];
-const char* const paren_sub[NUM_BOOLOP];
-const char* const quote_sub[NUM_BOOLOP];
-const char* const boolval_sub[NUM_BOOLOP];
+const char* const op_sub[NUM_OP];
+const char* const paren_sub[NUM_PAREN];
+const char* const quote_sub[NUM_QUOTE];
+const char* const boolval_sub[NUM_BOOLVAL];
 
 Token *create_token(const char *str);
 void destroy_token(Token *token);

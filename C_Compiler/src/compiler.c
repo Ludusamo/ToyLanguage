@@ -29,15 +29,10 @@ void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth) {
 	case CONST_NODE:
 		compile_const(instructions, rhs);
 		break;
-	case ARITHOP_NODE:
+	case OPERATOR_NODE:
 		compile_rhs(instructions, SUB_NODE(rhs, 0), depth);
 		compile_rhs(instructions, SUB_NODE(rhs, 1), depth);
-		compile_arithop(instructions, rhs);
-		break;
-	case BOOLOP_NODE:
-		compile_rhs(instructions, SUB_NODE(rhs, 0), depth);
-		compile_rhs(instructions, SUB_NODE(rhs, 1), depth);
-		compile_boolop(instructions, rhs);
+		compile_operator(instructions, rhs);
 		break;
 	case VAR_NODE:
 		if (depth == 0) compile_global_var(instructions, rhs);
@@ -48,18 +43,8 @@ void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth) {
 	}
 }
 
-void compile_arithop(Linked_List *instructions, ASTNode *arithop) {
+void compile_operator(Linked_List *instructions, ASTNode *arithop) {
 	int type = GET_OP_TYPE(arithop);
-	int op;
-	if (type == PLUS) op = ADDI_OP;
-	if (type == MINUS) op = SUBI_OP;
-	if (type == MULTIPLY) op = MULI_OP;
-	if (type == DIVIDE) op = DIVI_OP;
-	add_link(instructions, op);
-}
-
-void compile_boolop(Linked_List *instructions, ASTNode *boolop) {
-	int type = GET_OP_TYPE(boolop);
 	int op;
 	if (type == EQ) op = EQ_OP;
 	if (type == NEQ) op = NEQ_OP;
@@ -67,6 +52,12 @@ void compile_boolop(Linked_List *instructions, ASTNode *boolop) {
 	if (type == GT) op = GT_OP;
 	if (type == LTE) op = LTE_OP;
 	if (type == GTE) op = GTE_OP;
+	if (type == OR) op = OR_OP;
+	if (type == AND) op = AND_OP;
+	if (type == PLUS) op = ADDI_OP;
+	if (type == MINUS) op = SUBI_OP;
+	if (type == MULTIPLY) op = MULI_OP;
+	if (type == DIVIDE) op = DIVI_OP;
 	add_link(instructions, op);
 }
 

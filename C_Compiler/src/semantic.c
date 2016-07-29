@@ -60,11 +60,7 @@ int analyze_rhs(ASTNode *rhs, int datatype) {
 		case CONST_NODE:
 			sp--;
 			break;
-		case ARITHOP_NODE:
-			stack[sp++] = SUB_NODE(cur_node, 1);
-			stack[sp++] = SUB_NODE(cur_node, 0);
-			break;
-		case BOOLOP_NODE:
+		case OPERATOR_NODE:
 			stack[sp++] = SUB_NODE(cur_node, 1);
 			stack[sp++] = SUB_NODE(cur_node, 0);
 			break;

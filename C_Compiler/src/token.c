@@ -1,8 +1,7 @@
 #include <token.h>
 
 const char * const data_sub[] = { "void", "int", "bool", "char" };
-const char * const arithop_sub[] = { "+", "-", "*", "/", "%" };
-const char * const boolop_sub[] = { "==", "<=", ">=", "<", ">", "!=" };
+const char * const op_sub[] = { "&&", "||", "==", "!=", "<=", ">=", "<", ">", "+", "-", "*", "/", "%" };
 const char * const paren_sub[] = { "(", ")" };
 const char * const quote_sub[] = { "\'", "\"" };
 const char * const boolval_sub[] = { "false", "true" };
@@ -32,12 +31,8 @@ void identify_token_type(Token *token) {
 		token->type = DATATYPE;
 		token->subtype = list_index;
 		return;
-	} else if ((list_index = is_in_list(arithop_sub, NUM_ARITHOP, s)) != -1) {
-		token->type = ARITHOP;
-		token->subtype = list_index;
-		return;
-	} else if ((list_index = is_in_list(boolop_sub, NUM_BOOLOP, s)) != -1) {
-		token->type = BOOLOP;
+	} else if ((list_index = is_in_list(op_sub, NUM_OP, s)) != -1) {
+		token->type = OPERATOR;
 		token->subtype = list_index;
 		return;
 	} else if (s[0] == '=') {

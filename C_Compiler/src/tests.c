@@ -217,7 +217,7 @@ int test_lex() {
 	if (!is_type(s1.tokens[0], DATATYPE) || !is_type(s1.tokens[1], IDENTIFIER))
 		return FAILURE;
 	if (!is_subtype(s3.tokens[0], BOOL)) return FAILURE;
-	if (!is_type(s4.tokens[1], ARITHOP)) return FAILURE;
+	if (!is_type(s4.tokens[1], OPERATOR)) return FAILURE;
 
 	return SUCCESS;
 }
@@ -241,8 +241,8 @@ int test_rhs() {
 	ASTNode *rhs = parse_rhs(statement, 3);
 	if (!rhs) return FAILURE;
 	printf("%d\n", NODE_TYPE(rhs));
-	if (NODE_TYPE(rhs) != BOOLOP_NODE || GET_OP_TYPE(rhs) != EQ) return FAILURE;
-	if (NODE_TYPE(SUB_NODE(rhs, 0)) != ARITHOP_NODE || GET_OP_TYPE(SUB_NODE(rhs, 0)) != MULTIPLY) return FAILURE;
+	if (NODE_TYPE(rhs) != OPERATOR_NODE || GET_OP_TYPE(rhs) != EQ) return FAILURE;
+	if (NODE_TYPE(SUB_NODE(rhs, 0)) != OPERATOR_NODE || GET_OP_TYPE(SUB_NODE(rhs, 0)) != MULTIPLY) return FAILURE;
 	if (NODE_TYPE(SUB_NODE(SUB_NODE(rhs, 0), 0)) != VAR_NODE) return FAILURE;
 	if (GET_CONST_INT(SUB_NODE(SUB_NODE(rhs, 0), 1)) != 300) return FAILURE;
 	if (GET_CONST_INT(SUB_NODE(rhs, 1)) != 200) return FAILURE;
