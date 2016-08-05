@@ -4,6 +4,9 @@
 #include "ast.h"
 #include "memory.h"
 #include "shared_values.h"
+#include "error.h"
+
+int lineno;
 
 int semantic_analysis(ASTNode *prog);
 int analyze_decl(ASTNode *decl, int depth);

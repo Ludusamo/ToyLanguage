@@ -5,8 +5,10 @@ Linked_List *compile(ASTNode *program) {
 	for (int i = 0; i < num_lines; i++) {
 		switch (NODE_TYPE(SUB_NODE(program, i))) {
 		case DECL_NODE:
-			compile_decl(instructions, SUB_NODE(program,i), 0);
+			compile_decl(instructions, SUB_NODE(program, i), 0);
 			break;
+		case ASSIGN_NODE:
+			compile_assign(instructions, SUB_NODE(program, i), 0);
 		}
 	}
 	add_link(instructions, HALT_OP);
@@ -18,6 +20,18 @@ void compile_decl(Linked_List *instructions, ASTNode *decl, int depth) {
 	if (depth == 0) addr = get_global_addr(GET_AST_DECL_ID(decl));
 	else addr = get_local_addr(GET_AST_DECL_ID(decl));
 	compile_rhs(instructions, SUB_NODE(decl, 2), depth);
+
+	if (depth == 0) add_link(instructions, GSTORE_OP);
+	else add_link(instructions, STORE_OP);
+	add_link(instructions, addr->addr);
+}
+
+void compile_assign(Linked_List *instructions, ASTNode *decl, int depth) {
+	Memory_Address *addr;
+	char *id = GET_AST_STR_DATA(SUB_NODE(decl, 0));
+	if (depth == 0) addr = get_global_addr(id);
+	else addr = get_local_addr(id);
+	compile_rhs(instructions, SUB_NODE(decl, 1), depth);
 
 	if (depth == 0) add_link(instructions, GSTORE_OP);
 	else add_link(instructions, STORE_OP);

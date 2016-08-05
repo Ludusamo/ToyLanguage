@@ -3,7 +3,9 @@
 int semantic_analysis(ASTNode *prog) {
 	if (NODE_TYPE(prog) != PROG_NODE) return 0;
 	int status = 1;
+	lineno = 0;
 	for (int i = 0; i < num_lines; i++) {
+		lineno = i + 1;
 		switch (NODE_TYPE(SUB_NODE(prog, i))) {
 		case DECL_NODE:
 			status = status && analyze_decl(SUB_NODE(prog, i), 0);
@@ -19,8 +21,7 @@ int analyze_decl(ASTNode *decl, int depth) {
 	char *id = GET_AST_DECL_ID(decl);
 	if (depth == 0) {
 		if (get_global_addr(id)) {
-			// TODO: Error Checking
-			printf("ERROR: VARIABLE \"%s\" EXISTS\n", id);
+			throw_error(VARIABLE_EXISTS, "Unknown", lineno);
 		} else {
 			Memory_Address *addr = create_mem_addr(1, NUM_GLOBAL, GET_AST_DATATYPE(decl));
 			int status = create_global_variable(id, addr);
@@ -36,8 +37,7 @@ int analyze_assignment(ASTNode *assign, int depth) {
 	char *id = GET_AST_STR_DATA(SUB_NODE(assign, 0));
 	if (depth == 0) {
 		if (!get_global_addr(id)) {
-			// TODO: Error Checking
-			printf("ERROR: VARIABLE \"%s\" DOES NOT EXISTS\n", id);
+			throw_error(UNKNOWN_REFERENCE, "Unknown", lineno);
 		} else {
 			ASTNode *rhs = SUB_NODE(assign, 1);
 			int status = 0;

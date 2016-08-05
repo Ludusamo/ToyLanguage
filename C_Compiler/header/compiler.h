@@ -40,6 +40,7 @@ typedef enum {
 
 Linked_List *compile(ASTNode *program);
 void compile_decl(Linked_List *instructions, ASTNode *decl, int depth);
+void compile_assign(Linked_List *instructions, ASTNode *decl, int depth);
 void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth);
 void compile_operator(Linked_List *instructions, ASTNode *arithop);
 void compile_const(Linked_List *instructions, ASTNode *const_node);

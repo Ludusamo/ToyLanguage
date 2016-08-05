@@ -4,10 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define NUM_ERROR_TYPES 1
+#define NUM_ERROR_TYPES 2
 
 typedef enum {
-	UNKNOWN_REFERENCE	
+	UNKNOWN_REFERENCE,
+	VARIABLE_EXISTS
 } Error_Type;
 
 const char *ErrorNames[NUM_ERROR_TYPES];

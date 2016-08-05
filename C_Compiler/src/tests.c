@@ -282,14 +282,18 @@ int test_semantic_analysis() {
 
 int test_compile() {
 	clear_mem();
-	num_lines = 2;
-	Statement *statements = malloc(sizeof(Statement) * 2);
+	num_lines = 3;
+	Statement *statements = malloc(sizeof(Statement) * num_lines);
 	Statement *statement1 = create_statement("int a = 100 * (300 == 200)\n");
 	Statement *statement2 = create_statement("int b = a\n");
+	Statement *statement3 = create_statement("a = 10\n");
 	tokenize_statement(statement1);
 	tokenize_statement(statement2);
-	statements[0] = *statement1;
-	statements[1] = *statement2;
+	tokenize_statement(statement3);
+	int i = 0;
+	statements[i++] = *statement1;
+	statements[i++] = *statement2;
+	statements[i++] = *statement3;
 
 	ASTNode *prog = parse(statements);
 	int status = semantic_analysis(prog);

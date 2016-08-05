@@ -3,6 +3,7 @@
 Map *create_map() {
 	Map *m = malloc(sizeof(Map));
 	m->num_values = 0;
+	m->root = 0;
 	return m;
 }
 
@@ -54,6 +55,7 @@ Map_Item *make_item(const char *key, void *data) {
 }
 
 Map_Item *rbt_insert_r(Map_Item *root, const char *key, void *data) {
+	if (root) printf("hi\n");
 	if (!root) {
 		root = make_item(key, data);
 	} else if (data != root->data) {
