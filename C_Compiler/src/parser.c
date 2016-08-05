@@ -24,7 +24,9 @@ ASTNode *parse_line(Statement *statement) {
 	} else if (node = parse_assignment(statement)) {
 		printf("Identified as a assignment.\n");
 		return node;
-
+	} else if (node = parse_if(statement)) {
+		printf("Identified as a if. \n");
+		return node;
 	}
 	return 0;
 }
@@ -47,6 +49,17 @@ ASTNode *parse_assignment(Statement *statement) {
 		ASTNode *rhs = parse_rhs(statement, 2);
 		if (rhs)
 			return create_assignment_ast(tokens[0].token_str, rhs);	
+	}
+	return 0;
+}
+
+ASTNode *parse_if(Statement *statement) {
+	Token *tokens = statement->tokens;
+	printf("%i\n", tokens[0].type);
+	if (is_type(tokens[0], CONTROL) && is_subtype(tokens[0], IF)) {
+		ASTNode *rhs = parse_rhs(statement, 1);
+		if (rhs)
+			return create_if_ast(rhs);
 	}
 	return 0;
 }

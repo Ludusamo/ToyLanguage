@@ -18,6 +18,7 @@ typedef enum {
 	PROG_NODE,
 	DECL_NODE,
 	ASSIGN_NODE,
+	IF_NODE,
 	CONST_NODE,
 	ID_NODE,
 	DATATYPE_NODE,
@@ -42,6 +43,8 @@ ASTNode *create_id_ast(const char *id);
 
 ASTNode *create_decl_ast(int *datatype, const char *id, ASTNode *rhs);
 ASTNode *create_assignment_ast(const char *id, ASTNode *rhs);
+
+ASTNode *create_if_ast(ASTNode *rhs);
 
 ASTNode *create_operator_ast(int *operation);
 

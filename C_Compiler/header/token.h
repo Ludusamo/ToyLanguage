@@ -10,6 +10,7 @@
 #define NUM_PAREN 2
 #define NUM_QUOTE 2
 #define NUM_BOOLVAL 2
+#define NUM_CONTROL 4
 
 typedef enum {
 	WHITESPACE,
@@ -21,6 +22,7 @@ typedef enum {
 	COMMA,
 	NUM,
 	BOOLVAL,
+	CONTROL,
 	RETURN,
 	IDENTIFIER
 } TYPE;
@@ -30,6 +32,7 @@ enum OPSUB { AND, OR, EQ, NEQ, LTE, GTE, LT, GT, PLUS, MINUS, MULTIPLY, DIVIDE, 
 enum PARENSUB { LPAREN, RPAREN };
 enum QUOTESUB { SINGLE_QUOTE, DOUBLE_QUOTE };
 enum BOOLVAL { FALSE, TRUE };
+enum CONTROL { IF, ELSE, WHILE, FOR };
 
 typedef struct {
 	const char *token_str;	
@@ -42,6 +45,7 @@ const char* const op_sub[NUM_OP];
 const char* const paren_sub[NUM_PAREN];
 const char* const quote_sub[NUM_QUOTE];
 const char* const boolval_sub[NUM_BOOLVAL];
+const char* const control_sub[NUM_CONTROL];
 
 Token *create_token(const char *str);
 void destroy_token(Token *token);

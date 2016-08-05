@@ -1,3 +1,4 @@
 int a
 bool b
 a = 3
+if (a == b)

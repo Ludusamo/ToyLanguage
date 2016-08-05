@@ -53,6 +53,15 @@ ASTNode *create_assignment_ast(const char *id, ASTNode *rhs) {
 	return node;
 }
 
+ASTNode *create_if_ast(ASTNode *rhs) {
+	ASTNode *node = malloc(sizeof(ASTNode));
+	node->type = IF_NODE;
+	node->sub_nodes = malloc(sizeof(ASTNode) * 1);
+	SUB_NODE(node, 0) = rhs;
+	node->num_sub = 1;
+	return node;
+}
+
 ASTNode *create_operator_ast(int *operation) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = OPERATOR_NODE;

@@ -5,6 +5,7 @@ const char * const op_sub[] = { "&&", "||", "==", "!=", "<=", ">=", "<", ">", "+
 const char * const paren_sub[] = { "(", ")" };
 const char * const quote_sub[] = { "\'", "\"" };
 const char * const boolval_sub[] = { "false", "true" };
+const char * const control_sub[] = { "if", "else", "while", "for" };
 
 Token *create_token(const char *str) {
 	Token *t = malloc(sizeof(Token));
@@ -51,6 +52,10 @@ void identify_token_type(Token *token) {
 	} else if ((list_index = is_in_list(boolval_sub, NUM_BOOLVAL, s)) != -1) {
 		token->type = BOOLVAL;
 		token->subtype = list_index;
+		return;
+	} else if ((list_index = is_in_list(control_sub, NUM_CONTROL, s)) != -1) {
+		token->type = CONTROL;
+		token->subtype = list_index;	
 		return;
 	} else if (str_equal("return", s)) {
 		token->type = RETURN;
