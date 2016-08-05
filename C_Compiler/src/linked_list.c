@@ -4,6 +4,7 @@ Linked_List *create_linked_list() {
 	Linked_List *list = malloc(sizeof(Linked_List));
 	list->head = 0;
 	list->tail = 0;
+	list->length = 0;
 	return list;
 }
 

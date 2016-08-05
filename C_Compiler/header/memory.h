@@ -6,9 +6,10 @@
 #include "map.h"
 
 #define NUM_GLOBAL global_memory->num_values
-#define NUM_LOCAL local_memory->num_values
 
-Map *global_memory, *local_memory, *function_addresses, *datatypes;
+Map *global_memory, *local_memory[255], *function_addresses, *datatypes;
+
+int NUM_LOCAL;
 
 typedef struct {
 	int size; // Units of 16 bits
@@ -24,11 +25,13 @@ Memory_Address *create_mem_addr(int size, int addr, int type);
 void destroy_mem_addr(Memory_Address *mem_addr);
 
 int create_global_variable(const char *key, Memory_Address *addr);
-int create_local_variable(const char *key, Memory_Address *addr);
+int create_local_variable(const char *key, Memory_Address *addr, int depth);
 int create_function(const char *key, Memory_Address *addr);
 
+void exit_depth(int depth);
+
 Memory_Address *get_global_addr(const char *key);
-Memory_Address *get_local_addr(const char *key);
+Memory_Address *get_local_addr(const char *key, int depth);
 Memory_Address *get_function_addr(const char *key);
 int *get_datatype_by_key(const char *key);
 

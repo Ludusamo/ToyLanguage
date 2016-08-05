@@ -1,18 +1,21 @@
 #include "compiler.h"
 
 Linked_List *compile(ASTNode *program) {
+	clear_mem();
 	Linked_List *instructions = create_linked_list();
 	instruction_sp = 0;
 	prev_depth = 0;
 	for (int i = 0; i < num_lines; i++) {
 		ASTNode *node = SUB_NODE(program, i);
 		if (instruction_sp != 0) {
-				printf("%d %d\n", node->depth, prev_depth);
 			if (node->depth < prev_depth) {
 				for (int i = 0; i < prev_depth - node->depth; i++) {
+					for (int j = 0; j < local_memory[prev_depth - i - 1]->num_values; j++)
+						add_link(instructions, POP_OP);
+					exit_depth(prev_depth - i);
 					Link *unknown = unknown_instruction_stack[--instruction_sp];
-					unknown->val = instructions->length;
-				}
+					unknown->val = instructions->length;	
+				}	
 			}
 		}
 		switch (NODE_TYPE(node)) {
@@ -34,8 +37,15 @@ Linked_List *compile(ASTNode *program) {
 
 void compile_decl(Linked_List *instructions, ASTNode *decl, int depth) {
 	Memory_Address *addr;
-	if (depth == 0) addr = get_global_addr(GET_AST_DECL_ID(decl));
-	else addr = get_local_addr(GET_AST_DECL_ID(decl));
+	if (depth == 0) {
+		addr = create_mem_addr(1, NUM_GLOBAL, GET_AST_DATATYPE(decl));
+		create_global_variable(GET_AST_DECL_ID(decl), addr);
+	} else {
+		add_link(instructions, PUSH_OP);
+		add_link(instructions, 0);
+		addr = create_mem_addr(1, NUM_LOCAL + 1, GET_AST_DATATYPE(decl));
+		create_local_variable(GET_AST_DECL_ID(decl), addr, depth);
+	}
 	compile_rhs(instructions, SUB_NODE(decl, 2), depth);
 
 	if (depth == 0) add_link(instructions, GSTORE_OP);
@@ -44,14 +54,19 @@ void compile_decl(Linked_List *instructions, ASTNode *decl, int depth) {
 }
 
 void compile_assign(Linked_List *instructions, ASTNode *assign, int depth) {
-	Memory_Address *addr;
+	Memory_Address *addr = 0;
 	char *id = GET_AST_STR_DATA(SUB_NODE(assign, 0));
-	if (depth == 0) addr = get_global_addr(id);
-	else addr = get_local_addr(id);
 	compile_rhs(instructions, SUB_NODE(assign, 1), depth);
+	if (depth > 0) {
+		addr = get_local_addr(id, depth);
+	}
+	if (!addr) {
+		add_link(instructions, GSTORE_OP);
+		addr = get_global_addr(id);
+	} else {
+		add_link(instructions, STORE_OP);
+	}
 
-	if (depth == 0) add_link(instructions, GSTORE_OP);
-	else add_link(instructions, STORE_OP);
 	add_link(instructions, addr->addr);
 }
 

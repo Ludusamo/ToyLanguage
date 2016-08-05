@@ -7,6 +7,7 @@
 #include "error.h"
 
 int lineno;
+int prev_depth;
 
 int semantic_analysis(ASTNode *prog);
 int analyze_decl(ASTNode *decl, int depth);
