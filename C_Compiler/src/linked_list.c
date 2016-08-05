@@ -30,6 +30,7 @@ int add_link(Linked_List *list, int val) {
 		list->tail->next = new_link;
 		list->tail = list->tail->next;
 	}
+	list->length++;
 	return 1;
 }
 
@@ -38,6 +39,7 @@ int remove_link(Linked_List *list, int val) {
 	Link *next = head->next;
 	if (head->val == val) {
 		list->head = next;
+		list->length--;
 		return 1;
 	}
 	while (next) {
@@ -46,6 +48,7 @@ int remove_link(Linked_List *list, int val) {
 			if (next == list->tail) list->tail = (head->next) ? head->next : head;
 			free(next);
 			next = 0;
+			list->length--;
 			return 1;
 		}
 		head = next;

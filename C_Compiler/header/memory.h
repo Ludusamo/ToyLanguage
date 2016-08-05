@@ -6,6 +6,7 @@
 #include "map.h"
 
 #define NUM_GLOBAL global_memory->num_values
+#define NUM_LOCAL local_memory->num_values
 
 Map *global_memory, *local_memory, *function_addresses, *datatypes;
 

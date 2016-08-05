@@ -14,6 +14,7 @@ struct Link {
 typedef struct {
 	Link *head;
 	Link *tail;
+	int length;
 } Linked_List;
 
 Linked_List *create_linked_list();

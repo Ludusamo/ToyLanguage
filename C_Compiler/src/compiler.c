@@ -2,14 +2,31 @@
 
 Linked_List *compile(ASTNode *program) {
 	Linked_List *instructions = create_linked_list();
+	instruction_sp = 0;
+	prev_depth = 0;
 	for (int i = 0; i < num_lines; i++) {
-		switch (NODE_TYPE(SUB_NODE(program, i))) {
+		ASTNode *node = SUB_NODE(program, i);
+		if (instruction_sp != 0) {
+				printf("%d %d\n", node->depth, prev_depth);
+			if (node->depth < prev_depth) {
+				for (int i = 0; i < prev_depth - node->depth; i++) {
+					Link *unknown = unknown_instruction_stack[--instruction_sp];
+					unknown->val = instructions->length;
+				}
+			}
+		}
+		switch (NODE_TYPE(node)) {
 		case DECL_NODE:
-			compile_decl(instructions, SUB_NODE(program, i), 0);
+			compile_decl(instructions, node, node->depth);
 			break;
 		case ASSIGN_NODE:
-			compile_assign(instructions, SUB_NODE(program, i), 0);
+			compile_assign(instructions, node, node->depth);
+			break;
+		case IF_NODE:
+			compile_if(instructions, node, node->depth);
+			break;
 		}
+		prev_depth = node->depth;
 	}
 	add_link(instructions, HALT_OP);
 	return instructions;
@@ -26,16 +43,23 @@ void compile_decl(Linked_List *instructions, ASTNode *decl, int depth) {
 	add_link(instructions, addr->addr);
 }
 
-void compile_assign(Linked_List *instructions, ASTNode *decl, int depth) {
+void compile_assign(Linked_List *instructions, ASTNode *assign, int depth) {
 	Memory_Address *addr;
-	char *id = GET_AST_STR_DATA(SUB_NODE(decl, 0));
+	char *id = GET_AST_STR_DATA(SUB_NODE(assign, 0));
 	if (depth == 0) addr = get_global_addr(id);
 	else addr = get_local_addr(id);
-	compile_rhs(instructions, SUB_NODE(decl, 1), depth);
+	compile_rhs(instructions, SUB_NODE(assign, 1), depth);
 
 	if (depth == 0) add_link(instructions, GSTORE_OP);
 	else add_link(instructions, STORE_OP);
 	add_link(instructions, addr->addr);
+}
+
+void compile_if(Linked_List *instructions, ASTNode *if_node, int depth) {
+	compile_rhs(instructions, SUB_NODE(if_node, 0), depth);	
+	add_link(instructions, BRF_OP);
+	add_link(instructions, 0);
+	unknown_instruction_stack[instruction_sp++] = instructions->tail;
 }
 
 void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth) {
