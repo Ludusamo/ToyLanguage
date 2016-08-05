@@ -12,6 +12,10 @@ int semantic_analysis(ASTNode *prog) {
 			break;
 		case ASSIGN_NODE:
 			status = status && analyze_assignment(SUB_NODE(prog, i), 0);
+			break;
+		case IF_NODE:
+			status = status && analyze_if(SUB_NODE(prog, i), 0);
+			break;
 		}
 	}
 	return status;
@@ -46,6 +50,10 @@ int analyze_assignment(ASTNode *assign, int depth) {
 		}
 	}
 	return 0;
+}
+
+int analyze_if(ASTNode *if_node, int depth) {
+	return analyze_rhs(SUB_NODE(if_node, 0), 2); // 2 is BOOL
 }
 
 int analyze_rhs(ASTNode *rhs, int datatype) {
