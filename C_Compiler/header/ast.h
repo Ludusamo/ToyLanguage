@@ -31,6 +31,7 @@ struct ASTNode {
 	void *data;
 	ASTNode **sub_nodes;
 	int num_sub;
+	int depth;
 };
 
 ASTNode *create_program_ast(int num_lines);
@@ -41,10 +42,10 @@ ASTNode *create_const_ast(void *data);
 
 ASTNode *create_id_ast(const char *id);
 
-ASTNode *create_decl_ast(int *datatype, const char *id, ASTNode *rhs);
-ASTNode *create_assignment_ast(const char *id, ASTNode *rhs);
+ASTNode *create_decl_ast(int *datatype, const char *id, ASTNode *rhs, int depth);
+ASTNode *create_assignment_ast(const char *id, ASTNode *rhs, int depth);
 
-ASTNode *create_if_ast(ASTNode *rhs);
+ASTNode *create_if_ast(ASTNode *rhs, int depth);
 
 ASTNode *create_operator_ast(int *operation);
 

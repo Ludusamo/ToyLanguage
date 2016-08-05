@@ -253,7 +253,7 @@ int test_ast() {
 	int a = 1;
 	int b = 20;
 	ASTNode *rhs = create_const_ast(&b);
-	ASTNode *node = create_decl_ast(&a, "test", rhs);
+	ASTNode *node = create_decl_ast(&a, "test", rhs, 0);
 	if (NODE_TYPE(SUB_NODE(node, 0)) != DATATYPE_NODE) return FAILURE;
 	if (!str_equal(GET_AST_DECL_ID(node), "test")) return FAILURE;
 	if (GET_CONST_INT(SUB_NODE(node, 2)) != 20) return FAILURE;

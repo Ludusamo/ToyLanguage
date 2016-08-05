@@ -32,10 +32,11 @@ ASTNode *create_id_ast(const char *id) {
 	return node;
 }
 
-ASTNode *create_decl_ast(int *datatype, const char *id, ASTNode *rhs) {
+ASTNode *create_decl_ast(int *datatype, const char *id, ASTNode *rhs, int depth) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = DECL_NODE;
 	node->sub_nodes = malloc(sizeof(ASTNode) * 3);
+	node->depth = depth;
 	SUB_NODE(node, 0) = create_datatype_ast(datatype);
 	SUB_NODE(node, 1) = create_id_ast(id);
 	SUB_NODE(node, 2) = rhs;
@@ -43,20 +44,22 @@ ASTNode *create_decl_ast(int *datatype, const char *id, ASTNode *rhs) {
 	return node;
 }
 
-ASTNode *create_assignment_ast(const char *id, ASTNode *rhs) {
+ASTNode *create_assignment_ast(const char *id, ASTNode *rhs, int depth) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = ASSIGN_NODE;
 	node->sub_nodes = malloc(sizeof(ASTNode) * 2);
+	node->depth = depth;
 	SUB_NODE(node, 0) = create_id_ast(id);
 	SUB_NODE(node, 1) = rhs;
 	node->num_sub = 2;
 	return node;
 }
 
-ASTNode *create_if_ast(ASTNode *rhs) {
+ASTNode *create_if_ast(ASTNode *rhs, int depth) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = IF_NODE;
 	node->sub_nodes = malloc(sizeof(ASTNode) * 1);
+	node->depth = depth;
 	SUB_NODE(node, 0) = rhs;
 	node->num_sub = 1;
 	return node;

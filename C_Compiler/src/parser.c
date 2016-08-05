@@ -38,7 +38,7 @@ ASTNode *parse_declaration(Statement *statement) {
 		int zero = 0;
 		if (is_type(tokens[2], ASSIGNMENT)) rhs = parse_rhs(statement, 3);
 		else rhs = create_const_ast((void*) &zero);
-		return create_decl_ast(&GET_DATATYPE(statement), GET_DECL_ID(statement), rhs);
+		return create_decl_ast(&GET_DATATYPE(statement), GET_DECL_ID(statement), rhs, statement->depth);
 	}
 	return 0;
 }
@@ -48,7 +48,7 @@ ASTNode *parse_assignment(Statement *statement) {
 	if (is_type(tokens[0], IDENTIFIER) && is_type(tokens[1], ASSIGNMENT)) {
 		ASTNode *rhs = parse_rhs(statement, 2);
 		if (rhs)
-			return create_assignment_ast(tokens[0].token_str, rhs);	
+			return create_assignment_ast(tokens[0].token_str, rhs, statement->depth);	
 	}
 	return 0;
 }
@@ -59,7 +59,7 @@ ASTNode *parse_if(Statement *statement) {
 	if (is_type(tokens[0], CONTROL) && is_subtype(tokens[0], IF)) {
 		ASTNode *rhs = parse_rhs(statement, 1);
 		if (rhs)
-			return create_if_ast(rhs);
+			return create_if_ast(rhs, statement->depth);
 	}
 	return 0;
 }
