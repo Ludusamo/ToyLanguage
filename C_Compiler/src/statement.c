@@ -22,7 +22,6 @@ Statement *create_statement(const char *str) {
 }
 
 void add_token(Statement *statement, const char *str) {
-	printf("Add Token: %s\n", str);
 	Token *t = create_token(str);
 	identify_token_type(t);
 	statement->tokens[statement->num_tokens++] = *t;

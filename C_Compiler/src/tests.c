@@ -240,7 +240,6 @@ int test_rhs() {
 	
 	ASTNode *rhs = parse_rhs(statement, 3);
 	if (!rhs) return FAILURE;
-	printf("%d\n", NODE_TYPE(rhs));
 	if (NODE_TYPE(rhs) != OPERATOR_NODE || GET_OP_TYPE(rhs) != EQ) return FAILURE;
 	if (NODE_TYPE(SUB_NODE(rhs, 0)) != OPERATOR_NODE || GET_OP_TYPE(SUB_NODE(rhs, 0)) != MULTIPLY) return FAILURE;
 	if (NODE_TYPE(SUB_NODE(SUB_NODE(rhs, 0), 0)) != VAR_NODE) return FAILURE;
@@ -298,12 +297,10 @@ int test_compile() {
 	Linked_List *instructions = compile(prog);
 
 	Link *head = instructions->head;
-	printf("\nInstructions\n");
 	FILE *file_out = fopen("res/bytecode.bytels", "w");
 	fprintf(file_out, "0\n");
 	while (head) {
 		fprintf(file_out, "%i\n", head->val);
-		printf("%i\n", head->val);
 		head = head->next;
 	}
 	fclose(file_out);
