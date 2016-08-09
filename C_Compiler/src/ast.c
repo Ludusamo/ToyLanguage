@@ -65,6 +65,24 @@ ASTNode *create_if_ast(ASTNode *rhs, int depth) {
 	return node;
 }
 
+ASTNode *create_func_ast(const char *id, int num_arg) {
+	ASTNode *node = malloc(sizeof(ASTNode));
+	node->type = FUNC_NODE;
+	node->sub_nodes = malloc(sizeof(ASTNode) * 2);
+	SUB_NODE(node, 0) = create_id_ast(id);
+	SUB_NODE(node, 1) = create_varlist_ast(num_arg);
+	node->num_sub = 2;
+	return node;
+}
+
+ASTNode *create_varlist_ast(int num_var) {
+	ASTNode *node = malloc(sizeof(ASTNode));
+	node->type = VARLIST_NODE;
+	node->sub_nodes = malloc(sizeof(ASTNode) * num_var);
+	node->num_sub = num_var;
+	return node;
+}
+
 ASTNode *create_operator_ast(int *operation) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = OPERATOR_NODE;

@@ -17,13 +17,15 @@ typedef struct ASTNode ASTNode;
 typedef enum {
 	PROG_NODE,
 	DECL_NODE,
+	FUNC_NODE,
 	ASSIGN_NODE,
 	IF_NODE,
 	CONST_NODE,
 	ID_NODE,
 	DATATYPE_NODE,
 	OPERATOR_NODE,
-	VAR_NODE
+	VAR_NODE,
+	VARLIST_NODE
 } AST_TYPE;
 
 struct ASTNode {
@@ -46,6 +48,9 @@ ASTNode *create_decl_ast(int *datatype, const char *id, ASTNode *rhs, int depth)
 ASTNode *create_assignment_ast(const char *id, ASTNode *rhs, int depth);
 
 ASTNode *create_if_ast(ASTNode *rhs, int depth);
+
+ASTNode *create_func_ast(const char *id, int num_arg);
+ASTNode *create_varlist_ast(int num_var);
 
 ASTNode *create_operator_ast(int *operation);
 

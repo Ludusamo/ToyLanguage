@@ -14,6 +14,7 @@ ASTNode *parse_line(Statement *statement);
 ASTNode *parse_declaration(Statement *statement);
 ASTNode *parse_assignment(Statement *statement);
 ASTNode *parse_if(Statement *statement);
+ASTNode *parse_function(Statement *statement);
 
 ASTNode *parse_rhs(Statement *statement, int rhs_index);
 ASTNode *shift_op(ASTNode *rhs);
