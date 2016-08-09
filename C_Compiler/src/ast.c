@@ -65,13 +65,14 @@ ASTNode *create_if_ast(ASTNode *rhs, int depth) {
 	return node;
 }
 
-ASTNode *create_func_ast(const char *id, int num_arg) {
+ASTNode *create_func_ast(int *datatype, const char *id, int num_arg) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = FUNC_NODE;
-	node->sub_nodes = malloc(sizeof(ASTNode) * 2);
-	SUB_NODE(node, 0) = create_id_ast(id);
-	SUB_NODE(node, 1) = create_varlist_ast(num_arg);
-	node->num_sub = 2;
+	node->sub_nodes = malloc(sizeof(ASTNode) * 3);
+	SUB_NODE(node, 0) = create_datatype_ast(datatype);
+	SUB_NODE(node, 1) = create_id_ast(id);
+	SUB_NODE(node, 2) = create_varlist_ast(num_arg);
+	node->num_sub = 3;
 	return node;
 }
 
