@@ -2,3 +2,5 @@ int a
 bool b
 a = 3
 if (a == b)
+void test1(int a)
+void test(int a, int b)

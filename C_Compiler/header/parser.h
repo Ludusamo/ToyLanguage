@@ -16,6 +16,7 @@ ASTNode *parse_assignment(Statement *statement);
 ASTNode *parse_if(Statement *statement);
 ASTNode *parse_function(Statement *statement);
 
+ASTNode *parse_parameter_list();
 ASTNode *parse_rhs(Statement *statement, int rhs_index);
 ASTNode *shift_op(ASTNode *rhs);
 int is_const(Token token);

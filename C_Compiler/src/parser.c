@@ -23,6 +23,8 @@ ASTNode *parse_line(Statement *statement) {
 		return node;
 	} else if (node = parse_if(statement)) {
 		return node;
+	} else if (node = parse_function(statement)) {
+		return node;
 	}
 	return 0;
 }
@@ -33,7 +35,8 @@ ASTNode *parse_declaration(Statement *statement) {
 		ASTNode *rhs = 0;
 		int zero = 0;
 		if (is_type(tokens[2], ASSIGNMENT)) rhs = parse_rhs(statement, 3);
-		else rhs = create_const_ast((void*) &zero);
+		else if (statement->num_tokens < 3) rhs = create_const_ast((void*) &zero);
+		else return 0;
 		return create_decl_ast(&GET_DATATYPE(statement), GET_DECL_ID(statement), rhs, statement->depth);
 	}
 	return 0;
@@ -55,6 +58,58 @@ ASTNode *parse_if(Statement *statement) {
 		ASTNode *rhs = parse_rhs(statement, 1);
 		if (rhs)
 			return create_if_ast(rhs, statement->depth);
+	}
+	return 0;
+}
+
+ASTNode *parse_function(Statement *statement) {
+	Token *tokens = statement->tokens;
+	if (is_type(tokens[0], DATATYPE) && is_type(tokens[1], IDENTIFIER)) {
+		if (is_type(tokens[2], PAREN) && is_subtype(tokens[2], LPAREN)) {
+			ASTNode *arg_list = parse_parameter_list(statement, 3);
+			if (arg_list) {
+				return create_func_ast(&GET_DATATYPE(statement), GET_DECL_ID(statement), arg_list);
+			}
+		}
+	}
+	return 0;
+}
+
+ASTNode *parse_parameter_list(Statement *statement, int rhs_index) {
+	statement_index = rhs_index;
+	Token *tokens = statement->tokens;
+	int num_param = 0;
+	ASTNode *var_stack[255];
+	int expecting_param = 1;
+	for (int i = statement_index; i < statement->num_tokens; i++) {
+		if (is_type(tokens[i], DATATYPE) && is_type(tokens[i + 1], IDENTIFIER)) {
+			if (expecting_param) {
+				expecting_param = 0;
+				var_stack[num_param++] = create_decl_ast(&tokens[i].subtype, tokens[i + 1].token_str, 0, statement->depth + 1);
+				i++;
+			} else {
+				// TODO: Throw Error Unexpected Token
+			}
+		} else if (is_type(tokens[i], COMMA)) {
+			if (!expecting_param) {
+				expecting_param = 1;	
+			} else {
+				// TODO: Throw Error Unexpected Token
+			}
+		} else if (is_type(tokens[i], PAREN) && is_subtype(tokens[i], RPAREN)) {
+			if (i == statement->num_tokens - 1) {
+				ASTNode *arg_list = create_varlist_ast(num_param);
+				for (int i = 0; i < num_param; i++) {
+					SUB_NODE(arg_list, i) = var_stack[i];
+				}
+				return arg_list;
+			} else {
+				// TODO: Throw Error Unexpected Token
+			}
+		} else {
+			// TODO: Throw Error Unexpected Token
+			return 0;
+		}
 	}
 	return 0;
 }
@@ -103,6 +158,7 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 		}
 		return lhs;
 	}
+	// TODO: Throw Error
 	return 0;
 }
 
