@@ -2,7 +2,8 @@
 
 const char *ErrorNames[] = {
 	"Unknown Reference Exception",
-	"Variable Exists"
+	"Variable Exists",
+	"Function Exists"
 };
 
 void throw_error(Error_Type type, const char *filename, int lineno) {
