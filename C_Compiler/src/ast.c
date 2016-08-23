@@ -4,6 +4,9 @@ ASTNode *create_program_ast(int num_lines) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = PROG_NODE;
 	node->sub_nodes = malloc(sizeof(ASTNode) * num_lines);
+	for (int i = 0; i < num_lines; i++) {
+		SUB_NODE(node, i) = NULL;
+	}
 	node->num_sub = num_lines;
 	return node;
 }
@@ -80,6 +83,9 @@ ASTNode *create_varlist_ast(int num_var) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = VARLIST_NODE;
 	node->sub_nodes = malloc(sizeof(ASTNode) * num_var);
+	for (int i = 0; i < num_var; i++) {
+		SUB_NODE(node, i) = NULL;
+	}
 	node->num_sub = num_var;
 	return node;
 }
