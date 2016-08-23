@@ -6,8 +6,10 @@
 #include "ast.h"
 #include "memory.h"
 #include "shared_values.h"
+#include "error.h"
 
 int statement_index;
+int lineno;
 
 ASTNode *parse(Statement *statements);
 ASTNode *parse_line(Statement *statement);

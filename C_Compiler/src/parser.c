@@ -3,6 +3,7 @@
 ASTNode *parse(Statement *statements) {
 	ASTNode *program = create_program_ast(num_lines);
 	for (int i = 0; i < num_lines; i++) {
+		lineno = i + 1;
 		ASTNode *node = parse_line(&statements[i]);
 		if (node) {
 			// TODO: Successful Code
@@ -35,7 +36,9 @@ ASTNode *parse_declaration(Statement *statement) {
 	if (is_type(tokens[0], DATATYPE) && is_type(tokens[1], IDENTIFIER)) {
 		ASTNode *rhs = 0;
 		int zero = 0;
-		if (is_type(tokens[2], ASSIGNMENT)) rhs = parse_rhs(statement, 3);
+		if (is_type(tokens[2], ASSIGNMENT)) {
+			rhs = parse_rhs(statement, 3);
+		}
 		else if (is_type(tokens[2], EOS)) rhs = create_const_ast((void*) &zero);
 		else return 0;
 		return create_decl_ast(&GET_DATATYPE(statement), GET_DECL_ID(statement), rhs, statement->depth);
@@ -89,13 +92,13 @@ ASTNode *parse_parameter_list(Statement *statement, int rhs_index) {
 				var_stack[num_param++] = create_decl_ast(&tokens[i].subtype, tokens[i + 1].token_str, 0, statement->depth + 1);
 				i++;
 			} else {
-				// TODO: Throw Error Unexpected Token
+				throw_error(UNEXPECTED_TOKEN, "Unknown", lineno, str_add("Unexpected token ", tokens[i].token_str));
 			}
 		} else if (is_type(tokens[i], COMMA)) {
 			if (!expecting_param) {
 				expecting_param = 1;	
 			} else {
-				// TODO: Throw Error Unexpected Token
+				throw_error(UNEXPECTED_TOKEN, "Unknown", lineno, str_add("Unexpected token ", tokens[i].token_str));
 			}
 		} else if (is_type(tokens[i], PAREN) && is_subtype(tokens[i], RPAREN)) {
 			if (is_type(tokens[i + 1], EOS)) {
@@ -105,11 +108,10 @@ ASTNode *parse_parameter_list(Statement *statement, int rhs_index) {
 				}
 				return arg_list;
 			} else {
-				// TODO: Throw Error Unexpected Token
+				throw_error(UNEXPECTED_TOKEN, "Unknown", lineno, str_add("Unexpected token ", tokens[i].token_str));
 			}
 		} else {
-			// TODO: Throw Error Unexpected Token
-			return 0;
+			throw_error(UNEXPECTED_TOKEN, "Unknown", lineno, str_add("Unexpected token ", tokens[i].token_str));
 		}
 	}
 	return 0;
@@ -119,13 +121,23 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 	statement_index = rhs_index;
 	Token *tokens = statement->tokens;
 	if (is_const(tokens[rhs_index])) {
-		ASTNode *lhs = create_const_ast(create_data_packet(tokens[rhs_index]));
-		ASTNode *op = parse_rhs(statement, rhs_index + 1);
-		if (op) {
-			return append_to_leftmost(lhs, op);
+		if (is_const(tokens[rhs_index + 1])) {
+			throw_error(UNEXPECTED_TOKEN, "Unknown", lineno, str_add("Unexpected token ", tokens[statement_index + 1].token_str));	
 		}
+
+		ASTNode *lhs = create_const_ast(create_data_packet(tokens[rhs_index]));
+		if (!is_type(tokens[rhs_index + 1], EOS)) {
+			ASTNode *op = parse_rhs(statement, rhs_index + 1);
+			if (op) {
+				return append_to_leftmost(lhs, op);
+			}
+		}	
 		return lhs;
 	} else if (is_type(tokens[rhs_index], OPERATOR)) {
+		if (is_type(tokens[rhs_index + 1], OPERATOR) || is_type(tokens[rhs_index + 1], EOS)) {
+			throw_error(UNEXPECTED_TOKEN, "Unknown", lineno, str_add("Unexpected token ", tokens[statement_index + 1].token_str));	
+		}
+
 		ASTNode *op = create_operator_ast(&tokens[rhs_index].subtype);
 		SUB_NODE(op, 1) = parse_rhs(statement, rhs_index + 1);
 		if (SUB_NODE(op, 1)) {
@@ -149,6 +161,8 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 					return op;
 				}
 				return lhs;
+			} else {
+				throw_error(UNEXPECTED_TOKEN, "Unknown", lineno, str_add("Unexpected token ", tokens[statement_index].token_str));	
 			}
 		}
 	} else if (is_type(tokens[rhs_index], IDENTIFIER)) {
@@ -159,7 +173,7 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 		}
 		return lhs;
 	}
-	// TODO: Throw Error
+		
 	return 0;
 }
 

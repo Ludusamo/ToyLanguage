@@ -34,7 +34,7 @@ int analyze_decl(ASTNode *decl, int depth) {
 	char *id = GET_AST_DECL_ID(decl);
 	if (depth == 0) {
 		if (get_global_addr(id)) {
-			throw_error(VARIABLE_EXISTS, "Unknown", lineno);
+			throw_error(VARIABLE_EXISTS, "Unknown", lineno, NULL);
 		} else {
 			Memory_Address *addr = create_mem_addr(1, NUM_GLOBAL, GET_AST_DATATYPE(decl));
 			int status = create_global_variable(id, addr);
@@ -44,7 +44,7 @@ int analyze_decl(ASTNode *decl, int depth) {
 		}	
 	} else if (depth == -1) { // FUNCTION ARGS}
 		if (get_local_addr(id, 1)) { // TODO
-			throw_error(VARIABLE_EXISTS, "Unknown", lineno);
+			throw_error(VARIABLE_EXISTS, "Unknown", lineno, NULL);
 		} else {
 			Memory_Address *addr = create_mem_addr(1, -3 - NUM_LOCAL, GET_AST_DATATYPE(decl));
 			int status = create_local_variable(id, addr, 1);
@@ -52,7 +52,7 @@ int analyze_decl(ASTNode *decl, int depth) {
 		}
 	} else {
 		if (get_local_addr(id, depth)) {
-			throw_error(VARIABLE_EXISTS, "Unknown", lineno);
+			throw_error(VARIABLE_EXISTS, "Unknown", lineno, NULL);
 		} else {
 			Memory_Address *addr = create_mem_addr(1, NUM_LOCAL + 1, GET_AST_DATATYPE(decl));
 			int status = create_local_variable(id, addr, depth);
@@ -68,7 +68,7 @@ int analyze_assignment(ASTNode *assign, int depth) {
 	char *id = GET_AST_STR_DATA(SUB_NODE(assign, 0));
 	if (depth == 0) {
 		if (!get_global_addr(id)) {
-			throw_error(UNKNOWN_REFERENCE, "Unknown", lineno);
+			throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, NULL);
 		} else {
 			ASTNode *rhs = SUB_NODE(assign, 1);
 			int status = 0;
@@ -77,7 +77,7 @@ int analyze_assignment(ASTNode *assign, int depth) {
 		}
 	} else {
 		if (!get_local_addr(id, depth) && !get_global_addr(id)) {
-			throw_error(UNKNOWN_REFERENCE, "Unknown", lineno);
+			throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, NULL);
 		} else {
 			ASTNode *rhs = SUB_NODE(assign, 1);
 			int status = 0;
@@ -98,7 +98,7 @@ int analyze_func_decl(ASTNode *func_decl) {
 	char *id = GET_AST_STR_DATA(SUB_NODE(func_decl, 1));
 	int status = 1;
 	if (get_function_addr(id)) {
-		throw_error(FUNCTION_EXISTS, "Unknown", lineno);
+		throw_error(FUNCTION_EXISTS, "Unknown", lineno, NULL);
 	} else {
 		ASTNode *arg_list = SUB_NODE(func_decl, 2);
 		for (int i = 0; i < arg_list->num_sub; i++) {
