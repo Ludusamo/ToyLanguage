@@ -183,9 +183,6 @@ int test_create_token() {
 
 int test_identify_token() {
 	Token *token = malloc(sizeof(Token));
-	token->token_str = " ";
-	identify_token_type(token);
-	if (!is_type(*token, WHITESPACE)) return FAILURE;
 	token->token_str = "int";
 	identify_token_type(token);
 	if (!is_type(*token, DATATYPE) || !is_subtype(*token, INT)) return FAILURE;

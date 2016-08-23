@@ -56,6 +56,7 @@ void tokenize_statement(Statement *statement) {
 			}
 		}
 		buffer[bi++] = s[i];
+		if (s[i] == '\n') add_token(statement, "\n");
 	}
 }
 

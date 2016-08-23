@@ -9,6 +9,7 @@ ASTNode *parse(Statement *statements) {
 			SUB_NODE(program, i) = node;
 		} else {
 			// TODO: Failure Code
+			printf("Line %i is not a statement.\n", i + 1);
 		}
 	}
 	return program;
@@ -35,7 +36,7 @@ ASTNode *parse_declaration(Statement *statement) {
 		ASTNode *rhs = 0;
 		int zero = 0;
 		if (is_type(tokens[2], ASSIGNMENT)) rhs = parse_rhs(statement, 3);
-		else if (statement->num_tokens < 3) rhs = create_const_ast((void*) &zero);
+		else if (is_type(tokens[2], EOS)) rhs = create_const_ast((void*) &zero);
 		else return 0;
 		return create_decl_ast(&GET_DATATYPE(statement), GET_DECL_ID(statement), rhs, statement->depth);
 	}
@@ -97,7 +98,7 @@ ASTNode *parse_parameter_list(Statement *statement, int rhs_index) {
 				// TODO: Throw Error Unexpected Token
 			}
 		} else if (is_type(tokens[i], PAREN) && is_subtype(tokens[i], RPAREN)) {
-			if (i == statement->num_tokens - 1) {
+			if (is_type(tokens[i + 1], EOS)) {
 				ASTNode *arg_list = create_varlist_ast(num_param);
 				for (int i = 0; i < num_param; i++) {
 					SUB_NODE(arg_list, i) = var_stack[i];
