@@ -68,10 +68,11 @@ ASTNode *create_if_ast(ASTNode *rhs, int depth) {
 	return node;
 }
 
-ASTNode *create_func_ast(int *datatype, const char *id, ASTNode *varlist) {
+ASTNode *create_func_ast(int *datatype, const char *id, ASTNode *varlist, int depth) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = FUNC_NODE;
 	node->sub_nodes = malloc(sizeof(ASTNode) * 3);
+	node->depth = depth;
 	SUB_NODE(node, 0) = create_datatype_ast(datatype);
 	SUB_NODE(node, 1) = create_id_ast(id);
 	SUB_NODE(node, 2) = varlist;
@@ -79,10 +80,11 @@ ASTNode *create_func_ast(int *datatype, const char *id, ASTNode *varlist) {
 	return node;
 }
 
-ASTNode *create_return_ast(int *return_type, ASTNode *rhs) {
+ASTNode *create_return_ast(int *return_type, ASTNode *rhs, int depth) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = RETURN_NODE;
 	node->sub_nodes = malloc(sizeof(ASTNode) * 2);
+	node->depth = depth;
 	SUB_NODE(node, 0) = create_datatype_ast(return_type);
 	SUB_NODE(node, 1) = rhs;
 	node->num_sub = 2;

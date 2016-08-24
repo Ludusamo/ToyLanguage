@@ -79,7 +79,7 @@ ASTNode *parse_function(Statement *statement) {
 		if (is_type(tokens[2], PAREN) && is_subtype(tokens[2], LPAREN)) {
 			ASTNode *arg_list = parse_parameter_list(statement, 3);
 			if (arg_list) {
-				return create_func_ast(&GET_DATATYPE(statement), GET_DECL_ID(statement), arg_list);
+				return create_func_ast(&GET_DATATYPE(statement), GET_DECL_ID(statement), arg_list, statement->depth);
 			}
 		}
 	}
@@ -91,7 +91,7 @@ ASTNode *parse_return(Statement *statement) {
 	if (is_type(tokens[0], RETURN)) {
 		if (!in_function) throw_error(UNEXPECTED_TOKEN, "Unknown", lineno, str_add("Unexpected token ", tokens[0].token_str));
 		ASTNode *rhs = parse_rhs(statement, 1);
-		return create_return_ast(function_return_type, rhs);
+		return create_return_ast(function_return_type, rhs, statement->depth);
 	}
 	return 0;
 }
