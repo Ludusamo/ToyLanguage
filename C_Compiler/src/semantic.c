@@ -24,6 +24,9 @@ int semantic_analysis(ASTNode *prog) {
 		case FUNC_NODE:
 			status = status && analyze_func_decl(node);
 			break;
+		case RETURN_NODE:
+			status = status && analyze_return(node);
+			break;
 		}
 		prev_depth = node->depth;
 	}
@@ -109,6 +112,10 @@ int analyze_func_decl(ASTNode *func_decl) {
 		status = status && create_function(id, addr);
 	}
 	return status;
+}
+
+int analyze_return(ASTNode *return_node) {
+	return analyze_rhs(SUB_NODE(return_node, 1), GET_AST_DATATYPE(return_node));
 }
 
 int analyze_rhs(ASTNode *rhs, int datatype) {
