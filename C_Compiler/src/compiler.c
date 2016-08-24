@@ -40,6 +40,10 @@ Linked_List *compile(ASTNode *program) {
 			break;
 		case FUNC_NODE:
 			compile_func_decl(instructions, node);
+			break;
+		case RETURN_NODE:
+			compile_return(instructions, node);
+			break;
 		}
 		prev_depth = node->depth;
 	}
@@ -96,7 +100,14 @@ void compile_func_decl(Linked_List *instructions, ASTNode *func_node) {
 	char *id = GET_AST_STR_DATA(SUB_NODE(func_node, 1));
 	Memory_Address *addr = create_mem_addr(1, instructions->length, 0);
 	create_function(id, addr);
-	func_depth = 1;
+	func_depth = func_node->depth;
+}
+
+void compile_return(Linked_List *instructions, ASTNode *return_node) {
+	if (GET_AST_DATATYPE(return_node) != 0) {
+		compile_rhs(instructions, SUB_NODE(return_node, 1), 0);
+	}
+	add_link(instructions, RET_OP);
 }
 
 void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth) {
