@@ -10,6 +10,7 @@
 
 int statement_index;
 int lineno;
+int in_function, function_depth, *function_return_type;
 
 ASTNode *parse(Statement *statements);
 ASTNode *parse_line(Statement *statement);

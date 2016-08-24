@@ -52,7 +52,7 @@ ASTNode *create_if_ast(ASTNode *rhs, int depth);
 
 ASTNode *create_func_ast(int *datatype, const char *id, ASTNode *varlist);
 ASTNode *create_varlist_ast(int num_var);
-ASTNode *create_return_ast(ASTNode *rhs);
+ASTNode *create_return_ast(int *return_type, ASTNode *rhs);
 
 ASTNode *create_operator_ast(int *operation);
 

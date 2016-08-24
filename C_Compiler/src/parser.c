@@ -2,6 +2,7 @@
 
 ASTNode *parse(Statement *statements) {
 	ASTNode *program = create_program_ast(num_lines);
+	in_function = 0;;
 	for (int i = 0; i < num_lines; i++) {
 		lineno = i + 1;
 		ASTNode *node = parse_line(&statements[i]);
@@ -19,6 +20,7 @@ ASTNode *parse(Statement *statements) {
 ASTNode *parse_line(Statement *statement) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node = parse_declaration(statement);
+	if (statement->depth < function_depth + 1) in_function = 0;
 	if (node = parse_declaration(statement)) {
 		return node;
 	} else if (node = parse_assignment(statement)) {
@@ -26,6 +28,9 @@ ASTNode *parse_line(Statement *statement) {
 	} else if (node = parse_if(statement)) {
 		return node;
 	} else if (node = parse_function(statement)) {
+		in_function = 1;
+		function_depth = statement->depth;
+		function_return_type = &statement->tokens[0].subtype;
 		return node;
 	} else if (node = parse_return(statement)) {
 		return node;
@@ -84,8 +89,9 @@ ASTNode *parse_function(Statement *statement) {
 ASTNode *parse_return(Statement *statement) {
 	Token *tokens = statement->tokens;
 	if (is_type(tokens[0], RETURN)) {
+		if (!in_function) throw_error(UNEXPECTED_TOKEN, "Unknown", lineno, str_add("Unexpected token ", tokens[0].token_str));
 		ASTNode *rhs = parse_rhs(statement, 1);
-		return create_return_ast(rhs);
+		return create_return_ast(function_return_type, rhs);
 	}
 	return 0;
 }

@@ -79,12 +79,13 @@ ASTNode *create_func_ast(int *datatype, const char *id, ASTNode *varlist) {
 	return node;
 }
 
-ASTNode *create_return_ast(ASTNode *rhs) {
+ASTNode *create_return_ast(int *return_type, ASTNode *rhs) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = RETURN_NODE;
-	node->sub_nodes = malloc(sizeof(ASTNode) * 1);
-	SUB_NODE(node, 0) = rhs;
-	node->num_sub = 1;
+	node->sub_nodes = malloc(sizeof(ASTNode) * 2);
+	SUB_NODE(node, 0) = create_datatype_ast(return_type);
+	SUB_NODE(node, 1) = rhs;
+	node->num_sub = 2;
 	return node;
 }
 
