@@ -27,6 +27,8 @@ ASTNode *parse_line(Statement *statement) {
 		return node;
 	} else if (node = parse_function(statement)) {
 		return node;
+	} else if (node = parse_return(statement)) {
+		return node;
 	}
 	return 0;
 }
@@ -75,6 +77,15 @@ ASTNode *parse_function(Statement *statement) {
 				return create_func_ast(&GET_DATATYPE(statement), GET_DECL_ID(statement), arg_list);
 			}
 		}
+	}
+	return 0;
+}
+
+ASTNode *parse_return(Statement *statement) {
+	Token *tokens = statement->tokens;
+	if (is_type(tokens[0], RETURN)) {
+		ASTNode *rhs = parse_rhs(statement, 1);
+		return create_return_ast(rhs);
 	}
 	return 0;
 }
