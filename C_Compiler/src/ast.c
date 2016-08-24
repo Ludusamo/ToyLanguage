@@ -79,6 +79,15 @@ ASTNode *create_func_ast(int *datatype, const char *id, ASTNode *varlist) {
 	return node;
 }
 
+ASTNode *create_return_ast(ASTNode *rhs) {
+	ASTNode *node = malloc(sizeof(ASTNode));
+	node->type = RETURN_NODE;
+	node->sub_nodes = malloc(sizeof(ASTNode) * 1);
+	SUB_NODE(node, 0) = rhs;
+	node->num_sub = 1;
+	return node;
+}
+
 ASTNode *create_varlist_ast(int num_var) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = VARLIST_NODE;
