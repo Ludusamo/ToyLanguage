@@ -28,6 +28,8 @@ Linked_List *compile(ASTNode *program) {
 		case IF_NODE:
 			compile_if(instructions, node, node->depth);
 			break;
+		case FUNC_NODE:
+			compile_func_decl(instructions, node);
 		}
 		prev_depth = node->depth;
 	}
@@ -75,6 +77,15 @@ void compile_if(Linked_List *instructions, ASTNode *if_node, int depth) {
 	add_link(instructions, BRF_OP);
 	add_link(instructions, 0);
 	unknown_instruction_stack[instruction_sp++] = instructions->tail;
+}
+
+void compile_func_decl(Linked_List *instructions, ASTNode *func_node) {
+	add_link(instructions, BR_OP);
+	add_link(instructions, 0);
+	unknown_instruction_stack[instruction_sp++] = instructions->tail;
+	char *id = GET_AST_STR_DATA(SUB_NODE(func_node, 1));
+	Memory_Address *addr = create_mem_addr(1, instructions->length, 0);
+	create_function(id, addr);
 }
 
 void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth) {
