@@ -115,7 +115,12 @@ int analyze_func_decl(ASTNode *func_decl) {
 }
 
 int analyze_return(ASTNode *return_node) {
-	return analyze_rhs(SUB_NODE(return_node, 1), GET_AST_DATATYPE(return_node));
+	if (SUB_NODE(return_node, 1)) {
+		return analyze_rhs(SUB_NODE(return_node, 1), GET_AST_DATATYPE(return_node));
+	} else if (GET_AST_DATATYPE(return_node) == 0) {
+		return 1;
+	}
+	return 0;
 }
 
 int analyze_rhs(ASTNode *rhs, int datatype) {
