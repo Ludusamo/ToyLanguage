@@ -33,6 +33,36 @@ void tokenize_statement(Statement *statement) {
 	int mode = 1;
 	char *buffer = malloc(sizeof(char) * strlen(s) + 1);
 	for (int i = 0; i < strlen(s) + 1; i++) {
+		if (s[i] == '\'') {
+			if (isalpha(s[i + 1]) && s[i + 2] == '\'') {
+				buffer[0] = s[i];
+				buffer[1] = s[i + 1];
+				buffer[2] = s[i + 2];	
+				buffer[3] = '\0';
+				bi = 0;
+				add_token(statement, buffer);
+				i += 2;
+				continue;
+			}
+		}
+		if (s[i] == '\"') {
+			if (mode == 3) {
+				buffer[bi++] = '\0';
+				bi = 0;
+				add_token(statement, buffer);
+				i += 1;
+				if (is_whitespace(s[i])) {
+					mode = 0;
+				} else if (isalnum(s[i])) {
+					mode = 1;
+				} else {
+					mode = 2;
+				}
+			} else {
+				bi = 0;
+				mode = 3;
+			}
+		}
 		if (mode == 0) { // Reading whitespace
 			if (!is_whitespace(s[i])) {
 				buffer[bi++] = '\0';

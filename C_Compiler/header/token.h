@@ -4,11 +4,11 @@
 #include <stdio.h>
 #include <string_util.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #define NUM_DATATYPE 4
 #define NUM_OP 13
 #define NUM_PAREN 2
-#define NUM_QUOTE 2
 #define NUM_BOOLVAL 2
 #define NUM_CONTROL 4
 #define NUM_EOS 2
@@ -19,10 +19,11 @@ typedef enum {
 	DATATYPE,
 	OPERATOR,
 	PAREN,
-	QUOTE,
 	COMMA,
 	NUM,
 	BOOLVAL,
+	CHAR_LITERAL,
+	STRING_LITERAL,
 	CONTROL,
 	RETURN,
 	EOS,
@@ -32,7 +33,6 @@ typedef enum {
 enum DATASUB { VOID, INT, BOOL, CHAR };
 enum OPSUB { AND, OR, EQ, NEQ, LTE, GTE, LT, GT, PLUS, MINUS, MULTIPLY, DIVIDE, MODULO };
 enum PARENSUB { LPAREN, RPAREN };
-enum QUOTESUB { SINGLE_QUOTE, DOUBLE_QUOTE };
 enum BOOLVAL { FALSE, TRUE };
 enum CONTROL { IF, ELSE, WHILE, FOR };
 enum EOS { SEMICOLON, NEWLINE };
@@ -46,7 +46,6 @@ typedef struct {
 const char* const data_sub[NUM_DATATYPE];
 const char* const op_sub[NUM_OP];
 const char* const paren_sub[NUM_PAREN];
-const char* const quote_sub[NUM_QUOTE];
 const char* const boolval_sub[NUM_BOOLVAL];
 const char* const control_sub[NUM_CONTROL];
 const char* const eos_sub[NUM_EOS];

@@ -195,11 +195,12 @@ int test_create_statement() {
 }
 
 int test_tokenize_statement() {
-	Statement *statement = create_statement("int a");
+	Statement *statement = create_statement("char a = \"adafjasdklfglk;\"");
 	tokenize_statement(statement);
-	if (statement->num_tokens < 2) return FAILURE;
+	if (statement->num_tokens < 4) return FAILURE;
 	if (!is_type(statement->tokens[0], DATATYPE)) return FAILURE;
 	if (!is_type(statement->tokens[1], IDENTIFIER)) return FAILURE;
+	if (!is_type(statement->tokens[3], STRING_LITERAL)) return FAILURE;
 	return SUCCESS;
 }
 
