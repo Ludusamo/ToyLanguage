@@ -48,8 +48,6 @@ int main() {
 	//runProgram(program, 18, 0);
 	FILE *bytecode;
 
-	bytecode = fopen("../Compiler/res/bytecode.bytels", "r");
-	program1 = malloc(sizeof(int) * 55000);
 	int mainMethod;
 	fscanf(bytecode, "%d", &mainMethod);
 

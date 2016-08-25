@@ -3,9 +3,9 @@
 const char * const data_sub[] = { "void", "int", "bool", "char" };
 const char * const op_sub[] = { "&&", "||", "==", "!=", "<=", ">=", "<", ">", "+", "-", "*", "/", "%" };
 const char * const paren_sub[] = { "(", ")" };
-const char * const quote_sub[] = { "\'", "\"" };
 const char * const boolval_sub[] = { "false", "true" };
 const char * const control_sub[] = { "if", "else", "while", "for" };
+const char * const eos_sub[] = { ";", "\n" };
 
 Token *create_token(const char *str) {
 	Token *t = malloc(sizeof(Token));
@@ -25,10 +25,8 @@ int is_in_list(const char* const *strings, int num_in_list, const char *s) {
 void identify_token_type(Token *token) {
 	int list_index = -1;
 	const char *s = token->token_str;
-	if (s[0] <= 32) {
-		token->type = WHITESPACE;
-		return;	
-	} else if ((list_index = is_in_list(data_sub, NUM_DATATYPE, s)) != -1) {
+	//printf("%s\n", s);
+	if ((list_index = is_in_list(data_sub, NUM_DATATYPE, s)) != -1) {
 		token->type = DATATYPE;
 		token->subtype = list_index;
 		return;
@@ -43,9 +41,12 @@ void identify_token_type(Token *token) {
 		token->type = PAREN;
 		token->subtype = list_index;
 		return;
-	} else if ((list_index = is_in_list(quote_sub, NUM_QUOTE, s)) != -1) {
-		token->type = QUOTE;
-		token->subtype = list_index;
+	} else if (s[0] == '\'' && isalnum(s[1]) && s[2] == '\'') {
+		token->type = CHAR_LITERAL;
+		return;
+	} else if (s[0] == '\"') {
+		token->type = STRING_LITERAL;
+		return;
 	} else if (str_equal(",", s)) {
 		token->type = COMMA;
 		return;
@@ -56,6 +57,10 @@ void identify_token_type(Token *token) {
 	} else if ((list_index = is_in_list(control_sub, NUM_CONTROL, s)) != -1) {
 		token->type = CONTROL;
 		token->subtype = list_index;	
+		return;
+	} else if ((list_index = is_in_list(eos_sub, NUM_EOS, s)) != - 1) {
+		token->type = EOS;
+		token->subtype = list_index;
 		return;
 	} else if (str_equal("return", s)) {
 		token->type = RETURN;

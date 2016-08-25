@@ -18,6 +18,7 @@ typedef enum {
 	PROG_NODE,
 	DECL_NODE,
 	FUNC_NODE,
+	RETURN_NODE,
 	ASSIGN_NODE,
 	IF_NODE,
 	CONST_NODE,
@@ -49,8 +50,9 @@ ASTNode *create_assignment_ast(const char *id, ASTNode *rhs, int depth);
 
 ASTNode *create_if_ast(ASTNode *rhs, int depth);
 
-ASTNode *create_func_ast(const char *id, int num_arg);
+ASTNode *create_func_ast(int *datatype, const char *id, ASTNode *varlist, int depth);
 ASTNode *create_varlist_ast(int num_var);
+ASTNode *create_return_ast(int *return_type, ASTNode *rhs, int depth);
 
 ASTNode *create_operator_ast(int *operation);
 

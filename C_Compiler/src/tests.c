@@ -183,9 +183,6 @@ int test_create_token() {
 
 int test_identify_token() {
 	Token *token = malloc(sizeof(Token));
-	token->token_str = " ";
-	identify_token_type(token);
-	if (!is_type(*token, WHITESPACE)) return FAILURE;
 	token->token_str = "int";
 	identify_token_type(token);
 	if (!is_type(*token, DATATYPE) || !is_subtype(*token, INT)) return FAILURE;
@@ -198,11 +195,12 @@ int test_create_statement() {
 }
 
 int test_tokenize_statement() {
-	Statement *statement = create_statement("int a");
+	Statement *statement = create_statement("char a = \"adafjasdklfglk;\"");
 	tokenize_statement(statement);
-	if (statement->num_tokens < 2) return FAILURE;
+	if (statement->num_tokens < 4) return FAILURE;
 	if (!is_type(statement->tokens[0], DATATYPE)) return FAILURE;
 	if (!is_type(statement->tokens[1], IDENTIFIER)) return FAILURE;
+	if (!is_type(statement->tokens[3], STRING_LITERAL)) return FAILURE;
 	return SUCCESS;
 }
 
@@ -260,24 +258,9 @@ int test_ast() {
 }
 
 int test_semantic_analysis() {
-	num_lines = 4;
-
-	Statement *statements = malloc(sizeof(Statement) * num_lines);
-	Statement *statement1 = create_statement("int a = 100 * (300 + 200)\n");
-	Statement *statement2 = create_statement("int b = a\n");
-	Statement *statement3 = create_statement("a = 1\n");
-	Statement *statement4 = create_statement("if (2 == 1)\n");
-	tokenize_statement(statement1);
-	tokenize_statement(statement2);
-	tokenize_statement(statement3);
-	tokenize_statement(statement4);
-
-	int i = 0;
-	statements[i++] = *statement1;
-	statements[i++] = *statement2;
-	statements[i++] = *statement3;
-	statements[i++] = *statement4;
-
+	FILE *file = fopen("res/semantic_test.in", "r");	
+	Statement *statements = lex(file);
+	fclose(file);
 	ASTNode *prog = parse(statements);
 	int status = semantic_analysis(prog);
 	if (!status) return FAILURE;	

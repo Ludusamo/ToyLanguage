@@ -40,11 +40,14 @@ typedef enum {
 int instruction_sp;
 Link *unknown_instruction_stack[255];
 int prev_depth;
+int func_depth;
 
 Linked_List *compile(ASTNode *program);
 void compile_decl(Linked_List *instructions, ASTNode *decl, int depth);
 void compile_assign(Linked_List *instructions, ASTNode *assign, int depth);
 void compile_if(Linked_List *instructions, ASTNode *if_node, int depth);
+void compile_func_decl(Linked_List *instructions, ASTNode *func_node);
+void compile_return(Linked_List *instructions, ASTNode *return_node);
 void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth);
 void compile_operator(Linked_List *instructions, ASTNode *arithop);
 void compile_const(Linked_List *instructions, ASTNode *const_node);
