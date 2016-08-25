@@ -210,8 +210,8 @@ int test_lex() {
 	fclose(file);
 	if (!statements) return FAILURE;
 	Statement s1 = statements[0];
-	Statement s3 = statements[2];
-	Statement s4 = statements[3];
+	Statement s3 = statements[3];
+	Statement s4 = statements[4];
 	if (!is_type(s1.tokens[0], DATATYPE) || !is_type(s1.tokens[1], IDENTIFIER))
 		return FAILURE;
 	if (!is_subtype(s3.tokens[0], BOOL)) return FAILURE;

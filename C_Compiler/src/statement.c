@@ -7,12 +7,18 @@ Statement *create_statement(const char *str) {
 	statement->depth = 0;
 	int i = 0;
 	while (is_whitespace(str[i])) {
-		statement->depth++;
-		i++;
+		if (str[i] != '\n') {
+			statement->depth++;
+			i++;
+		} else {
+			break;
+		}
 	}
 	char *buffer = malloc(sizeof(char) * strlen(str) - i + 1);	
 	int si = 0;
-	while (i < strlen(str)) buffer[si++] = str[i++];
+	while (i < strlen(str)) {
+		buffer[si++] = str[i++];
+	}
 	buffer[si++] = '\0';
 	statement->statement_str = str_copy(buffer);
 
@@ -32,6 +38,7 @@ void tokenize_statement(Statement *statement) {
 	int bi = 0;
 	int mode = 1;
 	char *buffer = malloc(sizeof(char) * strlen(s) + 1);
+
 	for (int i = 0; i < strlen(s) + 1; i++) {
 		if (s[i] == '\'') {
 			if (isalpha(s[i + 1]) && s[i + 2] == '\'') {
