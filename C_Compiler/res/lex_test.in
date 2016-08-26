@@ -1,4 +1,5 @@
 int a
+
 int b
 bool c
 a + b

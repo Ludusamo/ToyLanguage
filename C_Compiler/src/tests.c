@@ -210,8 +210,8 @@ int test_lex() {
 	fclose(file);
 	if (!statements) return FAILURE;
 	Statement s1 = statements[0];
-	Statement s3 = statements[2];
-	Statement s4 = statements[3];
+	Statement s3 = statements[3];
+	Statement s4 = statements[4];
 	if (!is_type(s1.tokens[0], DATATYPE) || !is_type(s1.tokens[1], IDENTIFIER))
 		return FAILURE;
 	if (!is_subtype(s3.tokens[0], BOOL)) return FAILURE;
@@ -228,7 +228,7 @@ int test_parse() {
 	if (statements[0].type != DECL || statements[1].type != DECL) return FAILURE;
 	if (NODE_TYPE(prog) != PROG_NODE) return FAILURE;
 	if (NODE_TYPE(SUB_NODE(prog, 0)) != DECL_NODE) return FAILURE;
-	if (NODE_TYPE(SUB_NODE(prog, 2)) != ASSIGN_NODE) return FAILURE;
+	if (NODE_TYPE(SUB_NODE(prog, 3)) != ASSIGN_NODE) return FAILURE;
 	return SUCCESS;
 }
 

@@ -2,7 +2,7 @@
 
 ASTNode *parse(Statement *statements) {
 	ASTNode *program = create_program_ast(num_lines);
-	in_function = 0;;
+	in_function = 0;
 	for (int i = 0; i < num_lines; i++) {
 		lineno = i + 1;
 		ASTNode *node = parse_line(&statements[i]);
@@ -19,7 +19,6 @@ ASTNode *parse(Statement *statements) {
 
 ASTNode *parse_line(Statement *statement) {
 	ASTNode *node = malloc(sizeof(ASTNode));
-	node = parse_declaration(statement);
 	if (statement->depth < function_depth + 1) in_function = 0;
 	if (node = parse_declaration(statement)) {
 		return node;
@@ -33,6 +32,10 @@ ASTNode *parse_line(Statement *statement) {
 		function_return_type = &statement->tokens[0].subtype;
 		return node;
 	} else if (node = parse_return(statement)) {
+		return node;
+	} else if (is_type(statement->tokens[1], EOS)) {
+		node = malloc(sizeof(ASTNode));
+		node->type = BLANK_NODE;
 		return node;
 	}
 	return 0;
