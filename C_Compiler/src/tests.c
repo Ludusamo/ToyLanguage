@@ -228,7 +228,7 @@ int test_parse() {
 	if (statements[0].type != DECL || statements[1].type != DECL) return FAILURE;
 	if (NODE_TYPE(prog) != PROG_NODE) return FAILURE;
 	if (NODE_TYPE(SUB_NODE(prog, 0)) != DECL_NODE) return FAILURE;
-	if (NODE_TYPE(SUB_NODE(prog, 2)) != ASSIGN_NODE) return FAILURE;
+	if (NODE_TYPE(SUB_NODE(prog, 3)) != ASSIGN_NODE) return FAILURE;
 	return SUCCESS;
 }
 

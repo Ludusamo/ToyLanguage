@@ -25,7 +25,6 @@ int is_in_list(const char* const *strings, int num_in_list, const char *s) {
 void identify_token_type(Token *token) {
 	int list_index = -1;
 	const char *s = token->token_str;
-	//printf("%s\n", s);
 	if ((list_index = is_in_list(data_sub, NUM_DATATYPE, s)) != -1) {
 		token->type = DATATYPE;
 		token->subtype = list_index;
