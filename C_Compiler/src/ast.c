@@ -19,11 +19,13 @@ ASTNode *create_datatype_ast(int *datatype) {
 	return node;
 }
 
-ASTNode *create_const_ast(void *data) {
+ASTNode *create_const_ast(int *datatype, void *data) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = CONST_NODE;
 	node->data = data;
-	node->num_sub = 0;
+	node->sub_nodes = malloc(sizeof(ASTNode));
+	SUB_NODE(node, 0) = create_datatype_ast(datatype);
+	node->num_sub = 1;
 	return node;
 }
 
