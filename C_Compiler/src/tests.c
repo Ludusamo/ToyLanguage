@@ -247,9 +247,10 @@ int test_rhs() {
 }
 
 int test_ast() {
+	int type = 1;
 	int a = 1;
 	int b = 20;
-	ASTNode *rhs = create_const_ast(&b);
+	ASTNode *rhs = create_const_ast(&type, &b);
 	ASTNode *node = create_decl_ast(&a, "test", rhs, 0);
 	if (NODE_TYPE(SUB_NODE(node, 0)) != DATATYPE_NODE) return FAILURE;
 	if (!str_equal(GET_AST_DECL_ID(node), "test")) return FAILURE;

@@ -49,7 +49,7 @@ ASTNode *parse_declaration(Statement *statement) {
 		if (is_type(tokens[2], ASSIGNMENT)) {
 			rhs = parse_rhs(statement, 3);
 		}
-		else if (is_type(tokens[2], EOS)) rhs = create_const_ast((void*) &zero);
+		else if (is_type(tokens[2], EOS)) rhs = create_const_ast(&zero, (void*) &zero);
 		else return 0;
 		return create_decl_ast(&GET_DATATYPE(statement), GET_DECL_ID(statement), rhs, statement->depth);
 	}
@@ -145,7 +145,9 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 			throw_error(UNEXPECTED_TOKEN, "Unknown", lineno, str_add("Unexpected token ", tokens[statement_index + 1].token_str));	
 		}
 
-		ASTNode *lhs = create_const_ast(create_data_packet(tokens[rhs_index]));
+		int *const_type = determine_const_type(tokens[rhs_index].type);
+
+		ASTNode *lhs = create_const_ast(const_type, create_data_packet(tokens[rhs_index]));
 		if (!is_type(tokens[rhs_index + 1], EOS)) {
 			ASTNode *op = parse_rhs(statement, rhs_index + 1);
 			if (op) {
@@ -206,7 +208,15 @@ ASTNode *shift_op(ASTNode *rhs) {
 }
 
 int is_const(Token token) {
-	return is_type(token, NUM) || is_type(token, BOOLVAL);
+	return is_type(token, NUM) || is_type(token, BOOLVAL) || is_type(token, CHAR_LITERAL);
+}
+
+int *determine_const_type(int type) {
+	int *const_type = malloc(sizeof(int));
+	if (type == NUM) *const_type = INT;
+	if (type == BOOLVAL) *const_type = BOOL;
+	if (type == CHAR_LITERAL) *const_type = CHAR;
+	return const_type;
 }
 
 ASTNode *append_to_leftmost(ASTNode *lhs, ASTNode *rhs) {

@@ -41,16 +41,27 @@ void tokenize_statement(Statement *statement) {
 
 	for (int i = 0; i < strlen(s) + 1; i++) {
 		if (s[i] == '\'') {
-			if (isalpha(s[i + 1]) && s[i + 2] == '\'') {
-				buffer[0] = s[i];
-				buffer[1] = s[i + 1];
-				buffer[2] = s[i + 2];	
-				buffer[3] = '\0';
+			bi = 0;
+			buffer[bi++] = s[i];
+			if (s[i + 1] == '\\' && s[i + 3] == '\'') {
+				buffer[bi++] = s[i + 1];
+				buffer[bi++] = s[i + 2];	
+				buffer[bi++] = s[i + 3];	
+				buffer[bi++] = '\0';
+				bi = 0;
+				add_token(statement, buffer);
+				i += 3;
+			} else if (s[i + 2] == '\'') {
+				buffer[bi++] = s[i + 1];
+				buffer[bi++] = s[i + 2];	
+				buffer[bi++] = '\0';
 				bi = 0;
 				add_token(statement, buffer);
 				i += 2;
-				continue;
+			} else {
+				// TODO: Throw invalid char literal error
 			}
+			continue;
 		}
 		if (s[i] == '\"') {
 			if (mode == 3) {
