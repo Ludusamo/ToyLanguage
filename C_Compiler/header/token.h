@@ -61,4 +61,6 @@ int is_subtype(Token token, int subtype);
 
 void *create_data_packet(Token token);
 
+char identify_char_literal(Token *char_token);
+
 #endif // TOKEN_H
