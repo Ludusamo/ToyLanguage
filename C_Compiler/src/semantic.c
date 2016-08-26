@@ -151,8 +151,7 @@ int analyze_rhs(ASTNode *rhs, int datatype, int depth) {
 				throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, "");
 				return 0;
 			}
-			if (var->type == datatype) sp--;
-			else return 0;
+			sp--;
 			break;
 		}
 		}
