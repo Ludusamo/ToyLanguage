@@ -93,6 +93,11 @@ void *create_data_packet(Token token) {
 		int *bool_val = malloc(sizeof(int));
 		*bool_val = token.subtype;
 		return (void*) bool_val;
+	} else if (is_type(token, CHAR_LITERAL)) {
+		int *char_val = malloc(sizeof(int));
+		printf("%c\n", token.token_str[1]);
+		*char_val = (int) token.token_str[1];
+		return (void*) char_val;
 	}
 	return 0;
 }
