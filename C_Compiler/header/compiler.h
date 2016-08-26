@@ -51,6 +51,6 @@ void compile_return(Linked_List *instructions, ASTNode *return_node);
 void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth);
 void compile_operator(Linked_List *instructions, ASTNode *arithop);
 void compile_const(Linked_List *instructions, ASTNode *const_node);
-void compile_global_var(Linked_List *instructions, ASTNode *var_node);
+void compile_var(Linked_List *instructions, ASTNode *var_node, int depth);
 
 #endif // COMPILER_H

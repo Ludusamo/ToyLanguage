@@ -143,8 +143,8 @@ int analyze_rhs(ASTNode *rhs, int datatype, int depth) {
 			Memory_Address *var = 0;
 			char *id = GET_AST_STR_DATA(SUB_NODE(cur_node, 0));
 			int search_depth = depth;
-			while (!var && depth > 0) {
-				var = get_local_addr(id, depth--);
+			while (!var && search_depth > 0) {
+				var = get_local_addr(id, search_depth--);
 			}
 			if (!var) var = get_global_addr(id);
 			if (!var) {
