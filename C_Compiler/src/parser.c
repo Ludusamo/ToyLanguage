@@ -105,7 +105,6 @@ ASTNode *parse_func_call(Statement *statement) {
 	Token *tokens = statement->tokens;
 	if (is_type(tokens[0], IDENTIFIER)) {
 		if (is_type(tokens[1], PAREN) && is_subtype(tokens[1], LPAREN)) {
-			printf("%s\n", statement->statement_str);
 			int num_param = 0;
 			ASTNode *var_stack[255];
 			var_stack[num_param++] = parse_rhs(statement, 2);

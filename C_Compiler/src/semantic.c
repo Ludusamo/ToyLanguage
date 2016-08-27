@@ -26,7 +26,7 @@ int semantic_analysis(ASTNode *prog) {
 			status = status && analyze_return(node);
 			break;
 		case FUNC_CALL_NODE:
-			status - status && analyze_func_call(node);
+			status = status && analyze_func_call(node);
 			break;
 		}
 		prev_depth = node->depth;
@@ -147,7 +147,19 @@ int analyze_func_call(ASTNode *func_call) {
 		throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, "");
 	}
 	
-	
+	ASTNode *rhs_list = SUB_NODE(func_call, 2);
+	ASTNode *arg_list = func->arg_list;	
+	int num_args = arg_list->num_sub;
+	if (rhs_list->num_sub != arg_list->num_sub) {
+		throw_error(INSUFFICIENT_ARGS, "Unknown", lineno, "");
+	}
+	for (int i = 0; i < num_args; i++) {
+		analyze_rhs(SUB_NODE(rhs_list, i), func_call->depth);
+		if (!check_datatype(SUB_NODE(rhs_list, i), GET_AST_DATATYPE(SUB_NODE(arg_list, i)))) {
+			return 0;
+		}
+	}
+	return 1;
 }
 
 int analyze_rhs(ASTNode *rhs, int depth) {
