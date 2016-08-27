@@ -239,10 +239,10 @@ int test_rhs() {
 	ASTNode *rhs = parse_rhs(statement, 3);
 	if (!rhs) return FAILURE;
 	if (NODE_TYPE(rhs) != OPERATOR_NODE || GET_OP_TYPE(rhs) != EQ) return FAILURE;
-	if (NODE_TYPE(SUB_NODE(rhs, 0)) != OPERATOR_NODE || GET_OP_TYPE(SUB_NODE(rhs, 0)) != MULTIPLY) return FAILURE;
-	if (NODE_TYPE(SUB_NODE(SUB_NODE(rhs, 0), 0)) != VAR_NODE) return FAILURE;
-	if (GET_CONST_INT(SUB_NODE(SUB_NODE(rhs, 0), 1)) != 300) return FAILURE;
-	if (GET_CONST_INT(SUB_NODE(rhs, 1)) != 200) return FAILURE;
+	if (NODE_TYPE(SUB_NODE(rhs, 1)) != OPERATOR_NODE || GET_OP_TYPE(SUB_NODE(rhs, 1)) != MULTIPLY) return FAILURE;
+	if (NODE_TYPE(SUB_NODE(SUB_NODE(rhs, 1), 1)) != VAR_NODE) return FAILURE;
+	if (GET_CONST_INT(SUB_NODE(SUB_NODE(rhs, 1), 2)) != 300) return FAILURE;
+	if (GET_CONST_INT(SUB_NODE(rhs, 2)) != 200) return FAILURE;
 	return SUCCESS;
 }
 

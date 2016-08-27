@@ -96,7 +96,6 @@ void *create_data_packet(Token token) {
 	} else if (is_type(token, CHAR_LITERAL)) {
 		int *char_val = malloc(sizeof(int));
 		*char_val = (int) identify_char_literal(token);
-		printf("%c\n", identify_char_literal(token));
 		return (void*) char_val;
 	}
 	return 0;
@@ -105,7 +104,6 @@ void *create_data_packet(Token token) {
 char identify_char_literal(Token char_token) {
 	const char *char_str = char_token.token_str;
 	char character = 0;
-	printf("Identifying: %s\n", char_str);
 	if (char_str[1] == '\\') {
 		switch (char_str[2]) {
 		case '\'':

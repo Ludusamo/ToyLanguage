@@ -9,9 +9,7 @@ int semantic_analysis(ASTNode *prog) {
 		lineno = i + 1;
 		ASTNode *node = SUB_NODE(prog, i);
 		if (node->depth < prev_depth) {
-			exit_depth(prev_depth);
-		}
-		switch (NODE_TYPE(node)) {
+			exit_depth(prev_depth); } switch (NODE_TYPE(node)) {
 		case DECL_NODE:
 			status = status && analyze_decl(node, node->depth);
 			break;
@@ -94,7 +92,7 @@ int analyze_assignment(ASTNode *assign, int depth) {
 }
 
 int analyze_if(ASTNode *if_node, int depth) {
-	return analyze_rhs(SUB_NODE(if_node, 0), 2, depth); // 2 is BOOL
+	return analyze_rhs(SUB_NODE(if_node, 0), BOOL, depth); // 2 is BOOL
 }
 
 int analyze_func_decl(ASTNode *func_decl) {
@@ -124,37 +122,43 @@ int analyze_return(ASTNode *return_node) {
 }
 
 int analyze_rhs(ASTNode *rhs, int datatype, int depth) {
-	int sp = 0;
-	ASTNode **stack = malloc(sizeof(rhs) * 255);
-	stack[sp++] = rhs;
-	
-	ASTNode *cur_node;
-	while (sp > 0) {
-		cur_node = stack[--sp];
-		switch (NODE_TYPE(cur_node)) {
-		case CONST_NODE:
-			sp--;
-			break;
-		case OPERATOR_NODE:
-			stack[sp++] = SUB_NODE(cur_node, 1);
-			stack[sp++] = SUB_NODE(cur_node, 0);
-			break;
-		case VAR_NODE: {	
-			Memory_Address *var = 0;
-			char *id = GET_AST_STR_DATA(SUB_NODE(cur_node, 0));
-			int search_depth = depth;
-			while (!var && search_depth > 0) {
-				var = get_local_addr(id, search_depth--);
-			}
-			if (!var) var = get_global_addr(id);
-			if (!var) {
-				throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, "");
-				return 0;
-			}
-			sp--;
-			break;
+	if (NODE_TYPE(rhs) == OPERATOR_NODE) {
+		analyze_rhs(SUB_NODE(rhs, 1), datatype, depth);
+		analyze_rhs(SUB_NODE(rhs, 2), datatype, depth);
+		int resulting_datatype = determine_resulting_datatype(rhs);
+		if (resulting_datatype == -1) {
+		} else {
+			SUB_NODE(rhs, 0) = create_datatype_ast(&resulting_datatype);
 		}
+	} else if (NODE_TYPE(rhs) == VAR_NODE) {
+		Memory_Address *var = 0;
+		char *id = GET_AST_STR_DATA(SUB_NODE(rhs, 0));
+		int search_depth = depth;
+		while (!var && search_depth > 0) {
+			var = get_local_addr(id, search_depth--);
+		}
+		if (!var) var = get_global_addr(id);
+		if (!var) {
+			throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, "");
 		}
 	}
 	return 1;	
+}
+
+int determine_resulting_datatype(ASTNode *op_node) {
+	int op = GET_OP_TYPE(op_node);
+	int l_datatype = GET_AST_DATATYPE(SUB_NODE(op_node, 1));
+	int r_datatype = GET_AST_DATATYPE(SUB_NODE(op_node, 2));
+
+	int return_op = -1;
+
+	if (l_datatype <= 5 && r_datatype <= 5) {
+		if (op == AND || op == OR || op == EQ || op == NEQ 
+			|| op == LTE || op == GTE || op == LT || op == GT) {
+			return_op = BOOL;
+		} else {
+			return_op =  INT;
+		}
+	}
+	return return_op;
 }

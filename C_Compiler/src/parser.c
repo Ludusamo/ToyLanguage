@@ -161,9 +161,9 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 		}
 
 		ASTNode *op = create_operator_ast(&tokens[rhs_index].subtype);
-		SUB_NODE(op, 1) = parse_rhs(statement, rhs_index + 1);
-		if (SUB_NODE(op, 1)) {
-			if (!is_type(tokens[rhs_index + 1], PAREN) && (NODE_TYPE(SUB_NODE(op, 1)) == OPERATOR_NODE && GET_OP_TYPE(SUB_NODE(op, 1)) < GET_OP_TYPE(op))) {
+		SUB_NODE(op, 2) = parse_rhs(statement, rhs_index + 1);
+		if (SUB_NODE(op, 2)) {
+			if (!is_type(tokens[rhs_index + 1], PAREN) && (NODE_TYPE(SUB_NODE(op, 2)) == OPERATOR_NODE && GET_OP_TYPE(SUB_NODE(op, 2)) < GET_OP_TYPE(op))) {
 				ASTNode *rhs = shift_op(op);
 				return rhs;
 			}
@@ -179,7 +179,7 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 				ASTNode *op = parse_rhs(statement, statement_index + 1);
 
 				if (op) {
-					SUB_NODE(op, 0) = lhs;
+					SUB_NODE(op, 1) = lhs;
 					return op;
 				}
 				return lhs;
@@ -201,9 +201,9 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 
 ASTNode *shift_op(ASTNode *rhs) {
 	ASTNode *p = rhs;
-	ASTNode *r = SUB_NODE(rhs, 1);
-	SUB_NODE(p, 1) = SUB_NODE(r, 0);
-	SUB_NODE(r, 0) = p;
+	ASTNode *r = SUB_NODE(rhs, 2);
+	SUB_NODE(p, 2) = SUB_NODE(r, 1);
+	SUB_NODE(r, 1) = p;
 	return r;
 }
 
@@ -221,7 +221,7 @@ int *determine_const_type(int type) {
 
 ASTNode *append_to_leftmost(ASTNode *lhs, ASTNode *rhs) {
 	ASTNode *leftmost = rhs;
-	while (SUB_NODE(leftmost, 0)) leftmost = SUB_NODE(leftmost, 0);
-	SUB_NODE(leftmost, 0) = lhs;
+	while (SUB_NODE(leftmost, 1)) leftmost = SUB_NODE(leftmost, 1);
+	SUB_NODE(leftmost, 1) = lhs;
 	return rhs;
 }

@@ -108,9 +108,10 @@ ASTNode *create_operator_ast(int *operation) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = OPERATOR_NODE;
 	node->data = (void*) operation;
-	node->sub_nodes = malloc(sizeof(ASTNode) * 2);
+	node->sub_nodes = malloc(sizeof(ASTNode) * 3);
 	SUB_NODE(node, 0) = NULL;
 	SUB_NODE(node, 1) = NULL;
+	SUB_NODE(node, 2) = NULL;
 	node->num_sub = 2;
 	return node;
 }

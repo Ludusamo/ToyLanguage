@@ -116,8 +116,8 @@ void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth) {
 		compile_const(instructions, rhs);
 		break;
 	case OPERATOR_NODE:
-		compile_rhs(instructions, SUB_NODE(rhs, 0), depth);
 		compile_rhs(instructions, SUB_NODE(rhs, 1), depth);
+		compile_rhs(instructions, SUB_NODE(rhs, 2), depth);
 		compile_operator(instructions, rhs);
 		break;
 	case VAR_NODE:
