@@ -33,6 +33,8 @@ ASTNode *parse_line(Statement *statement) {
 		return node;
 	} else if (node = parse_return(statement)) {
 		return node;
+	} else if (node = parse_func_call(statement)) {
+		return node;
 	} else if (is_type(statement->tokens[1], EOS)) {
 		node = malloc(sizeof(ASTNode));
 		node->type = BLANK_NODE;
@@ -97,6 +99,45 @@ ASTNode *parse_return(Statement *statement) {
 		return create_return_ast(function_return_type, rhs, statement->depth);
 	}
 	return 0;
+}
+
+ASTNode *parse_func_call(Statement *statement) {
+	Token *tokens = statement->tokens;
+	if (is_type(tokens[0], IDENTIFIER)) {
+		if (is_type(tokens[1], PAREN) && is_subtype(tokens[1], LPAREN)) {
+			printf("%s\n", statement->statement_str);
+			int num_param = 0;
+			ASTNode *var_stack[255];
+			var_stack[num_param++] = parse_rhs(statement, 2);
+			if (!var_stack[num_param - 1]) {
+				if (is_type(tokens[2], PAREN) && is_subtype(tokens[2], RPAREN)) {
+					ASTNode *arg_list = create_varlist_ast(0);
+					return create_func_call_ast(NULL, tokens[0].token_str, arg_list, statement->depth);
+				} else {
+					printf("Incorrect rhs\n");
+					// TODO: throw_error();
+				}
+			} else {
+				int i = 2;
+				while (!is_type(tokens[i], EOS)) {
+					if (is_type(tokens[i], PAREN) && is_subtype(tokens[i], RPAREN)) {
+						ASTNode *arg_list = create_varlist_ast(num_param);
+						for (int i = 0; i < num_param; i++) {
+							SUB_NODE(arg_list, i) = var_stack[i];
+						}
+						return create_func_call_ast(NULL, tokens[0].token_str, arg_list, statement->depth);	
+					} else if (is_type(tokens[i], COMMA)) {
+						var_stack[num_param++] = parse_rhs(statement, i + 1);
+						if (!var_stack[num_param - 1]) {
+							printf("Incorrect rhs1\n");
+							// TODO: throw_error();
+						}
+					}
+					i++;
+				}
+			}
+		}
+	}
 }
 
 ASTNode *parse_parameter_list(Statement *statement, int rhs_index) {
