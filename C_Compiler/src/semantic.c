@@ -25,6 +25,9 @@ int semantic_analysis(ASTNode *prog) {
 		case RETURN_NODE:
 			status = status && analyze_return(node);
 			break;
+		case FUNC_CALL_NODE:
+			status - status && analyze_func_call(node);
+			break;
 		}
 		prev_depth = node->depth;
 	}
@@ -111,7 +114,7 @@ int analyze_if(ASTNode *if_node, int depth) {
 int analyze_func_decl(ASTNode *func_decl) {
 	char *id = GET_AST_STR_DATA(SUB_NODE(func_decl, 1));
 	int status = 1;
-	if (get_function_addr(id)) {
+	if (get_function(id)) {
 		throw_error(FUNCTION_EXISTS, "Unknown", lineno, NULL);
 	} else {
 		ASTNode *arg_list = SUB_NODE(func_decl, 2);
@@ -119,8 +122,8 @@ int analyze_func_decl(ASTNode *func_decl) {
 			ASTNode *arg = SUB_NODE(arg_list, i);
 			status = status && analyze_decl(arg, -1);
 		}
-		Memory_Address *addr = create_mem_addr(1, -1, 1);
-		status = status && create_function(id, addr);
+		Function *func = create_function(-1, arg_list);
+		status = status && add_function(id, func);
 	}
 	return status;
 }
@@ -135,6 +138,16 @@ int analyze_return(ASTNode *return_node) {
 		return 1;
 	}
 	return 0;
+}
+
+int analyze_func_call(ASTNode *func_call) {
+	char *id = GET_AST_STR_DATA(SUB_NODE(func_call, 1));
+	Function *func = get_function(id);
+	if (!func) {
+		throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, "");
+	}
+	
+	
 }
 
 int analyze_rhs(ASTNode *rhs, int depth) {

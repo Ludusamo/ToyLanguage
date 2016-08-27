@@ -98,8 +98,8 @@ void compile_func_decl(Linked_List *instructions, ASTNode *func_node) {
 	add_link(instructions, 0);
 	unknown_instruction_stack[instruction_sp++] = instructions->tail;
 	char *id = GET_AST_STR_DATA(SUB_NODE(func_node, 1));
-	Memory_Address *addr = create_mem_addr(1, instructions->length, 0);
-	create_function(id, addr);
+	Function *func = create_function(instructions->length, SUB_NODE(func_node, 2));
+	add_function(id, func);
 	func_depth = func_node->depth;
 }
 
