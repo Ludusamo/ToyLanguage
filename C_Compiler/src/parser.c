@@ -228,7 +228,12 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 			}
 		}
 	} else if (is_type(tokens[rhs_index], IDENTIFIER)) {
-		ASTNode *lhs = create_var_ast(tokens[rhs_index].token_str);
+		ASTNode *lhs = 0;
+		if (is_type(tokens[rhs_index + 1], PAREN) && is_subtype(tokens[rhs_index + 1], LPAREN)) {
+			lhs = parse_func_call(statement, rhs_index);
+		} else {
+			lhs = create_var_ast(tokens[rhs_index].token_str);
+		}
 		ASTNode *op = parse_rhs(statement, rhs_index + 1);
 		if (op) {
 			return append_to_leftmost(lhs, op);
