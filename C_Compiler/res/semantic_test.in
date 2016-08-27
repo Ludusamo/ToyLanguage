@@ -5,5 +5,7 @@ if (a == 3)
 	int d = c
 	a = d
 
-void b(int a)
+void b(int a, bool b)
 	return
+
+b(4, true)

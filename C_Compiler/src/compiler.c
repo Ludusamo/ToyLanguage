@@ -10,6 +10,7 @@ Linked_List *compile(ASTNode *program) {
 		ASTNode *node = SUB_NODE(program, i);
 		if (func_depth != -1) {
 			if (node->depth < func_depth) {
+				printf("hi\n");
 				func_depth = -1;
 				add_link(instructions, PUSH_OP);
 				add_link(instructions, 0);
@@ -28,6 +29,7 @@ Linked_List *compile(ASTNode *program) {
 				}	
 			}
 		}
+		printf("Line %d\n", i + 1);
 		switch (NODE_TYPE(node)) {
 		case DECL_NODE:
 			compile_decl(instructions, node, node->depth);
@@ -43,6 +45,9 @@ Linked_List *compile(ASTNode *program) {
 			break;
 		case RETURN_NODE:
 			compile_return(instructions, node);
+			break;
+		case FUNC_CALL_NODE:
+			compile_func_call(instructions, node);
 			break;
 		}
 		prev_depth = node->depth;
@@ -94,13 +99,19 @@ void compile_if(Linked_List *instructions, ASTNode *if_node, int depth) {
 }
 
 void compile_func_decl(Linked_List *instructions, ASTNode *func_node) {
+	ASTNode *arg_list = SUB_NODE(func_node, 2);
+	for (int i = 0; i < arg_list->num_sub; i++) {
+		char *id = GET_AST_DECL_ID(SUB_NODE(arg_list, i));
+		Memory_Address *addr = create_mem_addr(1, -3 - i, GET_AST_DATATYPE(SUB_NODE(arg_list, i)));
+		create_local_variable(id, addr, func_node->depth + 1);
+	}
 	add_link(instructions, BR_OP);
 	add_link(instructions, 0);
 	unknown_instruction_stack[instruction_sp++] = instructions->tail;
 	char *id = GET_AST_STR_DATA(SUB_NODE(func_node, 1));
 	Function *func = create_function(instructions->length, SUB_NODE(func_node, 2));
 	add_function(id, func);
-	func_depth = func_node->depth;
+	func_depth = func_node->depth + 1;
 }
 
 void compile_return(Linked_List *instructions, ASTNode *return_node) {
@@ -108,6 +119,18 @@ void compile_return(Linked_List *instructions, ASTNode *return_node) {
 		compile_rhs(instructions, SUB_NODE(return_node, 1), 0);
 	}
 	add_link(instructions, RET_OP);
+}
+
+void compile_func_call(Linked_List *instructions, ASTNode *func_call) {
+	Function *func = get_function(GET_AST_STR_DATA(SUB_NODE(func_call,1)));
+	ASTNode *var_list = SUB_NODE(func_call, 2);
+	int num_args = var_list->num_sub;
+	for (int i = num_args - 1; i >= 0 ; i--) {
+		compile_rhs(instructions, SUB_NODE(var_list, i), func_call->depth);
+	}
+	add_link(instructions, CALL_OP);
+	add_link(instructions, func->addr);
+	add_link(instructions, num_args);
 }
 
 void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth) {
@@ -126,8 +149,8 @@ void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth) {
 	}
 }
 
-void compile_operator(Linked_List *instructions, ASTNode *arithop) {
-	int type = GET_OP_TYPE(arithop);
+void compile_operator(Linked_List *instructions, ASTNode *op_node) {
+	int type = GET_OP_TYPE(op_node);
 	int op;
 	if (type == EQ) op = EQ_OP;
 	if (type == NEQ) op = NEQ_OP;
