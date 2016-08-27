@@ -19,5 +19,6 @@ int analyze_return(ASTNode *return_node);
 int analyze_rhs(ASTNode *rhs, int datatype, int depth);
 
 int determine_resulting_datatype(ASTNode *op_node);
+int check_datatype(ASTNode *node, int datatype);
 
 #endif // SEMANTIC_H
