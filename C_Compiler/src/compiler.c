@@ -121,10 +121,7 @@ void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth) {
 		compile_operator(instructions, rhs);
 		break;
 	case VAR_NODE:
-		if (depth == 0) compile_global_var(instructions, rhs);
-		else {
-			// TODO
-		}
+		compile_var(instructions, rhs, depth);
 		break;
 	}
 }
@@ -152,7 +149,17 @@ void compile_const(Linked_List *instructions, ASTNode *const_node) {
 	add_link(instructions, GET_CONST_INT(const_node));
 }
 
-void compile_global_var(Linked_List *instructions, ASTNode *var_node) {
-	add_link(instructions, GLOAD_OP);	
-	add_link(instructions, get_global_addr(GET_AST_STR_DATA(SUB_NODE(var_node, 0)))->addr);
+void compile_var(Linked_List *instructions, ASTNode *var_node, int depth) {
+	char *id = GET_AST_STR_DATA(SUB_NODE(var_node, 0));
+	Memory_Address *addr = 0;
+	while (!addr && depth > 0) {
+		addr = get_local_addr(id, depth--);
+	}
+	if (!addr) {
+		add_link(instructions, GLOAD_OP);	
+		addr = get_global_addr(id);
+	} else {
+		add_link(instructions, LOAD_OP);
+	}
+	add_link(instructions, addr->addr);
 }

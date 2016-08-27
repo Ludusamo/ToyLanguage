@@ -24,6 +24,7 @@ ASTNode *parse_parameter_list();
 ASTNode *parse_rhs(Statement *statement, int rhs_index);
 ASTNode *shift_op(ASTNode *rhs);
 int is_const(Token token);
+int *determine_const_type(int type);
 ASTNode *append_to_leftmost(ASTNode *lhs, ASTNode *rhs);
 
 #endif // PARSER_H

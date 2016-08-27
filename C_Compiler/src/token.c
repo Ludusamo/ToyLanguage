@@ -40,7 +40,7 @@ void identify_token_type(Token *token) {
 		token->type = PAREN;
 		token->subtype = list_index;
 		return;
-	} else if (s[0] == '\'' && isalnum(s[1]) && s[2] == '\'') {
+	} else if (s[0] == '\'') {
 		token->type = CHAR_LITERAL;
 		return;
 	} else if (s[0] == '\"') {
@@ -93,6 +93,51 @@ void *create_data_packet(Token token) {
 		int *bool_val = malloc(sizeof(int));
 		*bool_val = token.subtype;
 		return (void*) bool_val;
+	} else if (is_type(token, CHAR_LITERAL)) {
+		int *char_val = malloc(sizeof(int));
+		*char_val = (int) identify_char_literal(token);
+		printf("%c\n", identify_char_literal(token));
+		return (void*) char_val;
 	}
 	return 0;
+}
+
+char identify_char_literal(Token char_token) {
+	const char *char_str = char_token.token_str;
+	char character = 0;
+	printf("Identifying: %s\n", char_str);
+	if (char_str[1] == '\\') {
+		switch (char_str[2]) {
+		case '\'':
+			character = '\'';
+			break;
+		case '\"':
+			character = '\"';
+			break;
+		case '\\':
+			character = '\\';
+			break;
+		case 'n':
+			character = '\n';
+			break;
+		case 'r':
+			character = '\r';
+			break;
+		case 't':
+			character = '\t';
+			break;
+		case 'b':
+			character = '\b';
+			break;
+		case 'f':
+			character = '\f';
+			break;
+		case '0':
+			character = '\0';
+			break;
+		}
+	} else {
+		character = char_str[1];
+	}
+	return character;
 }
