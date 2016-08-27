@@ -116,8 +116,8 @@ void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth) {
 		compile_const(instructions, rhs);
 		break;
 	case OPERATOR_NODE:
-		compile_rhs(instructions, SUB_NODE(rhs, 0), depth);
 		compile_rhs(instructions, SUB_NODE(rhs, 1), depth);
+		compile_rhs(instructions, SUB_NODE(rhs, 2), depth);
 		compile_operator(instructions, rhs);
 		break;
 	case VAR_NODE:
@@ -150,7 +150,7 @@ void compile_const(Linked_List *instructions, ASTNode *const_node) {
 }
 
 void compile_var(Linked_List *instructions, ASTNode *var_node, int depth) {
-	char *id = GET_AST_STR_DATA(SUB_NODE(var_node, 0));
+	char *id = GET_AST_STR_DATA(SUB_NODE(var_node, 1));
 	Memory_Address *addr = 0;
 	while (!addr && depth > 0) {
 		addr = get_local_addr(id, depth--);

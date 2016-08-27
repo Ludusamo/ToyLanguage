@@ -108,18 +108,20 @@ ASTNode *create_operator_ast(int *operation) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = OPERATOR_NODE;
 	node->data = (void*) operation;
-	node->sub_nodes = malloc(sizeof(ASTNode) * 2);
+	node->sub_nodes = malloc(sizeof(ASTNode) * 3);
 	SUB_NODE(node, 0) = NULL;
 	SUB_NODE(node, 1) = NULL;
-	node->num_sub = 2;
+	SUB_NODE(node, 2) = NULL;
+	node->num_sub = 3;
 	return node;
 }
 
 ASTNode *create_var_ast(const char *id) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = VAR_NODE;
-	node->sub_nodes = malloc(sizeof(ASTNode) * 1);
-	SUB_NODE(node, 0) = create_id_ast(id);
-	node->num_sub = 1;
+	node->sub_nodes = malloc(sizeof(ASTNode) * 2);
+	SUB_NODE(node, 0) = NULL;
+	SUB_NODE(node, 1) = create_id_ast(id);
+	node->num_sub = 2;
 	return node;
 }

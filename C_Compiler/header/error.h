@@ -4,13 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define NUM_ERROR_TYPES 4
+#define NUM_ERROR_TYPES 6
 
 typedef enum {
 	UNKNOWN_REFERENCE,
 	VARIABLE_EXISTS,
 	FUNCTION_EXISTS,
-	UNEXPECTED_TOKEN
+	UNEXPECTED_TOKEN,
+	TYPE_MISMATCH,
+	INVALID_OPERANDS
 } Error_Type;
 
 const char *ErrorNames[NUM_ERROR_TYPES];

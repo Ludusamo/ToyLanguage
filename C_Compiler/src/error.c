@@ -4,7 +4,9 @@ const char *ErrorNames[] = {
 	"Unknown Reference Exception",
 	"Variable Exists",
 	"Function Exists",
-	"Unexpected Token"
+	"Unexpected Token",
+	"Type Mismatch",
+	"Invalid Operands"
 };
 
 void throw_error(Error_Type type, const char *filename, int lineno, const char *additional) {

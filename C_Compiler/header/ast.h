@@ -13,7 +13,6 @@
 #define GET_AST_DATATYPE(ast) *(int*) ast->sub_nodes[0]->data
 
 typedef struct ASTNode ASTNode;
-
 typedef enum {
 	PROG_NODE,
 	DECL_NODE,
