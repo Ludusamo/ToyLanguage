@@ -33,7 +33,7 @@ ASTNode *parse_line(Statement *statement) {
 		return node;
 	} else if (node = parse_return(statement)) {
 		return node;
-	} else if (node = parse_func_call(statement)) {
+	} else if (node = parse_func_call(statement, 0)) {
 		return node;
 	} else if (is_type(statement->tokens[1], EOS)) {
 		node = malloc(sizeof(ASTNode));
@@ -101,15 +101,15 @@ ASTNode *parse_return(Statement *statement) {
 	return 0;
 }
 
-ASTNode *parse_func_call(Statement *statement) {
+ASTNode *parse_func_call(Statement *statement, int index) {
 	Token *tokens = statement->tokens;
-	if (is_type(tokens[0], IDENTIFIER)) {
-		if (is_type(tokens[1], PAREN) && is_subtype(tokens[1], LPAREN)) {
+	if (is_type(tokens[index], IDENTIFIER)) {
+		if (is_type(tokens[index + 1], PAREN) && is_subtype(tokens[index + 1], LPAREN)) {
 			int num_param = 0;
 			ASTNode *var_stack[255];
-			var_stack[num_param++] = parse_rhs(statement, 2);
+			var_stack[num_param++] = parse_rhs(statement, index + 2);
 			if (!var_stack[num_param - 1]) {
-				if (is_type(tokens[2], PAREN) && is_subtype(tokens[2], RPAREN)) {
+				if (is_type(tokens[index + 2], PAREN) && is_subtype(tokens[index + 2], RPAREN)) {
 					ASTNode *arg_list = create_varlist_ast(0);
 					return create_func_call_ast(NULL, tokens[0].token_str, arg_list, statement->depth);
 				} else {
@@ -117,14 +117,14 @@ ASTNode *parse_func_call(Statement *statement) {
 					// TODO: throw_error();
 				}
 			} else {
-				int i = 2;
+				int i = index + 2;
 				while (!is_type(tokens[i], EOS)) {
 					if (is_type(tokens[i], PAREN) && is_subtype(tokens[i], RPAREN)) {
 						ASTNode *arg_list = create_varlist_ast(num_param);
 						for (int i = 0; i < num_param; i++) {
 							SUB_NODE(arg_list, i) = var_stack[i];
 						}
-						return create_func_call_ast(NULL, tokens[0].token_str, arg_list, statement->depth);	
+						return create_func_call_ast(NULL, tokens[index].token_str, arg_list, statement->depth);	
 					} else if (is_type(tokens[i], COMMA)) {
 						var_stack[num_param++] = parse_rhs(statement, i + 1);
 						if (!var_stack[num_param - 1]) {
