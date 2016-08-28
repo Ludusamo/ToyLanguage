@@ -128,7 +128,6 @@ ASTNode *parse_func_call(Statement *statement, int index) {
 					} else if (is_type(tokens[i], COMMA)) {
 						var_stack[num_param++] = parse_rhs(statement, i + 1);
 						if (!var_stack[num_param - 1]) {
-							printf("Incorrect rhs1\n");
 							// TODO: throw_error();
 						}
 					}
@@ -230,8 +229,21 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 	} else if (is_type(tokens[rhs_index], IDENTIFIER)) {
 		ASTNode *lhs = 0;
 		if (is_type(tokens[rhs_index + 1], PAREN) && is_subtype(tokens[rhs_index + 1], LPAREN)) {
-			lhs = parse_func_call(statement, rhs_index);
-		} else {
+			int i = rhs_index + 2;
+			while (!is_type(tokens[i], PAREN) && !is_type(tokens[i], RPAREN)) {
+				if (is_type(tokens[i], EOS)) {
+					throw_error(UNEXPECTED_TOKEN, "Unknown", lineno, "");
+				} else if (is_type(tokens[i], COMMA)) {
+					lhs = parse_func_call(statement, rhs_index);
+					int j = 0;
+					for (j = rhs_index; !is_type(tokens[j], PAREN) && !is_subtype(tokens[j], RPAREN); j++);
+					rhs_index = i;
+					break;
+				}
+				i++;
+			}
+		} 
+		if (!lhs) {
 			lhs = create_var_ast(tokens[rhs_index].token_str);
 		}
 		ASTNode *op = parse_rhs(statement, rhs_index + 1);

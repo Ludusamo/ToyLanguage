@@ -38,10 +38,11 @@ Memory_Address *create_mem_addr(int size, int addr, int type) {
 	return mem_addr;
 }
 
-Function *create_function(int addr, ASTNode *arg_list) {
+Function *create_function(int addr, ASTNode *arg_list, int return_type) {
 	Function *func = malloc(sizeof(Function));
 	func->addr = addr;
 	func->arg_list = arg_list;
+	func->return_type = return_type;
 	return func;
 }
 

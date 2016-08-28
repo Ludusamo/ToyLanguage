@@ -122,7 +122,7 @@ int analyze_func_decl(ASTNode *func_decl) {
 			ASTNode *arg = SUB_NODE(arg_list, i);
 			status = status && analyze_decl(arg, -1);
 		}
-		Function *func = create_function(-1, arg_list);
+		Function *func = create_function(-1, arg_list, GET_AST_DATATYPE(func_decl));
 		status = status && add_function(id, func);
 	}
 	return status;
@@ -146,6 +146,7 @@ int analyze_func_call(ASTNode *func_call) {
 	if (!func) {
 		throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, "");
 	}
+	SUB_NODE(func_call, 0) = create_datatype_ast(&func->return_type);
 	
 	ASTNode *rhs_list = SUB_NODE(func_call, 2);
 	ASTNode *arg_list = func->arg_list;	
@@ -184,6 +185,8 @@ int analyze_rhs(ASTNode *rhs, int depth) {
 			throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, "");
 		}
 		SUB_NODE(rhs, 0) = create_datatype_ast(&var->type);
+	} else if (NODE_TYPE(rhs) == FUNC_CALL_NODE) {
+		analyze_func_call(rhs);
 	}
 	return 1;	
 }

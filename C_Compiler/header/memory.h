@@ -22,6 +22,7 @@ typedef struct {
 typedef struct {
 	int addr;
 	ASTNode *arg_list;
+	int return_type;
 } Function;
 
 void init_mem();
@@ -29,7 +30,7 @@ void deinit_mem();
 void clear_mem();
 
 Memory_Address *create_mem_addr(int size, int addr, int type);
-Function *create_function(int addr, ASTNode *arg_list);
+Function *create_function(int addr, ASTNode *arg_list, int return_type);
 void destroy_mem_addr(Memory_Address *mem_addr);
 
 int create_global_variable(const char *key, Memory_Address *addr);
