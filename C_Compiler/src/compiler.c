@@ -10,7 +10,6 @@ Linked_List *compile(ASTNode *program) {
 		ASTNode *node = SUB_NODE(program, i);
 		if (func_depth != -1) {
 			if (node->depth < func_depth) {
-				printf("hi\n");
 				func_depth = -1;
 				add_link(instructions, PUSH_OP);
 				add_link(instructions, 0);
@@ -116,7 +115,7 @@ void compile_func_decl(Linked_List *instructions, ASTNode *func_node) {
 
 void compile_return(Linked_List *instructions, ASTNode *return_node) {
 	if (GET_AST_DATATYPE(return_node) != 0) {
-		compile_rhs(instructions, SUB_NODE(return_node, 1), 0);
+		compile_rhs(instructions, SUB_NODE(return_node, 1), return_node->depth);
 	}
 	add_link(instructions, RET_OP);
 }
@@ -145,6 +144,10 @@ void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth) {
 		break;
 	case VAR_NODE:
 		compile_var(instructions, rhs, depth);
+		break;
+	case FUNC_CALL_NODE:
+		printf("hi\n");
+		compile_func_call(instructions, rhs);
 		break;
 	}
 }

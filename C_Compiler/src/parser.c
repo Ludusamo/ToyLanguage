@@ -236,8 +236,9 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 				} else if (is_type(tokens[i], COMMA)) {
 					lhs = parse_func_call(statement, rhs_index);
 					int j = 0;
-					for (j = rhs_index; !is_type(tokens[j], PAREN) && !is_subtype(tokens[j], RPAREN); j++);
-					rhs_index = i;
+					for (j = rhs_index; !is_type(tokens[j], PAREN) || !is_subtype(tokens[j], RPAREN); j++); 
+					rhs_index = j;
+					printf("%s\n", tokens[rhs_index].token_str);
 					break;
 				}
 				i++;
