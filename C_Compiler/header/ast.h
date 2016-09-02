@@ -21,6 +21,7 @@ typedef enum {
 	FUNC_CALL_NODE,
 	ASSIGN_NODE,
 	IF_NODE,
+	WHILE_NODE,
 	CONST_NODE,
 	ID_NODE,
 	DATATYPE_NODE,
@@ -50,6 +51,7 @@ ASTNode *create_decl_ast(int *datatype, const char *id, ASTNode *rhs, int depth)
 ASTNode *create_assignment_ast(const char *id, ASTNode *rhs, int depth);
 
 ASTNode *create_if_ast(ASTNode *rhs, int depth);
+ASTNode *create_while_ast(ASTNode *rhs, int depth);
 
 ASTNode *create_func_ast(int *datatype, const char *id, ASTNode *varlist, int depth);
 ASTNode *create_varlist_ast(int num_var);
