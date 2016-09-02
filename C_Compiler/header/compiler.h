@@ -7,7 +7,6 @@
 #include "linked_list.h"
 #include "shared_values.h"
 #include "token.h"
-
 typedef enum {
 	HALT_OP,
 	PUSH_OP,
@@ -47,6 +46,7 @@ Linked_List *compile(ASTNode *program);
 void compile_decl(Linked_List *instructions, ASTNode *decl, int depth);
 void compile_assign(Linked_List *instructions, ASTNode *assign, int depth);
 void compile_if(Linked_List *instructions, ASTNode *if_node, int depth);
+void compile_while(Linked_List *instructions, ASTNode *while_node, int depth);
 void compile_func_decl(Linked_List *instructions, ASTNode *func_node);
 void compile_return(Linked_List *instructions, ASTNode *return_node);
 void compile_func_call(Linked_List *instructions, ASTNode *func_call);

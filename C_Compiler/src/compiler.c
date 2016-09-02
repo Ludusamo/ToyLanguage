@@ -30,6 +30,9 @@ Linked_List *compile(ASTNode *program) {
 		case IF_NODE:
 			compile_if(instructions, node, node->depth);
 			break;
+		case WHILE_NODE:
+			compile_while(instructions, node, node->depth);
+			break;
 		case FUNC_NODE:
 			compile_func_decl(instructions, node);
 			break;
@@ -86,6 +89,15 @@ void compile_if(Linked_List *instructions, ASTNode *if_node, int depth) {
 	add_link(instructions, BRF_OP);
 	add_link(instructions, 0);
 	pda_stack[pda_sp++] = create_if_pda(instructions, instructions->tail);
+}
+
+void compile_while(Linked_List *instructions, ASTNode *while_node, int depth) {
+	int *beg_branch_index = malloc(sizeof(int));
+	*beg_branch_index = instructions->length;
+	compile_rhs(instructions, SUB_NODE(while_node, 0), depth);
+	add_link(instructions, BRF_OP);
+	add_link(instructions, 0);
+	pda_stack[pda_sp++] = create_while_pda(instructions, instructions->tail, beg_branch_index);
 }
 
 void compile_func_decl(Linked_List *instructions, ASTNode *func_node) {
