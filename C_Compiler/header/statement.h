@@ -27,5 +27,6 @@ void add_token(Statement *statement, const char *str);
 void tokenize_statement(Statement *statement);
 int is_whitespace(char c);
 int is_paren(char c);
+int is_comma(char c);
 
 #endif // STATEMENT_H

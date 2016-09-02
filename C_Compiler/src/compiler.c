@@ -146,7 +146,6 @@ void compile_rhs(Linked_List *instructions, ASTNode *rhs, int depth) {
 		compile_var(instructions, rhs, depth);
 		break;
 	case FUNC_CALL_NODE:
-		printf("hi\n");
 		compile_func_call(instructions, rhs);
 		break;
 	}

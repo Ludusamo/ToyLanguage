@@ -117,21 +117,28 @@ ASTNode *parse_func_call(Statement *statement, int index) {
 					// TODO: throw_error();
 				}
 			} else {
-				int i = index + 2;
-				while (!is_type(tokens[i], EOS)) {
-					if (is_type(tokens[i], PAREN) && is_subtype(tokens[i], RPAREN)) {
-						ASTNode *arg_list = create_varlist_ast(num_param);
-						for (int i = 0; i < num_param; i++) {
-							SUB_NODE(arg_list, i) = var_stack[i];
+				int paren_count = 1;
+				for (int i = statement_index; paren_count > 0; i++) {
+					if (is_type(tokens[i], PAREN)) {
+						if (is_subtype(tokens[i], LPAREN)) {
+							paren_count++;
+						} else {
+							paren_count--;
+							if (paren_count == 0) {
+								ASTNode *arg_list = create_varlist_ast(num_param);
+								for (int i = 0; i < num_param; i++) {
+									SUB_NODE(arg_list, i) = var_stack[i];
+								}
+								return create_func_call_ast(NULL, tokens[index].token_str, arg_list, statement->depth);	
+							}
 						}
-						return create_func_call_ast(NULL, tokens[index].token_str, arg_list, statement->depth);	
 					} else if (is_type(tokens[i], COMMA)) {
 						var_stack[num_param++] = parse_rhs(statement, i + 1);
+						i = statement_index - 1;
 						if (!var_stack[num_param - 1]) {
 							// TODO: throw_error();
 						}
 					}
-					i++;
 				}
 			}
 		}
@@ -230,21 +237,24 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 		ASTNode *lhs = 0;
 		if (is_type(tokens[rhs_index + 1], PAREN) && is_subtype(tokens[rhs_index + 1], LPAREN)) {
 			int i = rhs_index + 2;
-			while (!is_type(tokens[i], PAREN) && !is_type(tokens[i], RPAREN)) {
+			int paren_count = 1;
+			for (i = rhs_index + 2; paren_count > 0; i++) {
 				if (is_type(tokens[i], EOS)) {
 					throw_error(UNEXPECTED_TOKEN, "Unknown", lineno, "");
-				} else if (is_type(tokens[i], COMMA)) {
-					lhs = parse_func_call(statement, rhs_index);
-					int j = 0;
-					for (j = rhs_index; !is_type(tokens[j], PAREN) || !is_subtype(tokens[j], RPAREN); j++); 
-					rhs_index = j;
-					printf("%s\n", tokens[rhs_index].token_str);
-					break;
+				} else if (is_type(tokens[i], PAREN)) {
+					if (is_subtype(tokens[i], LPAREN)) {
+						paren_count++;	
+					} else {
+						paren_count--;	
+					}	
 				}
-				i++;
+				
 			}
-		} 
-		if (!lhs) {
+			printf("FUNC CALL %s\n", tokens[rhs_index].token_str);
+			lhs = parse_func_call(statement, rhs_index);
+			rhs_index = i - 1;
+			printf("%s\n", tokens[rhs_index].token_str);
+		} else {
 			lhs = create_var_ast(tokens[rhs_index].token_str);
 		}
 		ASTNode *op = parse_rhs(statement, rhs_index + 1);

@@ -44,8 +44,8 @@ int analyze_decl(ASTNode *decl, int depth) {
 			int status = create_global_variable(id, addr);
 			ASTNode *rhs = SUB_NODE(decl, 2);
 			if (rhs) {
-					analyze_rhs(rhs, depth);
-					status = status && check_datatype(rhs, GET_AST_DATATYPE(decl));
+				analyze_rhs(rhs, depth);
+				status = status && check_datatype(rhs, GET_AST_DATATYPE(decl));
 			}
 			if (status) return 1;
 		}	
@@ -152,6 +152,7 @@ int analyze_func_call(ASTNode *func_call) {
 	ASTNode *arg_list = func->arg_list;	
 	int num_args = arg_list->num_sub;
 	if (rhs_list->num_sub != arg_list->num_sub) {
+		printf("%d %d\n", rhs_list->num_sub, arg_list->num_sub);
 		throw_error(INSUFFICIENT_ARGS, "Unknown", lineno, "");
 	}
 	for (int i = 0; i < num_args; i++) {
