@@ -9,7 +9,9 @@ int semantic_analysis(ASTNode *prog) {
 		lineno = i + 1;
 		ASTNode *node = SUB_NODE(prog, i);
 		if (node->depth < prev_depth) {
-			exit_depth(prev_depth); } switch (NODE_TYPE(node)) {
+			exit_depth(prev_depth); 
+		} 
+		switch (NODE_TYPE(node)) {
 		case DECL_NODE:
 			status = status && analyze_decl(node, node->depth);
 			break;
@@ -18,6 +20,9 @@ int semantic_analysis(ASTNode *prog) {
 			break;
 		case IF_NODE:
 			status = status && analyze_if(node, node->depth);
+			break;
+		case WHILE_NODE:
+			status = status && analyze_while(node, node->depth);
 			break;
 		case FUNC_NODE:
 			status = status && analyze_func_decl(node);
@@ -111,6 +116,11 @@ int analyze_if(ASTNode *if_node, int depth) {
 	return check_datatype(SUB_NODE(if_node, 0), BOOL);
 }
 
+int analyze_while(ASTNode *while_node, int depth) {
+	analyze_rhs(SUB_NODE(while_node, 0), depth);
+	return check_datatype(SUB_NODE(while_node, 0), BOOL);
+}
+
 int analyze_func_decl(ASTNode *func_decl) {
 	char *id = GET_AST_STR_DATA(SUB_NODE(func_decl, 1));
 	int status = 1;
@@ -152,7 +162,6 @@ int analyze_func_call(ASTNode *func_call) {
 	ASTNode *arg_list = func->arg_list;	
 	int num_args = arg_list->num_sub;
 	if (rhs_list->num_sub != arg_list->num_sub) {
-		printf("%d %d\n", rhs_list->num_sub, arg_list->num_sub);
 		throw_error(INSUFFICIENT_ARGS, "Unknown", lineno, "");
 	}
 	for (int i = 0; i < num_args; i++) {

@@ -26,6 +26,8 @@ ASTNode *parse_line(Statement *statement) {
 		return node;
 	} else if (node = parse_if(statement)) {
 		return node;
+	} else if (node = parse_while(statement)) {
+		return node;
 	} else if (node = parse_function(statement)) {
 		in_function = 1;
 		function_depth = statement->depth;
@@ -262,10 +264,8 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 				}
 				
 			}
-			printf("FUNC CALL %s\n", tokens[rhs_index].token_str);
 			lhs = parse_func_call(statement, rhs_index);
 			rhs_index = i - 1;
-			printf("%s\n", tokens[rhs_index].token_str);
 		} else {
 			lhs = create_var_ast(tokens[rhs_index].token_str);
 		}

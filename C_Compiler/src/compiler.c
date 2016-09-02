@@ -28,7 +28,6 @@ Linked_List *compile(ASTNode *program) {
 				}	
 			}
 		}
-		printf("Line %d\n", i + 1);
 		switch (NODE_TYPE(node)) {
 		case DECL_NODE:
 			compile_decl(instructions, node, node->depth);
