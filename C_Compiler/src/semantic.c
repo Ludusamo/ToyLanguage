@@ -25,6 +25,9 @@ int semantic_analysis(ASTNode *prog) {
 		case RETURN_NODE:
 			status = status && analyze_return(node);
 			break;
+		case FUNC_CALL_NODE:
+			status = status && analyze_func_call(node);
+			break;
 		}
 		prev_depth = node->depth;
 	}
@@ -41,8 +44,8 @@ int analyze_decl(ASTNode *decl, int depth) {
 			int status = create_global_variable(id, addr);
 			ASTNode *rhs = SUB_NODE(decl, 2);
 			if (rhs) {
-					analyze_rhs(rhs, GET_AST_DATATYPE(decl), depth);
-					status = status && check_datatype(rhs, GET_AST_DATATYPE(decl));
+				analyze_rhs(rhs, depth);
+				status = status && check_datatype(rhs, GET_AST_DATATYPE(decl));
 			}
 			if (status) return 1;
 		}	
@@ -62,7 +65,7 @@ int analyze_decl(ASTNode *decl, int depth) {
 			int status = create_local_variable(id, addr, depth);
 			ASTNode *rhs = SUB_NODE(decl, 2);
 			if (rhs) {
-					analyze_rhs(rhs, GET_AST_DATATYPE(decl), depth);
+					analyze_rhs(rhs, depth);
 					status = status && check_datatype(rhs, GET_AST_DATATYPE(decl));
 			}
 			if (status) return 1;
@@ -80,7 +83,7 @@ int analyze_assignment(ASTNode *assign, int depth) {
 			ASTNode *rhs = SUB_NODE(assign, 1);
 			int status = 0;
 			if (rhs) {
-				analyze_rhs(SUB_NODE(assign, 1), get_global_addr(id)->type, depth);
+				analyze_rhs(SUB_NODE(assign, 1), depth);
 				status = check_datatype(rhs, get_global_addr(id)->type);
 			}
 			if (status) return 1;
@@ -94,7 +97,7 @@ int analyze_assignment(ASTNode *assign, int depth) {
 			Memory_Address *addr = get_local_addr(id, depth);
 			if (!addr) addr = get_global_addr(id);
 			if (rhs) {
-				analyze_rhs(rhs, addr->type, depth);
+				analyze_rhs(rhs, depth);
 				status = check_datatype(rhs, addr->type);
 			}
 			if (status) return 1;
@@ -104,14 +107,14 @@ int analyze_assignment(ASTNode *assign, int depth) {
 }
 
 int analyze_if(ASTNode *if_node, int depth) {
-	analyze_rhs(SUB_NODE(if_node, 0), BOOL, depth);
+	analyze_rhs(SUB_NODE(if_node, 0), depth);
 	return check_datatype(SUB_NODE(if_node, 0), BOOL);
 }
 
 int analyze_func_decl(ASTNode *func_decl) {
 	char *id = GET_AST_STR_DATA(SUB_NODE(func_decl, 1));
 	int status = 1;
-	if (get_function_addr(id)) {
+	if (get_function(id)) {
 		throw_error(FUNCTION_EXISTS, "Unknown", lineno, NULL);
 	} else {
 		ASTNode *arg_list = SUB_NODE(func_decl, 2);
@@ -119,15 +122,15 @@ int analyze_func_decl(ASTNode *func_decl) {
 			ASTNode *arg = SUB_NODE(arg_list, i);
 			status = status && analyze_decl(arg, -1);
 		}
-		Memory_Address *addr = create_mem_addr(1, -1, 1);
-		status = status && create_function(id, addr);
+		Function *func = create_function(-1, arg_list, GET_AST_DATATYPE(func_decl));
+		status = status && add_function(id, func);
 	}
 	return status;
 }
 
 int analyze_return(ASTNode *return_node) {
 	if (SUB_NODE(return_node, 1)) {
-		analyze_rhs(SUB_NODE(return_node, 1), GET_AST_DATATYPE(return_node), return_node->depth);
+		analyze_rhs(SUB_NODE(return_node, 1), return_node->depth);
 		if (check_datatype(SUB_NODE(return_node, 1), GET_AST_DATATYPE(return_node))) {
 			return 1;
 		}
@@ -137,10 +140,34 @@ int analyze_return(ASTNode *return_node) {
 	return 0;
 }
 
-int analyze_rhs(ASTNode *rhs, int datatype, int depth) {
+int analyze_func_call(ASTNode *func_call) {
+	char *id = GET_AST_STR_DATA(SUB_NODE(func_call, 1));
+	Function *func = get_function(id);
+	if (!func) {
+		throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, "");
+	}
+	SUB_NODE(func_call, 0) = create_datatype_ast(&func->return_type);
+	
+	ASTNode *rhs_list = SUB_NODE(func_call, 2);
+	ASTNode *arg_list = func->arg_list;	
+	int num_args = arg_list->num_sub;
+	if (rhs_list->num_sub != arg_list->num_sub) {
+		printf("%d %d\n", rhs_list->num_sub, arg_list->num_sub);
+		throw_error(INSUFFICIENT_ARGS, "Unknown", lineno, "");
+	}
+	for (int i = 0; i < num_args; i++) {
+		analyze_rhs(SUB_NODE(rhs_list, i), func_call->depth);
+		if (!check_datatype(SUB_NODE(rhs_list, i), GET_AST_DATATYPE(SUB_NODE(arg_list, i)))) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
+int analyze_rhs(ASTNode *rhs, int depth) {
 	if (NODE_TYPE(rhs) == OPERATOR_NODE) {
-		analyze_rhs(SUB_NODE(rhs, 1), datatype, depth);
-		analyze_rhs(SUB_NODE(rhs, 2), datatype, depth);
+		analyze_rhs(SUB_NODE(rhs, 1), depth);
+		analyze_rhs(SUB_NODE(rhs, 2), depth);
 		int resulting_datatype = determine_resulting_datatype(rhs);
 		if (resulting_datatype == -1) {
 			throw_error(INVALID_OPERANDS, "Unknown", lineno, "");
@@ -159,6 +186,8 @@ int analyze_rhs(ASTNode *rhs, int datatype, int depth) {
 			throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, "");
 		}
 		SUB_NODE(rhs, 0) = create_datatype_ast(&var->type);
+	} else if (NODE_TYPE(rhs) == FUNC_CALL_NODE) {
+		analyze_func_call(rhs);
 	}
 	return 1;	
 }

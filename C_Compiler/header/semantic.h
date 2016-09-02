@@ -16,7 +16,8 @@ int analyze_assignment(ASTNode *assign, int depth);
 int analyze_if(ASTNode *if_node, int depth);
 int analyze_func_decl(ASTNode *func_decl);
 int analyze_return(ASTNode *return_node);
-int analyze_rhs(ASTNode *rhs, int datatype, int depth);
+int analyze_func_call(ASTNode *func_call);
+int analyze_rhs(ASTNode *rhs, int depth);
 
 int determine_resulting_datatype(ASTNode *op_node);
 int check_datatype(ASTNode *node, int datatype);

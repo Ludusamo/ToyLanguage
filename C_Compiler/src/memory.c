@@ -38,6 +38,14 @@ Memory_Address *create_mem_addr(int size, int addr, int type) {
 	return mem_addr;
 }
 
+Function *create_function(int addr, ASTNode *arg_list, int return_type) {
+	Function *func = malloc(sizeof(Function));
+	func->addr = addr;
+	func->arg_list = arg_list;
+	func->return_type = return_type;
+	return func;
+}
+
 void destroy_mem_addr(Memory_Address *mem_addr) {
 	free(mem_addr);
 	mem_addr = 0;
@@ -52,8 +60,8 @@ int create_local_variable(const char *key, Memory_Address *addr, int depth) {
 	return rbt_insert(local_memory[depth - 1], key, addr);
 }
 
-int create_function(const char *key, Memory_Address *addr) {
-	return rbt_insert(function_addresses, key, addr);
+int add_function(const char *key, Function *func) {
+	return rbt_insert(function_addresses, key, func);
 }
 
 void exit_depth(int depth) {
@@ -77,9 +85,9 @@ Memory_Address *get_local_addr(const char *key, int depth) {
 	return 0;
 }
 
-Memory_Address *get_function_addr(const char *key) {
+Function *get_function(const char *key) {
 	Map_Item *f = rbt_find(function_addresses, key);
-	if (f) return (Memory_Address*) f->data;
+	if (f) return (Function*) f->data;
 	else return 0;
 }
 

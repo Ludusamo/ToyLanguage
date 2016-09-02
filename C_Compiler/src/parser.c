@@ -33,6 +33,8 @@ ASTNode *parse_line(Statement *statement) {
 		return node;
 	} else if (node = parse_return(statement)) {
 		return node;
+	} else if (node = parse_func_call(statement, 0)) {
+		return node;
 	} else if (is_type(statement->tokens[1], EOS)) {
 		node = malloc(sizeof(ASTNode));
 		node->type = BLANK_NODE;
@@ -97,6 +99,50 @@ ASTNode *parse_return(Statement *statement) {
 		return create_return_ast(function_return_type, rhs, statement->depth);
 	}
 	return 0;
+}
+
+ASTNode *parse_func_call(Statement *statement, int index) {
+	Token *tokens = statement->tokens;
+	if (is_type(tokens[index], IDENTIFIER)) {
+		if (is_type(tokens[index + 1], PAREN) && is_subtype(tokens[index + 1], LPAREN)) {
+			int num_param = 0;
+			ASTNode *var_stack[255];
+			var_stack[num_param++] = parse_rhs(statement, index + 2);
+			if (!var_stack[num_param - 1]) {
+				if (is_type(tokens[index + 2], PAREN) && is_subtype(tokens[index + 2], RPAREN)) {
+					ASTNode *arg_list = create_varlist_ast(0);
+					return create_func_call_ast(NULL, tokens[0].token_str, arg_list, statement->depth);
+				} else {
+					printf("Incorrect rhs\n");
+					// TODO: throw_error();
+				}
+			} else {
+				int paren_count = 1;
+				for (int i = statement_index; paren_count > 0; i++) {
+					if (is_type(tokens[i], PAREN)) {
+						if (is_subtype(tokens[i], LPAREN)) {
+							paren_count++;
+						} else {
+							paren_count--;
+							if (paren_count == 0) {
+								ASTNode *arg_list = create_varlist_ast(num_param);
+								for (int i = 0; i < num_param; i++) {
+									SUB_NODE(arg_list, i) = var_stack[i];
+								}
+								return create_func_call_ast(NULL, tokens[index].token_str, arg_list, statement->depth);	
+							}
+						}
+					} else if (is_type(tokens[i], COMMA)) {
+						var_stack[num_param++] = parse_rhs(statement, i + 1);
+						i = statement_index - 1;
+						if (!var_stack[num_param - 1]) {
+							// TODO: throw_error();
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 ASTNode *parse_parameter_list(Statement *statement, int rhs_index) {
@@ -188,7 +234,29 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 			}
 		}
 	} else if (is_type(tokens[rhs_index], IDENTIFIER)) {
-		ASTNode *lhs = create_var_ast(tokens[rhs_index].token_str);
+		ASTNode *lhs = 0;
+		if (is_type(tokens[rhs_index + 1], PAREN) && is_subtype(tokens[rhs_index + 1], LPAREN)) {
+			int i = rhs_index + 2;
+			int paren_count = 1;
+			for (i = rhs_index + 2; paren_count > 0; i++) {
+				if (is_type(tokens[i], EOS)) {
+					throw_error(UNEXPECTED_TOKEN, "Unknown", lineno, "");
+				} else if (is_type(tokens[i], PAREN)) {
+					if (is_subtype(tokens[i], LPAREN)) {
+						paren_count++;	
+					} else {
+						paren_count--;	
+					}	
+				}
+				
+			}
+			printf("FUNC CALL %s\n", tokens[rhs_index].token_str);
+			lhs = parse_func_call(statement, rhs_index);
+			rhs_index = i - 1;
+			printf("%s\n", tokens[rhs_index].token_str);
+		} else {
+			lhs = create_var_ast(tokens[rhs_index].token_str);
+		}
 		ASTNode *op = parse_rhs(statement, rhs_index + 1);
 		if (op) {
 			return append_to_leftmost(lhs, op);

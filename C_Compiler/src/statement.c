@@ -96,11 +96,18 @@ void tokenize_statement(Statement *statement) {
 				mode = is_whitespace(s[i]) ? 0 : 2;
 			}
 		} else if (mode == 2) { // Other
-			if (isalnum(s[i]) || is_whitespace(s[i]) || is_paren(s[i])) {
+			if (isalnum(s[i]) || is_whitespace(s[i]) || is_paren(s[i]) || is_comma(s[i])) {
 				buffer[bi++] = '\0';
+				printf("%s\n", buffer);
 				bi = 0;
 				add_token(statement, buffer);
-				mode = is_whitespace(s[i]) ? 0 : 1;
+				if (is_whitespace(s[i])) {
+					mode = 0;
+				} else if (isalnum(s[i])) {
+					mode = 1;
+				} else {
+					mode = 2;
+				}
 			}
 		}
 		buffer[bi++] = s[i];
@@ -114,4 +121,8 @@ int is_whitespace(char c) {
 
 int is_paren(char c) {
 	return c == '(' || c == ')';
+}
+
+int is_comma(char c) {
+	return c == ',';
 }
