@@ -4,28 +4,20 @@ Linked_List *compile(ASTNode *program) {
 	clear_mem();
 	func_depth = -1;
 	Linked_List *instructions = create_linked_list();
-	instruction_sp = 0;
+	pda_sp = 0;
 	prev_depth = 0;
 	for (int i = 0; i < num_lines; i++) {
 		ASTNode *node = SUB_NODE(program, i);
-		if (func_depth != -1) {
-			if (node->depth < func_depth) {
-				func_depth = -1;
-				add_link(instructions, PUSH_OP);
-				add_link(instructions, 0);
-				add_link(instructions, RET_OP);
-			}
-		}
 
-		if (instruction_sp != 0) {
+		if (pda_sp != 0) {
 			if (node->depth < prev_depth) {
 				for (int i = 0; i < prev_depth - node->depth; i++) {
 					for (int j = 0; j < local_memory[prev_depth - i - 1]->num_values; j++)
 						add_link(instructions, POP_OP);
 					exit_depth(prev_depth - i);
-					Link *unknown = unknown_instruction_stack[--instruction_sp];
-					unknown->val = instructions->length;	
-				}	
+					PDA *pda = pda_stack[--pda_sp];
+					pda->execute(pda);
+				}
 			}
 		}
 		switch (NODE_TYPE(node)) {
@@ -93,7 +85,7 @@ void compile_if(Linked_List *instructions, ASTNode *if_node, int depth) {
 	compile_rhs(instructions, SUB_NODE(if_node, 0), depth);	
 	add_link(instructions, BRF_OP);
 	add_link(instructions, 0);
-	unknown_instruction_stack[instruction_sp++] = instructions->tail;
+	pda_stack[pda_sp++] = create_if_pda(instructions, instructions->tail);
 }
 
 void compile_func_decl(Linked_List *instructions, ASTNode *func_node) {
@@ -105,7 +97,7 @@ void compile_func_decl(Linked_List *instructions, ASTNode *func_node) {
 	}
 	add_link(instructions, BR_OP);
 	add_link(instructions, 0);
-	unknown_instruction_stack[instruction_sp++] = instructions->tail;
+	pda_stack[pda_sp++] = create_func_pda(instructions, instructions->tail);
 	char *id = GET_AST_STR_DATA(SUB_NODE(func_node, 1));
 	Function *func = create_function(instructions->length, SUB_NODE(func_node, 2), GET_AST_DATATYPE(func_node));
 	add_function(id, func);

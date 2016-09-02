@@ -1,6 +1,7 @@
 #ifndef COMPILER_H
 #define COMPILER_H
 
+#include "pda.h"
 #include "ast.h"
 #include "memory.h"
 #include "linked_list.h"
@@ -37,8 +38,8 @@ typedef enum {
 	NUM_OP_CODES
 } Opcodes;
 
-int instruction_sp;
-Link *unknown_instruction_stack[255];
+int pda_sp;
+struct PDA *pda_stack[255];
 int prev_depth;
 int func_depth;
 
