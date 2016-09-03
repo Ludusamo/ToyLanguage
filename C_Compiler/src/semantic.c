@@ -33,6 +33,9 @@ int semantic_analysis(ASTNode *prog) {
 		case FUNC_CALL_NODE:
 			status = status && analyze_func_call(node);
 			break;
+		case PRINT_NODE:
+			status = status && analyze_print(node, node->depth);
+			break;
 		}
 		prev_depth = node->depth;
 	}
@@ -199,6 +202,12 @@ int analyze_rhs(ASTNode *rhs, int depth) {
 		analyze_func_call(rhs);
 	}
 	return 1;	
+}
+
+// TODO: REMOVE
+int analyze_print(ASTNode *print_node, int depth) {
+	analyze_rhs(SUB_NODE(print_node, 0), depth);
+	return check_datatype(SUB_NODE(print_node, 0), INT);
 }
 
 int determine_resulting_datatype(ASTNode *op_node) {
