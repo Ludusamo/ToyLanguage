@@ -41,6 +41,8 @@ ASTNode *parse_line(Statement *statement) {
 		node = malloc(sizeof(ASTNode));
 		node->type = BLANK_NODE;
 		return node;
+	} else if (node = parse_print(statement)) { // TODO: REMOVE
+		return node;
 	}
 	return 0;
 }
@@ -74,8 +76,7 @@ ASTNode *parse_assignment(Statement *statement) {
 ASTNode *parse_if(Statement *statement) {
 	Token *tokens = statement->tokens;
 	if (is_type(tokens[0], CONTROL) && is_subtype(tokens[0], IF)) {
-		ASTNode *rhs = parse_rhs(statement, 1);
-		if (rhs) {
+		ASTNode *rhs = parse_rhs(statement, 1); if (rhs) {
 			return create_if_ast(rhs, statement->depth);
 		}
 	}
@@ -156,6 +157,14 @@ ASTNode *parse_func_call(Statement *statement, int index) {
 				}
 			}
 		}
+	}
+}
+
+ASTNode *parse_print(Statement *statement) {
+	Token *tokens = statement->tokens;
+	if (is_type(tokens[0], PRINT)) {
+		ASTNode *rhs = parse_rhs(statement, 1);
+		return create_print_ast(rhs);
 	}
 }
 

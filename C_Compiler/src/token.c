@@ -64,6 +64,9 @@ void identify_token_type(Token *token) {
 	} else if (str_equal("return", s)) {
 		token->type = RETURN;
 		return;
+	} else if (str_equal("print", s)) { // TODO: REMOVE
+		token->type = PRINT;
+		return;
 	}
 	for (int i = 0; i < strlen(s); i++) {
 		if (s[i] > 57 || s[i] < 48) break;

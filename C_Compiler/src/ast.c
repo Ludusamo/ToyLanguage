@@ -148,3 +148,13 @@ ASTNode *create_var_ast(const char *id) {
 	node->num_sub = 2;
 	return node;
 }
+
+// TODO: REMOVE
+ASTNode *create_print_ast(ASTNode *rhs) {
+	ASTNode *node = malloc(sizeof(ASTNode));
+	node->type = PRINT_NODE;
+	node->sub_nodes = malloc(sizeof(ASTNode) * 1);
+	SUB_NODE(node, 0) = rhs;
+	node->num_sub = 1;
+	return node;
+}
