@@ -1,7 +1,7 @@
 int a = 3
 
-if (a == 3)
-	int c = 3
+while (a == 3)
+	int c = 2
 	int d = c
 	a = d
 

@@ -70,6 +70,16 @@ ASTNode *create_if_ast(ASTNode *rhs, int depth) {
 	return node;
 }
 
+ASTNode *create_while_ast(ASTNode *rhs, int depth) {
+	ASTNode *node = malloc(sizeof(ASTNode));
+	node->type = WHILE_NODE;
+	node->sub_nodes = malloc(sizeof(ASTNode) * 1);
+	node->depth = depth;
+	SUB_NODE(node, 0) = rhs;
+	node->num_sub = 1;
+	return node;
+}
+
 ASTNode *create_func_ast(int *datatype, const char *id, ASTNode *varlist, int depth) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = FUNC_NODE;

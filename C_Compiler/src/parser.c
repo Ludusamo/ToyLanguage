@@ -26,6 +26,8 @@ ASTNode *parse_line(Statement *statement) {
 		return node;
 	} else if (node = parse_if(statement)) {
 		return node;
+	} else if (node = parse_while(statement)) {
+		return node;
 	} else if (node = parse_function(statement)) {
 		in_function = 1;
 		function_depth = statement->depth;
@@ -62,8 +64,9 @@ ASTNode *parse_assignment(Statement *statement) {
 	Token *tokens = statement->tokens;
 	if (is_type(tokens[0], IDENTIFIER) && is_type(tokens[1], ASSIGNMENT)) {
 		ASTNode *rhs = parse_rhs(statement, 2);
-		if (rhs)
+		if (rhs) {
 			return create_assignment_ast(tokens[0].token_str, rhs, statement->depth);	
+		}
 	}
 	return 0;
 }
@@ -72,10 +75,21 @@ ASTNode *parse_if(Statement *statement) {
 	Token *tokens = statement->tokens;
 	if (is_type(tokens[0], CONTROL) && is_subtype(tokens[0], IF)) {
 		ASTNode *rhs = parse_rhs(statement, 1);
-		if (rhs)
+		if (rhs) {
 			return create_if_ast(rhs, statement->depth);
+		}
 	}
 	return 0;
+}
+
+ASTNode *parse_while(Statement *statement) {
+	Token *tokens = statement->tokens;
+	if (is_type(tokens[0], CONTROL) && is_subtype(tokens[0], WHILE)) {
+		ASTNode *rhs = parse_rhs(statement, 1);
+		if (rhs) {
+			return create_while_ast(rhs, statement->depth);
+		}
+	}
 }
 
 ASTNode *parse_function(Statement *statement) {
@@ -250,10 +264,8 @@ ASTNode *parse_rhs(Statement *statement, int rhs_index) {
 				}
 				
 			}
-			printf("FUNC CALL %s\n", tokens[rhs_index].token_str);
 			lhs = parse_func_call(statement, rhs_index);
 			rhs_index = i - 1;
-			printf("%s\n", tokens[rhs_index].token_str);
 		} else {
 			lhs = create_var_ast(tokens[rhs_index].token_str);
 		}
