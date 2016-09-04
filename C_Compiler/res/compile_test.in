@@ -1,7 +1,6 @@
-int add(int a, int b)
-	return a + b
-int sub(int a, int b)
-	return a - b
-int c = (3 / 3)
-int d = 5
-int a = add((sub(c, d) + 5), d) - 4
+int i = 0
+
+while i < 10
+	i = i + 1
+	print i
+

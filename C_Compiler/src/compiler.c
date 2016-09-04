@@ -42,6 +42,9 @@ Linked_List *compile(ASTNode *program) {
 		case FUNC_CALL_NODE:
 			compile_func_call(instructions, node);
 			break;
+		case PRINT_NODE:
+			compile_print(instructions, node);
+			break;
 		}
 		prev_depth = node->depth;
 	}
@@ -190,4 +193,9 @@ void compile_var(Linked_List *instructions, ASTNode *var_node, int depth) {
 		add_link(instructions, LOAD_OP);
 	}
 	add_link(instructions, addr->addr);
+}
+
+void compile_print(Linked_List *instructions, ASTNode *print_node) {
+	compile_rhs(instructions, SUB_NODE(print_node, 0), print_node->depth);
+	add_link(instructions, PRINTI_OP);
 }

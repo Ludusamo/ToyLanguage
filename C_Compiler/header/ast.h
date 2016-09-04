@@ -63,6 +63,6 @@ ASTNode *create_operator_ast(int *operation);
 
 ASTNode *create_var_ast(const char *id);
 
-ASTNode *create_print_ast(ASTNode *rhs); // TODO: REMOVE
+ASTNode *create_print_ast(ASTNode *rhs, int depth); // TODO: REMOVE
 
 #endif // AST_H

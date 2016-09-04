@@ -164,7 +164,7 @@ ASTNode *parse_print(Statement *statement) {
 	Token *tokens = statement->tokens;
 	if (is_type(tokens[0], PRINT)) {
 		ASTNode *rhs = parse_rhs(statement, 1);
-		return create_print_ast(rhs);
+		return create_print_ast(rhs, statement->depth);
 	}
 }
 
