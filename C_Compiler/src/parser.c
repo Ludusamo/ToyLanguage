@@ -1,7 +1,7 @@
 #include <parser.h>
 
 ASTNode *parse(Statement *statements) {
-	ASTNode *program = create_program_ast(num_lines);
+	ASTNode *program = create_program_ast(num_lines + 1);
 	in_function = 0;
 	for (int i = 0; i < num_lines; i++) {
 		lineno = i + 1;
@@ -14,6 +14,10 @@ ASTNode *parse(Statement *statements) {
 			printf("Line %i is not a statement.\n", i + 1);
 		}
 	}
+	ASTNode *node = malloc(sizeof(ASTNode));
+	node->type = BLANK_NODE;
+	node->depth = 0;
+	SUB_NODE(program, num_lines) = node;
 	return program;
 }
 
@@ -132,8 +136,7 @@ ASTNode *parse_func_call(Statement *statement, int index) {
 					// TODO: throw_error();
 				}
 			} else {
-				int paren_count = 1;
-				for (int i = statement_index; paren_count > 0; i++) {
+				int paren_count = 1; for (int i = statement_index; paren_count > 0; i++) {
 					if (is_type(tokens[i], PAREN)) {
 						if (is_subtype(tokens[i], LPAREN)) {
 							paren_count++;

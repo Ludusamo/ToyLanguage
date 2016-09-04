@@ -6,7 +6,7 @@ Linked_List *compile(ASTNode *program) {
 	Linked_List *instructions = create_linked_list();
 	pda_sp = 0;
 	prev_depth = 0;
-	for (int i = 0; i < num_lines; i++) {
+	for (int i = 0; i < num_lines + 1; i++) {
 		ASTNode *node = SUB_NODE(program, i);
 
 		if (pda_sp != 0) {
