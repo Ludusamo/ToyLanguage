@@ -28,7 +28,8 @@ typedef enum {
 	OPERATOR_NODE,
 	VAR_NODE,
 	VARLIST_NODE,
-	BLANK_NODE
+	BLANK_NODE,
+	PRINT_NODE // TODO: REMOVE
 } AST_TYPE;
 
 struct ASTNode {
@@ -61,5 +62,7 @@ ASTNode *create_func_call_ast(int *datatype, const char *id, ASTNode *varlist, i
 ASTNode *create_operator_ast(int *operation);
 
 ASTNode *create_var_ast(const char *id);
+
+ASTNode *create_print_ast(ASTNode *rhs, int depth); // TODO: REMOVE
 
 #endif // AST_H

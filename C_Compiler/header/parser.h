@@ -22,6 +22,8 @@ ASTNode *parse_function(Statement *statement);
 ASTNode *parse_return(Statement *statement);
 ASTNode *parse_func_call(Statement *statement, int index);
 
+ASTNode *parse_print(Statement *statement); // TODO: REMOVE
+
 ASTNode *parse_parameter_list();
 ASTNode *parse_rhs(Statement *statement, int rhs_index);
 ASTNode *shift_op(ASTNode *rhs);

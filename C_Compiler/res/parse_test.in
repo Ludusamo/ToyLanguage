@@ -8,3 +8,4 @@ void test1(int a)
 void test(int a, int b)
 	return
 hello(a * dfsdf, 2)
+print 1

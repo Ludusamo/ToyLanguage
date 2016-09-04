@@ -4,6 +4,7 @@ while (a == 3)
 	int c = 2
 	int d = c
 	a = d
+	print a
 
 void b(int a, bool b)
 	return

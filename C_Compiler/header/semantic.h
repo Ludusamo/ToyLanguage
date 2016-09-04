@@ -20,6 +20,8 @@ int analyze_return(ASTNode *return_node);
 int analyze_func_call(ASTNode *func_call);
 int analyze_rhs(ASTNode *rhs, int depth);
 
+int analyze_print(ASTNode *print_node, int depth); // TODO: REMOVE
+
 int determine_resulting_datatype(ASTNode *op_node);
 int check_datatype(ASTNode *node, int datatype);
 

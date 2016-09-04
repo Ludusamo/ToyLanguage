@@ -55,4 +55,6 @@ void compile_operator(Linked_List *instructions, ASTNode *op_node);
 void compile_const(Linked_List *instructions, ASTNode *const_node);
 void compile_var(Linked_List *instructions, ASTNode *var_node, int depth);
 
+void compile_print(Linked_List *instructions, ASTNode *print_node); //TODO: REMOVE
+
 #endif // COMPILER_H
