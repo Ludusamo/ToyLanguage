@@ -5,7 +5,7 @@ int semantic_analysis(ASTNode *prog) {
 	int status = 1;
 	lineno = 0;
 	prev_depth = 0;
-	for (int i = 0; i < num_lines; i++) {
+	for (int i = 0; i < num_lines + 1; i++) {
 		lineno = i + 1;
 		ASTNode *node = SUB_NODE(prog, i);
 		if (node->depth < prev_depth) {
