@@ -308,6 +308,7 @@ int test_compile() {
 	Link *head = instructions->head;
 	FILE *file_out = fopen("res/bytecode.bytels", "w");
 	fprintf(file_out, "0\n");
+	fprintf(file_out, "%d\n", instructions->length);
 	while (head) {
 		fprintf(file_out, "%i\n", head->val);
 		head = head->next;
