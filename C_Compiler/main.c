@@ -24,6 +24,8 @@ void initialize() {
 	create_test("Destroy Linked List", &test_destroy_linked_list);
 	create_test("File Input", &test_fileio_read);
 	create_test("File Output", &test_fileio_write);	
+	create_test("Create FilePath", &test_create_filepath);
+	create_test("FilePath To String", &test_filepath_to_string);
 	create_test("Create Token", &test_create_token);
 	create_test("Identify Token", &test_identify_token);
 	create_test("Create Statement", &test_create_statement);
@@ -36,10 +38,53 @@ void initialize() {
 	create_test("Compile", &test_compile);
 }
 
-int main() {
-	initialize();
+void compile_file(const char* filepath) {
+	init_mem();
+	FILE *file = fopen(filepath, "r");
+	if (!file) {
+		fprintf(stderr, "Error: File %s Does Not Exist\n", filepath);
+		exit(EXIT_FAILURE);
+	}
+	Statement *statements = lex(file);
+	fclose(file);
+	ASTNode *prog = parse(statements);
+	Linked_List *instructions = compile(prog);	
+	FilePath *fp = create_filepath(filepath);
 	
-	run_tests();
+	char *bytecode_path = str_copy("");
+	for (int i = 0; i < fp->num_dir; i++) {
+		bytecode_path = str_add(bytecode_path, fp->dirs[i]);
+		bytecode_path = str_add(bytecode_path, "/");
+	}
+	bytecode_path = str_add(bytecode_path, fp->filename);
+	bytecode_path = str_add(bytecode_path, ".");
+	bytecode_path = str_add(bytecode_path, "bytecode");
+
+	FILE *file_out = fopen(bytecode_path, "w");
+	fprintf(file_out, "0\n");
+	Link *head = instructions->head;
+	while (head) {
+		fprintf(file_out, "%i\n", head->val);
+		head = head->next;
+	}
+	fclose(file_out);
 	deinit_mem();
+}
+
+int main(int argc, const char* argv[]) {
+	if (argc == 1) {
+		printf("Running Test Mode\n");
+		initialize();
+			
+		run_tests();
+		deinit_mem();
+		printf("Tests Complete\n");
+	} else if (argc == 2) {
+		printf("Attempting Compilation\n");
+		compile_file(argv[1]);	
+		printf("Compilation Complete\n");
+	} else {
+		printf("Too many args\n");
+	}
 	return 0;
 }

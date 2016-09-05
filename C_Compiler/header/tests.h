@@ -14,6 +14,7 @@
 #include "semantic.h"
 #include "linked_list.h"
 #include "compiler.h"
+#include "filepath.h"
 
 #define MAX_TESTS 1000
 
@@ -44,6 +45,9 @@ int test_destroy_linked_list();
 
 int test_fileio_read();
 int test_fileio_write();
+
+int test_create_filepath();
+int test_filepath_to_string();
 
 int test_create_token();
 int test_identify_token();
