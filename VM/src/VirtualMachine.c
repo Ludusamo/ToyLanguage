@@ -49,6 +49,22 @@ void eval(int op) {
 			popIntoRegister(2);
 			push(registers[B] / registers[A]);
 			break;
+		case MODI:
+			popIntoRegister(2);
+			push(registers[B] % registers[A]);
+			break;
+		case BAND:
+			popIntoRegister(2);
+			push(registers[B] & registers[A]);
+			break;
+		case BOR:
+			popIntoRegister(2);
+			push(registers[B] | registers[A]);
+			break;
+		case BXOR:
+			popIntoRegister(2);
+			push(registers[B] ^ registers[A]);
+			break;
 		case EQ: 
 			popIntoRegister(2);
 			push(registers[A] == registers[B]);
