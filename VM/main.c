@@ -3,61 +3,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/*const int program[23] {
-	// FUNCTION A()
-	PUSH, 0,  // int B
+int *program;
+int num_global = 256;
 
-	PUSH, 0,  // int C
+int main(int argc, const char* argv[]) {
+	if (argc < 3) {
+		fprintf(stderr, "Insufficient Arguments\n");
+	} else if (argc == 3) {
+		FILE *bytecode = fopen(argv[1], "r");
+		if (!bytecode) {
+			fprintf(stderr, "File %s Does Not Exist\n", argv[1]);
+			exit(EXIT_FAILURE);
+		}
+		trace = atoi(argv[2]);
 
-	PUSH, 2,  //| B = 2
-	STORE, 1, //|
+		int mainMethod;
+		fscanf(bytecode, "%d", &mainMethod);
 
-	PUSH, 3,  //| C = 3
-	STORE, 2, //| 
+		int num_bytecode;
+		fscanf(bytecode, "%d", &num_bytecode);
+		program = calloc(sizeof(int), num_bytecode);
 
-	LOAD, 1,  //| return B + C
-	LOAD, 2,  //|
-	ADDI,     //|
-	RET,      //|
+		int programIndex = 0;
+		int byte;
+		while (fscanf(bytecode, "%d", &byte) != -1) {
+			program[programIndex++] = byte;
+		}
 
-	// MAIN FUNCTION
-	CALL, 0, 0,
-	PRINTI,
-	HALT 
-};*/
-
-const int program[] = {
-	PUSH, 1,
-	GSTORE, 0,
-	GLOAD, 0,
-	PUSH, 1,
-	EQ,
-	BRF, 17,
-	PUSH, 0,
-	PUSH, 0,
-	STORE, 1,
-	POP,
-	PUSH, 0,
-	GSTORE, 1,
-	HALT
-};
-
-int *program1;
-
-int main() {
-	//runProgram(program, 18, 0);
-	FILE *bytecode;
-
-	int mainMethod;
-	fscanf(bytecode, "%d", &mainMethod);
-
-	int programIndex = 0;
-	int byte;
-	while (fscanf(bytecode, "%d", &byte) != -1) {
-		program1[programIndex] = byte;
-		programIndex++;
+		runProgram(program, mainMethod, num_global);
+	} else {
+		fprintf(stderr, "Too Many Arguments\n");
 	}
-
-	runProgram(program1, mainMethod, 3);
 	return 0;
 }

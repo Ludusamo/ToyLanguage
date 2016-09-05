@@ -12,7 +12,7 @@ char *str_add(const char *str1, const char *str2) {
 	int str1len = strlen(str1);
 	int str2len = strlen(str2);
 	int len = str1len + str2len;
-	char *concat = malloc(len * sizeof(char));
+	char *concat = malloc(len * sizeof(char) + 1);
 	for (int i = 0; i < str1len; i++) concat[i] = str1[i];
 	for (int i = 0; i < str2len; i++) concat[i + str1len] = str2[i];
 	concat[len] = '\0';

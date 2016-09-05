@@ -1,0 +1,46 @@
+#!/bin/bash
+ 
+function to_bytecode_path {
+	local path=$1
+	BYTE_PATH="${path%.*}.bytecode"
+}
+
+function run_bytecode {
+	to_bytecode_path $SRC_PATH
+	trace=0
+	while getopts ":d" opt; do
+		case $opt in
+		d)
+			trace=1
+			;;
+		\?)
+			echo "Invalid option: -$OPTARG" >&2
+			;;
+		esac
+	done
+	./VM/lavm $BYTE_PATH $trace
+	echo "Finished Running"	
+}
+
+case $1 in
+	build)
+		cd C_Compiler
+		make
+		cd ../VM
+		make
+		exit
+		;;
+	run)
+		SRC_PATH=$2
+		./C_Compiler/COMPILER $2
+		if [ "$?" -eq "0" ]; then
+			run_bytecode
+		fi
+		;;
+	*)
+		echo "Invalid Argument $1"
+		exit
+		;;
+esac
+
+

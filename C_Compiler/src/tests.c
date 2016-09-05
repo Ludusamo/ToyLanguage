@@ -175,6 +175,31 @@ int test_fileio_write() {
 	return SUCCESS;
 }
 
+int test_create_filepath() {
+	const char *filepath = "test_dir/test_dir2/test-filename.myextension";
+	FilePath *fp = create_filepath(filepath);	
+	if (!str_equal(fp->dirs[0], "test_dir")) return FAILURE;
+	if (!str_equal(fp->dirs[1], "test_dir2")) return FAILURE;
+	if (!str_equal(fp->filename, "test-filename")) return FAILURE;
+	if (!str_equal(fp->extension, "myextension")) return FAILURE;	
+	return SUCCESS;
+}
+
+int test_filepath_to_string() {
+	FilePath *fp = malloc(sizeof(FilePath));
+	fp->num_dir = 2;
+	fp->dirs = calloc(sizeof(char*), fp->num_dir);
+	fp->dirs[0] = "test_dir";
+	fp->dirs[1] = "test_dir2";
+	fp->filename = "test-filename";
+	fp->extension = "myextension";
+	char *path = filepath_to_string(fp);
+	if (!str_equal(path, "test_dir/test_dir2/test-filename.myextension")) {
+		return FAILURE;
+	}
+	return SUCCESS;
+}
+
 int test_create_token() {
 	Token *token = create_token("test");
 	if (!str_equal(token->token_str, "test")) return FAILURE;
@@ -283,6 +308,7 @@ int test_compile() {
 	Link *head = instructions->head;
 	FILE *file_out = fopen("res/bytecode.bytels", "w");
 	fprintf(file_out, "0\n");
+	fprintf(file_out, "%d\n", instructions->length);
 	while (head) {
 		fprintf(file_out, "%i\n", head->val);
 		head = head->next;
