@@ -149,7 +149,6 @@ int fetch() {
 
 void runProgram(const int *program, const int mainIndex, const int gMemSize) {
 	running = 1;
-	trace = 0;
 	ip = mainIndex;
 	sp = -1;
 	fp = -1;
