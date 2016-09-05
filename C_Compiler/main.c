@@ -62,6 +62,7 @@ void compile_file(const char* filepath) {
 
 	FILE *file_out = fopen(bytecode_path, "w");
 	fprintf(file_out, "0\n");
+	fprintf(file_out, "%d\n", instructions->length);
 	Link *head = instructions->head;
 	while (head) {
 		fprintf(file_out, "%i\n", head->val);
