@@ -48,6 +48,7 @@ void compile_file(const char* filepath) {
 	Statement *statements = lex(file);
 	fclose(file);
 	ASTNode *prog = parse(statements);
+	semantic_analysis(prog);
 	Linked_List *instructions = compile(prog);	
 	FilePath *fp = create_filepath(filepath);
 	
@@ -81,9 +82,9 @@ int main(int argc, const char* argv[]) {
 		deinit_mem();
 		printf("Tests Complete\n");
 	} else if (argc == 2) {
-		printf("Attempting Compilation\n");
+		printf("Attempting Compilation\n\n");
 		compile_file(argv[1]);	
-		printf("Compilation Complete\n");
+		printf("Compilation Complete\n\n");
 	} else {
 		printf("Too many args\n");
 	}
