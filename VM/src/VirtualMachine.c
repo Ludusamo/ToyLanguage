@@ -33,6 +33,14 @@ void eval(int op) {
 		case POP: 
 			pop();
 			break;
+		case LSHIFT:
+			popIntoRegister(2);
+			push(registers[B] << registers[A]);
+			break;
+		case RSHIFT:
+			popIntoRegister(2);
+			push(registers[B] >> registers[A]);
+			break;
 		case ADDI: 
 			popIntoRegister(2);
 			push(registers[A] + registers[B]);
