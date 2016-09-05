@@ -15,11 +15,16 @@ int main(int argc, const char* argv[]) {
 			fprintf(stderr, "File %s Does Not Exist\n", argv[1]);
 			exit(EXIT_FAILURE);
 		}
+
 		int mainMethod;
 		fscanf(bytecode, "%d", &mainMethod);
+
+		int num_bytecode;
+		fscanf(bytecode, "%d", &num_bytecode);
+		program = calloc(sizeof(int), num_bytecode);
+
 		int programIndex = 0;
 		int byte;
-		program = calloc(sizeof(int), 1024);
 		while (fscanf(bytecode, "%d", &byte) != -1) {
 			program[programIndex++] = byte;
 		}
