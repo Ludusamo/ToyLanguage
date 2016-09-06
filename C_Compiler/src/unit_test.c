@@ -10,4 +10,5 @@ int run_test(Unit_Test test) {
 		printf("Test %s failed: Error Code %i\n", test.name, run_code);
 		break;
 	}
+	return run_code;
 }

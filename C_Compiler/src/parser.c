@@ -24,28 +24,28 @@ ASTNode *parse(Statement *statements) {
 ASTNode *parse_line(Statement *statement) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	if (statement->depth < function_depth + 1) in_function = 0;
-	if (node = parse_declaration(statement)) {
+	if ((node = parse_declaration(statement))) {
 		return node;
-	} else if (node = parse_assignment(statement)) {
+	} else if ((node = parse_assignment(statement))) {
 		return node;
-	} else if (node = parse_if(statement)) {
+	} else if ((node = parse_if(statement))) {
 		return node;
-	} else if (node = parse_while(statement)) {
+	} else if ((node = parse_while(statement))) {
 		return node;
-	} else if (node = parse_function(statement)) {
+	} else if ((node = parse_function(statement))) {
 		in_function = 1;
 		function_depth = statement->depth;
 		function_return_type = &statement->tokens[0].subtype;
 		return node;
-	} else if (node = parse_return(statement)) {
+	} else if ((node = parse_return(statement))) {
 		return node;
-	} else if (node = parse_func_call(statement, 0)) {
+	} else if ((node = parse_func_call(statement, 0))) {
 		return node;
 	} else if (is_type(statement->tokens[1], EOS)) {
 		node = malloc(sizeof(ASTNode));
 		node->type = BLANK_NODE;
 		return node;
-	} else if (node = parse_print(statement)) { // TODO: REMOVE
+	} else if ((node = parse_print(statement))) { // TODO: REMOVE
 		return node;
 	}
 	return 0;
@@ -95,6 +95,7 @@ ASTNode *parse_while(Statement *statement) {
 			return create_while_ast(rhs, statement->depth);
 		}
 	}
+	return 0;
 }
 
 ASTNode *parse_function(Statement *statement) {
@@ -161,6 +162,7 @@ ASTNode *parse_func_call(Statement *statement, int index) {
 			}
 		}
 	}
+	return 0;
 }
 
 ASTNode *parse_print(Statement *statement) {
@@ -169,6 +171,7 @@ ASTNode *parse_print(Statement *statement) {
 		ASTNode *rhs = parse_rhs(statement, 1);
 		return create_print_ast(rhs, statement->depth);
 	}
+	return 0;
 }
 
 ASTNode *parse_parameter_list(Statement *statement, int rhs_index) {

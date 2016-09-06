@@ -36,6 +36,8 @@ int semantic_analysis(ASTNode *prog) {
 		case PRINT_NODE:
 			status = status && analyze_print(node, node->depth);
 			break;
+		default:
+			break;
 		}
 		prev_depth = node->depth;
 	}
@@ -180,11 +182,12 @@ int analyze_rhs(ASTNode *rhs, int depth) {
 	if (NODE_TYPE(rhs) == OPERATOR_NODE) {
 		analyze_rhs(SUB_NODE(rhs, 1), depth);
 		analyze_rhs(SUB_NODE(rhs, 2), depth);
-		int resulting_datatype = determine_resulting_datatype(rhs);
-		if (resulting_datatype == -1) {
+		int *resulting_datatype = malloc(sizeof(int));
+		*resulting_datatype = determine_resulting_datatype(rhs);
+		if (*resulting_datatype == -1) {
 			throw_error(INVALID_OPERANDS, "Unknown", lineno, "");
 		} else {
-			SUB_NODE(rhs, 0) = create_datatype_ast(&resulting_datatype);
+			SUB_NODE(rhs, 0) = create_datatype_ast(resulting_datatype);
 		}
 	} else if (NODE_TYPE(rhs) == VAR_NODE) {
 		Memory_Address *var = 0;
