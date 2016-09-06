@@ -1,4 +1,0 @@
-INT IDENTIFIER // Declaration of int
-IDENTIFIER ASSIGNMENT NUMBER // Assignment of integer
-INT IDENTIFIER ASSIGNMENT NUMBER // Declaration and assignment of integer
-IF LPAREN BOOL RPAREN // If statement
