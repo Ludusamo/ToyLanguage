@@ -176,6 +176,8 @@ void compile_operator(Linked_List *instructions, ASTNode *op_node) {
 	if (type == BITAND) op = BAND_OP;
 	if (type == BITXOR) op = BXOR_OP;
 	if (type == BITOR) op = BOR_OP;
+	if (type == LSHIFT) op = LSHIFT_OP;
+	if (type == RSHIFT) op = RSHIFT_OP;
 	add_link(instructions, op);
 }
 

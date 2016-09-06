@@ -11,6 +11,8 @@ typedef enum {
 	HALT_OP,
 	PUSH_OP,
 	POP_OP,
+	LSHIFT_OP,
+	RSHIFT_OP,
 	ADDI_OP,
 	SUBI_OP,
 	MULI_OP,
