@@ -172,6 +172,12 @@ void compile_operator(Linked_List *instructions, ASTNode *op_node) {
 	if (type == MINUS) op = SUBI_OP;
 	if (type == MULTIPLY) op = MULI_OP;
 	if (type == DIVIDE) op = DIVI_OP;
+	if (type == MODULO) op = MODI_OP;
+	if (type == BITAND) op = BAND_OP;
+	if (type == BITXOR) op = BXOR_OP;
+	if (type == BITOR) op = BOR_OP;
+	if (type == LSHIFT) op = LSHIFT_OP;
+	if (type == RSHIFT) op = RSHIFT_OP;
 	add_link(instructions, op);
 }
 

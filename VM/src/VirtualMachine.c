@@ -33,6 +33,14 @@ void eval(int op) {
 		case POP: 
 			pop();
 			break;
+		case LSHIFT:
+			popIntoRegister(2);
+			push(registers[B] << registers[A]);
+			break;
+		case RSHIFT:
+			popIntoRegister(2);
+			push(registers[B] >> registers[A]);
+			break;
 		case ADDI: 
 			popIntoRegister(2);
 			push(registers[A] + registers[B]);
@@ -48,6 +56,22 @@ void eval(int op) {
 		case DIVI: 
 			popIntoRegister(2);
 			push(registers[B] / registers[A]);
+			break;
+		case MODI:
+			popIntoRegister(2);
+			push(registers[B] % registers[A]);
+			break;
+		case BAND:
+			popIntoRegister(2);
+			push(registers[B] & registers[A]);
+			break;
+		case BOR:
+			popIntoRegister(2);
+			push(registers[B] | registers[A]);
+			break;
+		case BXOR:
+			popIntoRegister(2);
+			push(registers[B] ^ registers[A]);
 			break;
 		case EQ: 
 			popIntoRegister(2);

@@ -7,7 +7,7 @@
 #include <ctype.h>
 
 #define NUM_DATATYPE 4
-#define NUM_OP 13
+#define NUM_OP 18
 #define NUM_PAREN 2
 #define NUM_BOOLVAL 2
 #define NUM_CONTROL 4
@@ -32,7 +32,7 @@ typedef enum {
 } TYPE;
 
 enum DATASUB { VOID, INT, BOOL, CHAR };
-enum OPSUB { AND, OR, EQ, NEQ, LTE, GTE, LT, GT, PLUS, MINUS, MULTIPLY, DIVIDE, MODULO };
+enum OPSUB { AND, OR, EQ, NEQ, LTE, GTE, LT, GT, BITOR, BITXOR, BITAND, LSHIFT, RSHIFT, PLUS, MINUS, MULTIPLY, DIVIDE, MODULO };
 enum PARENSUB { LPAREN, RPAREN };
 enum BOOLVAL { FALSE, TRUE };
 enum CONTROL { IF, ELSE, WHILE, FOR };

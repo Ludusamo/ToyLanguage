@@ -1,7 +1,7 @@
 #include <token.h>
 
 const char * const data_sub[] = { "void", "int", "bool", "char" };
-const char * const op_sub[] = { "&&", "||", "==", "!=", "<=", ">=", "<", ">", "+", "-", "*", "/", "%" };
+const char * const op_sub[] = { "&&", "||", "==", "!=", "<=", ">=", "<", ">", "|", "^", "&", "<<", ">>", "+", "-", "*", "/", "%" };
 const char * const paren_sub[] = { "(", ")" };
 const char * const boolval_sub[] = { "false", "true" };
 const char * const control_sub[] = { "if", "else", "while", "for" };
