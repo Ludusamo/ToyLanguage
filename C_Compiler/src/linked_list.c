@@ -23,6 +23,7 @@ int add_link(Linked_List *list, int val) {
 	Link *tail = list->tail;
 	Link *new_link = malloc(sizeof(Link));
 	new_link->next = 0;
+	new_link->prev = tail;
 	new_link->val = val;
 	if (!tail) {
 		list->head = new_link;
