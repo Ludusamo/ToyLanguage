@@ -34,8 +34,17 @@ PDA *create_while_pda(Linked_List *instructions, Link *branch_location, int *beg
 	return pda;
 }
 
-void function_execute(PDA *pda) {
+void function_execute(PDA *pda) {	
 	Linked_List *instructions = (Linked_List *) pda->data[0];
+	// Removes unnecessary POP_OPs
+	for (int i = 0; i < *((int*) pda->data[2]); i++) {
+			Link *tail = instructions->tail;
+			Link *new_tail = tail->prev;
+			instructions->tail = new_tail;
+			instructions->length--;
+			free(tail);
+	}
+
 	Link *branch_location = (Link *) pda->data[1];
 	add_link(instructions, PUSH_OP);
 	add_link(instructions, 0);
@@ -43,11 +52,12 @@ void function_execute(PDA *pda) {
 	branch_location->val = instructions->length;
 }
 
-PDA *create_func_pda(Linked_List *instructions, Link *branch_location) {
+PDA *create_func_pda(Linked_List *instructions, Link *branch_location, int *num_arg) {
 	PDA *pda = malloc(sizeof(PDA));
-	pda->data = calloc(sizeof(void*), 2);
+	pda->data = calloc(sizeof(void*), 3);
 	pda->data[0] = (void *) instructions;
 	pda->data[1] = (void *) branch_location;
+	pda->data[2] = (void *) num_arg;
 	pda->execute = &function_execute;
 	return pda;
 }
