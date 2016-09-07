@@ -9,6 +9,7 @@ typedef struct Link Link;
 struct Link {
 	int val;
 	struct Link *next;
+	struct Link *prev;
 };
 
 typedef struct {
