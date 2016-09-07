@@ -19,6 +19,6 @@ void while_execute(PDA *pda);
 PDA *create_while_pda(Linked_List *instructions, Link *branch_location, int *beg_branch_index);
 
 void function_execute(PDA *pda);
-PDA *create_func_pda(Linked_List *instructions, Link *branch_location);
+PDA *create_func_pda(Linked_List *instructions, Link *branch_location, int *num_arg);
 
 #endif // PDA_H

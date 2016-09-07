@@ -112,7 +112,10 @@ void compile_func_decl(Linked_List *instructions, ASTNode *func_node) {
 	}
 	add_link(instructions, BR_OP);
 	add_link(instructions, 0);
-	pda_stack[pda_sp++] = create_func_pda(instructions, instructions->tail);
+
+	int *num_args = malloc(sizeof(num_args));
+	*num_args = arg_list->num_sub;
+	pda_stack[pda_sp++] = create_func_pda(instructions, instructions->tail, num_args);
 	char *id = GET_AST_STR_DATA(SUB_NODE(func_node, 1));
 	Function *func = create_function(instructions->length, SUB_NODE(func_node, 2), GET_AST_DATATYPE(func_node));
 	add_function(id, func);
