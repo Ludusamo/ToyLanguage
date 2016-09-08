@@ -55,6 +55,7 @@ int test_identify_token();
 
 int test_create_statement();
 int test_tokenize_statement();
+int test_destroy_statement();
 
 int test_lex();
 

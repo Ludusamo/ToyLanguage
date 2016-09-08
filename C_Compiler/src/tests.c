@@ -14,8 +14,7 @@ void run_tests() {
 }
 
 int test_str_equal() {
-	int test_a = str_equal("hello", "hello");
-	int test_b = str_equal("i am not the same", "as you");
+	int test_a = str_equal("hello", "hello"); int test_b = str_equal("i am not the same", "as you");
 	int test_c = str_equal("blah blah \nblah", "blah blah \nblah");
 	if (test_a && !test_b && test_c) return SUCCESS;
 	return FAILURE;
@@ -237,6 +236,13 @@ int test_tokenize_statement() {
 	if (!is_type(statement->tokens[0], DATATYPE)) return FAILURE;
 	if (!is_type(statement->tokens[1], IDENTIFIER)) return FAILURE;
 	if (!is_type(statement->tokens[3], STRING_LITERAL)) return FAILURE;
+	return SUCCESS;
+}
+
+int test_destroy_statement() {
+	Statement *statement = create_statement("char a");
+	tokenize_statement(statement);
+	destroy_statement(statement);
 	return SUCCESS;
 }
 

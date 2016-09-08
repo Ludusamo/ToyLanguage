@@ -27,10 +27,19 @@ Statement *create_statement(const char *str) {
 	return statement;
 }
 
+void destroy_statement(Statement *statement) {
+	statement->statement_str = 0;
+	free((char*)statement->statement_str);	
+	statement->tokens = 0;
+	free(statement->tokens);
+}
+
 void add_token(Statement *statement, const char *str) {
 	Token *t = create_token(str);
 	identify_token_type(t);
 	statement->tokens[statement->num_tokens++] = *t;
+	t = 0;
+	free(t);
 }
 
 void tokenize_statement(Statement *statement) {

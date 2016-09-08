@@ -22,6 +22,7 @@ typedef struct {
 } Statement;
 
 Statement *create_statement(const char *str);
+void destroy_statement(Statement *statement);
 
 void add_token(Statement *statement, const char *str);
 void tokenize_statement(Statement *statement);

@@ -31,6 +31,7 @@ void initialize() {
 	create_test("Identify Token", &test_identify_token);
 	create_test("Create Statement", &test_create_statement);
 	create_test("Tokenize Statement", &test_tokenize_statement);
+	create_test("Destroy Statement", &test_destroy_statement);
 	create_test("Lexical Analyzer", &test_lex);
 	create_test("Parser", &test_parse);
 	create_test("RHS", &test_rhs);

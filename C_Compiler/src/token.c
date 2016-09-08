@@ -13,6 +13,13 @@ Token *create_token(const char *str) {
 	return t;
 }
 
+void destroy_token(Token *token) {
+	token->token_str = 0;
+	free((char*)token->token_str);
+	token = 0;
+	free(token);
+}
+
 int is_in_list(const char* const *strings, int num_in_list, const char *s) {
 	for (int i = 0; i < num_in_list; i++) {
 		if (str_equal(strings[i], s)) {
