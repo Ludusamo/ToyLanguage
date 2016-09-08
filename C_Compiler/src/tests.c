@@ -291,6 +291,7 @@ int test_ast() {
 	if (NODE_TYPE(SUB_NODE(node, 0)) != DATATYPE_NODE) return FAILURE;
 	if (!str_equal(GET_AST_DECL_ID(node), "test")) return FAILURE;
 	if (GET_CONST_INT(SUB_NODE(node, 2)) != 20) return FAILURE;
+	delete_ast(node);
 	return SUCCESS;
 }
 

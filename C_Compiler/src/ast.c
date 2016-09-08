@@ -1,5 +1,18 @@
 #include "ast.h"
 
+int delete_ast(ASTNode *ast) {
+	for (int i = 0; i < ast->num_sub; i++) {
+		delete_ast(ast->sub_nodes[i]);
+	}
+	ast->data = 0;
+	free(ast->data);
+	ast->sub_nodes = 0;
+	free(ast->sub_nodes);
+	ast = 0;
+	free(ast);
+	return 0;
+}
+
 ASTNode *create_program_ast(int num_lines) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	node->type = PROG_NODE;

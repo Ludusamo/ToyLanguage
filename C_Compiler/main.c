@@ -51,6 +51,8 @@ void compile_file(const char* filepath) {
 	ASTNode *prog = parse(statements);
 	semantic_analysis(prog);
 	Linked_List *instructions = compile(prog);	
+	delete_ast(prog);
+
 	FilePath *fp = create_filepath(filepath);
 	
 	char *bytecode_path = str_copy("");
