@@ -31,6 +31,8 @@ FilePath *create_filepath(const char *filepath) {
 			buffer[bp++] = c;
 		}
 	}
+	buffer = 0;
+	free(buffer);
 	return fp;
 }
 

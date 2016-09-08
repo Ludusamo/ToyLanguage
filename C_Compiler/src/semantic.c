@@ -161,7 +161,9 @@ int analyze_func_call(ASTNode *func_call) {
 	if (!func) {
 		throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, "");
 	}
-	SUB_NODE(func_call, 0) = create_datatype_ast(&func->return_type);
+	int *return_type = malloc(sizeof(int));
+	*return_type = func->return_type;
+	SUB_NODE(func_call, 0) = create_datatype_ast(return_type);
 	
 	ASTNode *rhs_list = SUB_NODE(func_call, 2);
 	ASTNode *arg_list = func->arg_list;	
@@ -182,6 +184,7 @@ int analyze_rhs(ASTNode *rhs, int depth) {
 	if (NODE_TYPE(rhs) == OPERATOR_NODE) {
 		analyze_rhs(SUB_NODE(rhs, 1), depth);
 		analyze_rhs(SUB_NODE(rhs, 2), depth);
+
 		int *resulting_datatype = malloc(sizeof(int));
 		*resulting_datatype = determine_resulting_datatype(rhs);
 		if (*resulting_datatype == -1) {
@@ -200,7 +203,10 @@ int analyze_rhs(ASTNode *rhs, int depth) {
 		if (!var) {
 			throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, "");
 		}
-		SUB_NODE(rhs, 0) = create_datatype_ast(&var->type);
+
+		int *var_type = malloc(sizeof(int));
+		*var_type = var->type;
+		SUB_NODE(rhs, 0) = create_datatype_ast(var_type);
 	} else if (NODE_TYPE(rhs) == FUNC_CALL_NODE) {
 		analyze_func_call(rhs);
 	}
