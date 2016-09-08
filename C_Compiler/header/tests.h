@@ -41,6 +41,7 @@ int test_destroy_map();
 int test_create_linked_list();
 int test_add_link();
 int test_remove_link();
+int test_remove_last_link();
 int test_destroy_linked_list();
 
 int test_fileio_read();

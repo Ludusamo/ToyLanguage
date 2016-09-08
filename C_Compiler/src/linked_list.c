@@ -58,3 +58,14 @@ int remove_link(Linked_List *list, int val) {
 	}
 	return 0;
 }
+
+int remove_last_link(Linked_List *list) {
+	Link *tail = list->tail;
+	Link *new_tail = tail->prev;
+	new_tail->next = 0;
+	list->tail = new_tail;
+	list->length--;
+	tail = 0;
+	free(tail);
+	return 1;
+}

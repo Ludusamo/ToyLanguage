@@ -5,7 +5,6 @@ void if_execute(PDA *pda) {
 	Link *branch_location = (Link *) pda->data[1];
 	branch_location->val = instructions->length;
 }
-
 PDA *create_if_pda(Linked_List *instructions, Link *branch_location) {
 	PDA *pda = malloc(sizeof(PDA));
 	pda->data = calloc(sizeof(void*), 2);
@@ -38,11 +37,7 @@ void function_execute(PDA *pda) {
 	Linked_List *instructions = (Linked_List *) pda->data[0];
 	// Removes unnecessary POP_OPs
 	for (int i = 0; i < *((int*) pda->data[2]); i++) {
-			Link *tail = instructions->tail;
-			Link *new_tail = tail->prev;
-			instructions->tail = new_tail;
-			instructions->length--;
-			free(tail);
+			remove_last_link(instructions);
 	}
 
 	Link *branch_location = (Link *) pda->data[1];
