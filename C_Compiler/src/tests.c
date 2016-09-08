@@ -165,7 +165,7 @@ int test_fileio_read() {
 	char *line1 = read_line(in);
 	char *line2 = read_line(in);
 	char *line3 = read_line(in);
-	if (!str_equal(line1, "Hello I am a test.\n") || !str_equal("I am the second line", line2) || line3) {
+	if (!str_equal(line1, "Hello I am a test.\n") || !str_equal(line2, "I am the second line\n") || line3) {
 		fclose(in);	
 		return FAILURE;
 	}
