@@ -2,6 +2,7 @@
 #define UNITTEST_H
 
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef enum {
 	SUCCESS,
