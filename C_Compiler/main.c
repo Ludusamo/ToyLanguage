@@ -72,6 +72,7 @@ void compile_file(const char* filepath) {
 		fprintf(file_out, "%i\n", head->val);
 		head = head->next;
 	}
+	free(instructions);
 	fclose(file_out);
 	deinit_mem();
 }
