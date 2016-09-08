@@ -139,6 +139,17 @@ int test_remove_link() {
 	return SUCCESS;
 }
 
+int test_remove_last_link() {
+	Linked_List *list = create_linked_list();
+	if (!add_link(list, 10)) return FAILURE;
+	if (!add_link(list, 20)) return FAILURE;
+	if (list->tail->val != 20) return FAILURE;
+	if (!remove_last_link(list)) return FAILURE;
+	if (list->tail->val != 10) return FAILURE;
+	if (list->tail->next) return FAILURE;
+	return SUCCESS;
+}
+
 int test_destroy_linked_list() {
 	Linked_List *list = create_linked_list();
 	Link *head = list->head;

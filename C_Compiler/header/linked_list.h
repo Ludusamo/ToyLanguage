@@ -23,5 +23,6 @@ void destroy_linked_list(Linked_List *list);
 
 int add_link(Linked_List *list, int val);
 int remove_link(Linked_List *list, int val);
+int remove_last_link(Linked_List *list);
 
 #endif // LINKEDLIST_H

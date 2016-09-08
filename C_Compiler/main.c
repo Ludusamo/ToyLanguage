@@ -21,6 +21,7 @@ void initialize() {
 	create_test("Create Linked List", &test_create_linked_list);
 	create_test("Add Link", &test_add_link);
 	create_test("Remove Link", &test_remove_link);
+	create_test("Remove Last Link", &test_remove_last_link);
 	create_test("Destroy Linked List", &test_destroy_linked_list);
 	create_test("File Input", &test_fileio_read);
 	create_test("File Output", &test_fileio_write);	
