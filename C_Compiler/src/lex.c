@@ -11,6 +11,9 @@ Statement *lex(FILE *input) {
 		tokenize_statement(statement);
 		statements[i] = *statement;
 	}
-
+	for (int i = 0; i < ln; i++) {
+		lines[i] = 0;
+		free(lines[i]);
+	}
 	return statements;
 }
