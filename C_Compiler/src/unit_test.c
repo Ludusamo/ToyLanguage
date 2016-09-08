@@ -8,6 +8,7 @@ int run_test(Unit_Test test) {
 		break;
 	case FAILURE:
 		printf("Test %s failed: Error Code %i\n", test.name, run_code);
+		exit(EXIT_FAILURE);
 		break;
 	}
 	return run_code;
