@@ -25,41 +25,33 @@ ASTNode *parse_line(Statement *statement) {
 	ASTNode *node = malloc(sizeof(ASTNode));
 	if (statement->depth < function_depth + 1) in_function = 0;
 	if ((node = parse_declaration(statement))) {
-		return node;
 	} else if ((node = parse_assignment(statement))) {
-		return node;
 	} else if ((node = parse_if(statement))) {
-		return node;
 	} else if ((node = parse_while(statement))) {
-		return node;
 	} else if ((node = parse_function(statement))) {
 		in_function = 1;
 		function_depth = statement->depth;
 		function_return_type = &statement->tokens[0].subtype;
-		return node;
 	} else if ((node = parse_return(statement))) {
-		return node;
 	} else if ((node = parse_func_call(statement, 0))) {
-		return node;
 	} else if (is_type(statement->tokens[1], EOS)) {
 		node = malloc(sizeof(ASTNode));
 		node->type = BLANK_NODE;
-		return node;
 	} else if ((node = parse_print(statement))) { // TODO: REMOVE
-		return node;
 	}
-	return 0;
+	return node;
 }
 
 ASTNode *parse_declaration(Statement *statement) {
 	Token *tokens = statement->tokens;
 	if (is_type(tokens[0], DATATYPE) && is_type(tokens[1], IDENTIFIER)) {
 		ASTNode *rhs = 0;
-		int zero = 0;
+		int *zero = malloc(sizeof(int));
+		*zero = 0;
 		if (is_type(tokens[2], ASSIGNMENT)) {
 			rhs = parse_rhs(statement, 3);
 		}
-		else if (is_type(tokens[2], EOS)) rhs = create_const_ast(&zero, (void*) &zero);
+		else if (is_type(tokens[2], EOS)) rhs = create_const_ast(zero, zero);
 		else return 0;
 		return create_decl_ast(&GET_DATATYPE(statement), GET_DECL_ID(statement), rhs, statement->depth);
 	}

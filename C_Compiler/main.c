@@ -31,6 +31,7 @@ void initialize() {
 	create_test("Identify Token", &test_identify_token);
 	create_test("Create Statement", &test_create_statement);
 	create_test("Tokenize Statement", &test_tokenize_statement);
+	create_test("Destroy Statement", &test_destroy_statement);
 	create_test("Lexical Analyzer", &test_lex);
 	create_test("Parser", &test_parse);
 	create_test("RHS", &test_rhs);
@@ -51,6 +52,8 @@ void compile_file(const char* filepath) {
 	ASTNode *prog = parse(statements);
 	semantic_analysis(prog);
 	Linked_List *instructions = compile(prog);	
+	delete_ast(prog);
+
 	FilePath *fp = create_filepath(filepath);
 	
 	char *bytecode_path = str_copy("");
@@ -70,6 +73,7 @@ void compile_file(const char* filepath) {
 		fprintf(file_out, "%i\n", head->val);
 		head = head->next;
 	}
+	free(instructions);
 	fclose(file_out);
 	deinit_mem();
 }

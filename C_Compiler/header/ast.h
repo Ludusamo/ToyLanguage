@@ -40,6 +40,8 @@ struct ASTNode {
 	int depth;
 };
 
+int delete_ast(ASTNode *ast);
+
 ASTNode *create_program_ast(int num_lines);
 
 ASTNode *create_datatype_ast(int *datatype);

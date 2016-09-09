@@ -3,3 +3,8 @@ int i = 1
 while i < 256
 	i = i << 1
 	print i
+
+int add(int a, int b)
+	return a + b
+
+print add(1, (1 * 2) + add(1, 3))

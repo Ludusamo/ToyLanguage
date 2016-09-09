@@ -14,9 +14,11 @@ void destroy_linked_list(Linked_List *list) {
 	while (head) {
 		buf = head;
 		head = head->next;
-		free(buf);
 		buf = 0;
+		free(buf);
 	}
+	list = 0;
+	free(list);
 }
 
 int add_link(Linked_List *list, int val) {

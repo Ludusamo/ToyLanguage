@@ -14,8 +14,7 @@ void run_tests() {
 }
 
 int test_str_equal() {
-	int test_a = str_equal("hello", "hello");
-	int test_b = str_equal("i am not the same", "as you");
+	int test_a = str_equal("hello", "hello"); int test_b = str_equal("i am not the same", "as you");
 	int test_c = str_equal("blah blah \nblah", "blah blah \nblah");
 	if (test_a && !test_b && test_c) return SUCCESS;
 	return FAILURE;
@@ -165,7 +164,7 @@ int test_fileio_read() {
 	char *line1 = read_line(in);
 	char *line2 = read_line(in);
 	char *line3 = read_line(in);
-	if (!str_equal(line1, "Hello I am a test.\n") || !str_equal("I am the second line", line2) || line3) {
+	if (!str_equal(line1, "Hello I am a test.\n") || !str_equal(line2, "I am the second line\n") || line3) {
 		fclose(in);	
 		return FAILURE;
 	}
@@ -240,6 +239,13 @@ int test_tokenize_statement() {
 	return SUCCESS;
 }
 
+int test_destroy_statement() {
+	Statement *statement = create_statement("char a");
+	tokenize_statement(statement);
+	destroy_statement(statement);
+	return SUCCESS;
+}
+
 int test_lex() {
 	FILE *file = fopen("res/lex_test.in", "r");	
 	Statement *statements = lex(file);
@@ -291,6 +297,7 @@ int test_ast() {
 	if (NODE_TYPE(SUB_NODE(node, 0)) != DATATYPE_NODE) return FAILURE;
 	if (!str_equal(GET_AST_DECL_ID(node), "test")) return FAILURE;
 	if (GET_CONST_INT(SUB_NODE(node, 2)) != 20) return FAILURE;
+	delete_ast(node);
 	return SUCCESS;
 }
 
