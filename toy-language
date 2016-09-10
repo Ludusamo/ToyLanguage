@@ -23,6 +23,13 @@ function run_bytecode {
 }
 
 case $1 in
+	remove)
+		cd C_Compiler
+		make remove
+		cd ../VM
+		make remove
+		exit
+		;;
 	build)
 		cd C_Compiler
 		make

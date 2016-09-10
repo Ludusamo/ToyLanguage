@@ -6,7 +6,7 @@ SRC_FILES := $(wildcard $(SRCDIR)/*.c)
 OBJECTS :=  $(SRC_FILES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 rm = rm -f
 
-CC = gcc
+CC = clang
 COMPILER_FLAGS = -std=c99 -Wall -Iheader
 
 LINKER = gcc -o
