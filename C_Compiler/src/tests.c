@@ -51,6 +51,8 @@ int test_str_lt() {
 
 int test_create_map() {
 	Map *m = create_map();
+	m = 0;
+	free(m);
 	return SUCCESS;
 }
 
@@ -226,6 +228,8 @@ int test_identify_token() {
 
 int test_create_statement() {
 	Statement *statement = create_statement("int a");	
+	statement = 0;
+	free(statement);
 	return SUCCESS;
 }
 

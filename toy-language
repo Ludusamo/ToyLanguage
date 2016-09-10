@@ -18,11 +18,18 @@ function run_bytecode {
 			;;
 		esac
 	done
-	./VM/lavm $BYTE_PATH $trace
+	./VM/bin/vm $BYTE_PATH $trace
 	echo "Finished Running"	
 }
 
 case $1 in
+	remove)
+		cd C_Compiler
+		make remove
+		cd ../VM
+		make remove
+		exit
+		;;
 	build)
 		cd C_Compiler
 		make
@@ -32,7 +39,7 @@ case $1 in
 		;;
 	run)
 		SRC_PATH=$2
-		./C_Compiler/COMPILER $2
+		./C_Compiler/bin/compiler $2
 		if [ "$?" -eq "0" ]; then
 			run_bytecode
 		fi
