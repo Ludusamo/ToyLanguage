@@ -8,6 +8,10 @@ int semantic_analysis(ASTNode *prog) {
 	for (int i = 0; i < num_lines + 1; i++) {
 		lineno = i + 1;
 		ASTNode *node = SUB_NODE(prog, i);
+
+		if (NODE_TYPE(node) == BLANK_NODE) {
+			continue; // Skip blank nodes
+		}
 		if (node->depth < prev_depth) {
 			exit_depth(prev_depth); 
 		} 
