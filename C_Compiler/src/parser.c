@@ -15,7 +15,7 @@ ASTNode *parse(Statement *statements) {
 		}
 	}
 	ASTNode *node = malloc(sizeof(ASTNode));
-	node->type = BLANK_NODE;
+	node->type = END_OF_FILE_NODE;
 	node->depth = 0;
 	SUB_NODE(program, num_lines) = node;
 	return program;
@@ -23,7 +23,6 @@ ASTNode *parse(Statement *statements) {
 
 ASTNode *parse_line(Statement *statement) {
 	ASTNode *node = malloc(sizeof(ASTNode));
-	if (statement->depth < function_depth + 1) in_function = 0;
 	if ((node = parse_declaration(statement))) {
 	} else if ((node = parse_assignment(statement))) {
 	} else if ((node = parse_if(statement))) {
@@ -37,7 +36,11 @@ ASTNode *parse_line(Statement *statement) {
 	} else if (is_type(statement->tokens[1], EOS)) {
 		node = malloc(sizeof(ASTNode));
 		node->type = BLANK_NODE;
+		return node;
 	} else if ((node = parse_print(statement))) { // TODO: REMOVE
+	}
+	if (statement->depth < function_depth) {
+		in_function = 0;
 	}
 	return node;
 }

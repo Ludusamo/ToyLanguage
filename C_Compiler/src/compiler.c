@@ -8,7 +8,7 @@ Linked_List *compile(ASTNode *program) {
 	prev_depth = 0;
 	for (int i = 0; i < num_lines + 1; i++) {
 		ASTNode *node = SUB_NODE(program, i);
-
+		if (NODE_TYPE(node) == BLANK_NODE) continue; // Skip blank nodes
 		if (pda_sp != 0) {
 			if (node->depth < prev_depth) {
 				for (int i = 0; i < prev_depth - node->depth; i++) {
