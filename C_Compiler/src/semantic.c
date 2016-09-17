@@ -7,6 +7,7 @@ int semantic_analysis(ASTNode *prog) {
 	prev_depth = 0;
 	for (int i = 0; i < num_lines + 1; i++) {
 		lineno = i + 1;
+		printf("%d\n", lineno);
 		ASTNode *node = SUB_NODE(prog, i);
 		if (node->depth < prev_depth) {
 			exit_depth(prev_depth); 
@@ -46,25 +47,20 @@ int semantic_analysis(ASTNode *prog) {
 
 int analyze_decl(ASTNode *decl, int depth) {
 	char *id = GET_AST_DECL_ID(decl);
+	int status = 0;
 	if (depth == 0) {
 		if (get_global_addr(id)) {
 			throw_error(VARIABLE_EXISTS, "Unknown", lineno, NULL);
 		} else {
 			Memory_Address *addr = create_mem_addr(1, NUM_GLOBAL, GET_AST_DATATYPE(decl));
-			int status = create_global_variable(id, addr);
-			ASTNode *rhs = SUB_NODE(decl, 2);
-			if (rhs) {
-				analyze_rhs(rhs, depth);
-				status = status && check_datatype(rhs, GET_AST_DATATYPE(decl));
-			}
-			if (status) return 1;
+			status = create_global_variable(id, addr);
 		}	
 	} else if (depth == -1) { // FUNCTION ARGS}
 		if (get_local_addr(id, 1)) { // TODO
 			throw_error(VARIABLE_EXISTS, "Unknown", lineno, NULL);
 		} else {
 			Memory_Address *addr = create_mem_addr(1, -3 - NUM_LOCAL, GET_AST_DATATYPE(decl));
-			int status = create_local_variable(id, addr, 1);
+			status = create_local_variable(id, addr, 1);
 			if (status) return 1;
 		}
 	} else {
@@ -72,47 +68,44 @@ int analyze_decl(ASTNode *decl, int depth) {
 			throw_error(VARIABLE_EXISTS, "Unknown", lineno, NULL);
 		} else {
 			Memory_Address *addr = create_mem_addr(1, NUM_LOCAL + 1, GET_AST_DATATYPE(decl));
-			int status = create_local_variable(id, addr, depth);
-			ASTNode *rhs = SUB_NODE(decl, 2);
-			if (rhs) {
-					analyze_rhs(rhs, depth);
-					status = status && check_datatype(rhs, GET_AST_DATATYPE(decl));
-			}
-			if (status) return 1;
+			status = create_local_variable(id, addr, depth);
 		}
 	}
+	
+	ASTNode *rhs = SUB_NODE(decl, 2);
+	if (rhs) {
+		analyze_rhs(rhs, depth);
+		status = status && check_datatype(rhs, GET_AST_DATATYPE(decl));
+	}
+	if (status) return 1;
 	return 0;
 }
 
 int analyze_assignment(ASTNode *assign, int depth) {
 	char *id = GET_AST_STR_DATA(SUB_NODE(assign, 0));
+	int status = 0;
+	Memory_Address *addr = NULL;
 	if (depth == 0) {
 		if (!get_global_addr(id)) {
 			throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, NULL);
 		} else {
-			ASTNode *rhs = SUB_NODE(assign, 1);
-			int status = 0;
-			if (rhs) {
-				analyze_rhs(SUB_NODE(assign, 1), depth);
-				status = check_datatype(rhs, get_global_addr(id)->type);
-			}
-			if (status) return 1;
+			addr = get_global_addr(id);
 		}
 	} else {
 		if (!get_local_addr(id, depth) && !get_global_addr(id)) {
 			throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, NULL);
 		} else {
-			ASTNode *rhs = SUB_NODE(assign, 1);
-			int status = 0;
-			Memory_Address *addr = get_local_addr(id, depth);
+			addr = get_local_addr(id, depth);
 			if (!addr) addr = get_global_addr(id);
-			if (rhs) {
-				analyze_rhs(rhs, depth);
-				status = check_datatype(rhs, addr->type);
-			}
-			if (status) return 1;
 		}
 	}
+
+	ASTNode *rhs = SUB_NODE(assign, 1);
+	if (rhs) {
+		analyze_rhs(SUB_NODE(assign, 1), depth);
+		status = check_datatype(rhs, addr->type);
+	}
+	if (status) return 1;
 	return 0;
 }
 
