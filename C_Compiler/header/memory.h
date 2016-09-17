@@ -8,8 +8,10 @@
 
 #define NUM_GLOBAL global_memory->num_values
 #define NUM_FUNC function_addresses->num_values
+#define MAX_DEPTH 255
 
-Map *global_memory, *local_memory[255], *function_addresses, *datatypes;
+Map *global_memory, *local_memory[MAX_DEPTH], *function_addresses, *datatypes;
+int last_active_depth;
 
 int NUM_LOCAL;
 
@@ -37,7 +39,9 @@ int create_global_variable(const char *key, Memory_Address *addr);
 int create_local_variable(const char *key, Memory_Address *addr, int depth);
 int add_function(const char *key, Function *function);
 
+int descend_depth();
 void exit_depth(int depth);
+int is_depth_active(int depth);
 
 Memory_Address *get_global_addr(const char *key);
 Memory_Address *get_local_addr(const char *key, int depth);

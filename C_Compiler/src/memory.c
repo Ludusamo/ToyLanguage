@@ -6,6 +6,7 @@ void init_mem() {
 		local_memory[i] = create_map();
 	function_addresses = create_map();
 	NUM_LOCAL = 0;
+	last_active_depth = 0;
 }
 
 void deinit_mem() {
@@ -25,6 +26,7 @@ void clear_mem() {
 		local_memory[i]->num_values = 0;
 	}
 	NUM_LOCAL = 0;
+	last_active_depth = 0;
 	rbt_destroy(function_addresses->root);
 	function_addresses->root = 0;
 	function_addresses->num_values = 0;
@@ -64,11 +66,24 @@ int add_function(const char *key, Function *func) {
 	return rbt_insert(function_addresses, key, func);
 }
 
+int descend_depth() {
+	last_active_depth++;
+	if (last_active_depth >= MAX_DEPTH) {
+		return 0;
+	}
+	return 1;
+}
+
 void exit_depth(int depth) {
+	last_active_depth--;
 	NUM_LOCAL -= local_memory[depth - 1]->num_values;
 	rbt_destroy(local_memory[depth - 1]->root);
 	local_memory[depth - 1]->root = 0;
 	local_memory[depth - 1]->num_values = 0;
+}
+
+int is_depth_active(int depth) {
+	return depth <= last_active_depth;
 }
 
 Memory_Address *get_global_addr(const char *key) {

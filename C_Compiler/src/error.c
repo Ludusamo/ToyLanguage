@@ -7,7 +7,9 @@ const char *ErrorNames[] = {
 	"Unexpected Token",
 	"Type Mismatch",
 	"Invalid Operands",
-	"Insufficient Arguments"
+	"Insufficient Arguments",
+	"Maximum Statement Depth Exceeded",
+	"Inactive Depth"
 };
 
 void throw_error(Error_Type type, const char *filename, int lineno, const char *additional) {

@@ -12,6 +12,11 @@ int semantic_analysis(ASTNode *prog) {
 		if (NODE_TYPE(node) == BLANK_NODE) {
 			continue; // Skip blank nodes
 		}
+		if (!is_depth_active(node->depth)) {
+			char *error_add;
+			sprintf(error_add, "Depth %d is currently inactive.", node->depth);
+			throw_error(INACTIVE_DEPTH, "Unknown", lineno, error_add);
+		}
 		if (node->depth < prev_depth) {
 			exit_depth(prev_depth); 
 		} 
@@ -24,12 +29,15 @@ int semantic_analysis(ASTNode *prog) {
 			break;
 		case IF_NODE:
 			status = status && analyze_if(node, node->depth);
+			descend_depth();
 			break;
 		case WHILE_NODE:
 			status = status && analyze_while(node, node->depth);
+			descend_depth();
 			break;
 		case FUNC_NODE:
 			status = status && analyze_func_decl(node);
+			descend_depth();
 			break;
 		case RETURN_NODE:
 			status = status && analyze_return(node);
