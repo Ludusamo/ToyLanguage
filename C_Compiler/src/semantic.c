@@ -7,7 +7,6 @@ int semantic_analysis(ASTNode *prog) {
 	prev_depth = 0;
 	for (int i = 0; i < num_lines + 1; i++) {
 		lineno = i + 1;
-		printf("%d\n", lineno);
 		ASTNode *node = SUB_NODE(prog, i);
 		if (node->depth < prev_depth) {
 			exit_depth(prev_depth); 
@@ -188,10 +187,7 @@ int analyze_rhs(ASTNode *rhs, int depth) {
 	} else if (NODE_TYPE(rhs) == VAR_NODE) {
 		Memory_Address *var = 0;
 		char *id = GET_AST_STR_DATA(SUB_NODE(rhs, 1));
-		int search_depth = depth;
-		while (!var && search_depth > 0) {
-			var = get_local_addr(id, search_depth--);
-		}
+		var = get_local_addr(id, depth);
 		if (!var) var = get_global_addr(id);
 		if (!var) {
 			throw_error(UNKNOWN_REFERENCE, "Unknown", lineno, "");
